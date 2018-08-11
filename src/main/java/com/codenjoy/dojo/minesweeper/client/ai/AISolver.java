@@ -29,9 +29,9 @@ import com.codenjoy.dojo.minesweeper.client.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 
-public class Vaa25Solver extends YourDirectionSolver implements Solver<Board> {
+public class AISolver extends YourDirectionSolver implements Solver<Board> {
 
-    public Vaa25Solver(String name, Dice dice) {
+    public AISolver(String name, Dice dice) {
         super(dice, name);
     }
 
@@ -46,7 +46,7 @@ public class Vaa25Solver extends YourDirectionSolver implements Solver<Board> {
 
     public static void start(String name, Dice dice) {
         WebSocketRunner.runAI(name,
-                new Vaa25Solver(name, dice),
+                new AISolver(name, dice),
                 new Board());
     }
 
