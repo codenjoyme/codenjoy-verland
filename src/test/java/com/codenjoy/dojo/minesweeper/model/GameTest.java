@@ -38,7 +38,7 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-public class MinesweeperTest {
+public class GameTest {
 
     private MockBoard game;
     private int size = 5;
@@ -814,8 +814,8 @@ public class MinesweeperTest {
                 }
             };
 
-            MinesweeperTest.this.mines = new LinkedList<>();
-            MinesweeperTest.this.mines.addAll(Arrays.asList(mines));
+            GameTest.this.mines = new LinkedList<>();
+            GameTest.this.mines.addAll(Arrays.asList(mines));
             for (Mine mine : mines) {
                 mine.init(this);
             }
@@ -825,7 +825,7 @@ public class MinesweeperTest {
 
         @Override
         public List<Mine> getMines() {
-            return MinesweeperTest.this.mines;
+            return GameTest.this.mines;
         }
 
         @Override

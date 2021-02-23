@@ -42,7 +42,8 @@ import static org.mockito.Mockito.mock;
  * User: oleksii.morozov Date: 10/14/12 Time: 11:04 AM
  */
 
-public class SapperTheHeroTest {
+public class HeroTest {
+
     private static final int MINES_COUNT = 4;
     private static final int BOARD_SIZE = 5;
     private static final int CHARGE_COUNT = 8;
