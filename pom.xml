@@ -13,7 +13,7 @@
     <artifactId>${module.name}-engine</artifactId>
 
     <properties>
-        <module.name>minesweeper</module.name>
+        <module.name>verland</module.name>
     </properties>
 
     <repositories>
@@ -106,13 +106,6 @@
                 <groupId>com.ruleoftech</groupId>
                 <artifactId>markdown-page-generator-plugin</artifactId>
             </plugin>
-            <!-- plugin> TODO добавить если хочу подебажить mvn test
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <forkMode>never</forkMode>
-                </configuration>
-            </plugin -->
         </plugins>
     </build>
 </project>
