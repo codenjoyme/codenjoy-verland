@@ -320,7 +320,7 @@ public class HeroTest {
         assertEquals(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼☺**☼\n" +
+                "☼♥**☼\n" +
                 "☼ **☼\n" +
                 "☼☼☼☼☼\n", getBoardAsString(board));
 
@@ -332,8 +332,8 @@ public class HeroTest {
         assertEquals(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼1☺*☼\n" +
-                "☼‼**☼\n" +
+                "☼1♥*☼\n" +
+                "☼!**☼\n" +
                 "☼☼☼☼☼\n", getBoardAsString(board));
 
         board.useMineDetectorToGivenDirection(Direction.DOWN);
@@ -343,9 +343,9 @@ public class HeroTest {
         board.sapperMoveTo(Direction.RIGHT);
         assertEquals(
                 "☼☼☼☼☼\n" +
-                "☼*‼*☼\n" +
-                "☼‼‼☺☼\n" +
-                "☼‼‼*☼\n" +
+                "☼*!*☼\n" +
+                "☼!!♥☼\n" +
+                "☼!!*☼\n" +
                 "☼☼☼☼☼\n", getBoardAsString(board));
 
         board.useMineDetectorToGivenDirection(Direction.DOWN);
@@ -354,9 +354,9 @@ public class HeroTest {
         board.useMineDetectorToGivenDirection(Direction.RIGHT);
         assertEquals(
                 "☼☼☼☼☼\n" +
-                "☼☻‼‼☼\n" +
-                "☼‼‼☺☼\n" +
-                "☼‼‼‼☼\n" +
+                "☼o!!☼\n" +
+                "☼!!♥☼\n" +
+                "☼!!!☼\n" +
                 "☼☼☼☼☼\n", getBoardAsString(board));
 
         assertFalse(sapper.isDead());

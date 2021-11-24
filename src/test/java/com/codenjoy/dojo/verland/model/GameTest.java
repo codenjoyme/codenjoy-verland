@@ -66,7 +66,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*1☺☼\n" +
+                "☼*1♥☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -76,7 +76,7 @@ public class GameTest {
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*1 ☼\n" +
-                "☼**☺☼\n" +
+                "☼**♥☼\n" +
                 "☼☼☼☼☼\n");
 
         moveLeft();
@@ -85,7 +85,7 @@ public class GameTest {
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*1 ☼\n" +
-                "☼*☺ ☼\n" +
+                "☼*♥ ☼\n" +
                 "☼☼☼☼☼\n");
     }
 
@@ -114,7 +114,7 @@ public class GameTest {
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*1*☼\n" +
-                "☼*☺*☼\n" +
+                "☼*♥*☼\n" +
                 "☼☼☼☼☼\n");
 
         moveRight();
@@ -123,7 +123,7 @@ public class GameTest {
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*1*☼\n" +
-                "☼*1☺☼\n" +
+                "☼*1♥☼\n" +
                 "☼☼☼☼☼\n");
 
         moveUp();
@@ -131,7 +131,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*1☺☼\n" +
+                "☼*1♥☼\n" +
                 "☼*1 ☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -139,7 +139,7 @@ public class GameTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼**☺☼\n" +
+                "☼**♥☼\n" +
                 "☼*1 ☼\n" +
                 "☼*1 ☼\n" +
                 "☼☼☼☼☼\n");
@@ -153,7 +153,7 @@ public class GameTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼*☺*☼\n" +
+                "☼*♥*☼\n" +
                 "☼*1*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
@@ -162,7 +162,7 @@ public class GameTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼☺ *☼\n" +
+                "☼♥ *☼\n" +
                 "☼*1*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
@@ -172,7 +172,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼  *☼\n" +
-                "☼☺1*☼\n" +
+                "☼♥1*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
     }
@@ -186,7 +186,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼☺1*☼\n" +
+                "☼♥1*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
     }
@@ -200,7 +200,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*☺‼☼\n" +
+                "☼*♥!☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
     }
@@ -213,8 +213,8 @@ public class GameTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼*‼*☼\n" +
-                "☼*☺*☼\n" +
+                "☼*!*☼\n" +
+                "☼*♥*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
     }
@@ -228,8 +228,8 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*☺*☼\n" +
-                "☼*‼*☼\n" +
+                "☼*♥*☼\n" +
+                "☼*!*☼\n" +
                 "☼☼☼☼☼\n");
     }
 
@@ -242,7 +242,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼‼☺*☼\n" +
+                "☼!♥*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
     }
@@ -256,7 +256,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼ 11☼\n" +
-                "☼ 1Ѡ☼\n" +
+                "☼ 1X☼\n" +
                 "☼ 11☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -272,7 +272,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*☺*☼\n" +
+                "☼*♥*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -281,7 +281,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼ 11☼\n" +
-                "☼ 1Ѡ☼\n" +
+                "☼ 1X☼\n" +
                 "☼ 11☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -301,9 +301,9 @@ public class GameTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼ x☻☼\n" +
-                "☼‼3Ѡ☼\n" +
-                "☼ x☻☼\n" +
+                "☼ xo☼\n" +
+                "☼!3X☼\n" +
+                "☼ xo☼\n" +
                 "☼☼☼☼☼\n");
 
         assertTrue(game.isGameOver());
@@ -315,7 +315,7 @@ public class GameTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼**☺☼\n" +
+                "☼**♥☼\n" +
                 "☼***☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
@@ -329,7 +329,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*☺*☼\n" +
+                "☼*♥*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -338,7 +338,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼☺1*☼\n" +
+                "☼♥1*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
     }
@@ -351,7 +351,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*☺*☼\n" +
+                "☼*♥*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -360,7 +360,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼☺2*☼\n" +
+                "☼♥2*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
     }
@@ -373,7 +373,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*☺*☼\n" +
+                "☼*♥*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -382,7 +382,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼☺3*☼\n" +
+                "☼♥3*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
     }
@@ -396,7 +396,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*☺*☼\n" +
+                "☼*♥*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -405,7 +405,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼☺4*☼\n" +
+                "☼♥4*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
     }
@@ -419,7 +419,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*☺*☼\n" +
+                "☼*♥*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -428,7 +428,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼☺5*☼\n" +
+                "☼♥5*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -444,7 +444,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*☺*☼\n" +
+                "☼*♥*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -453,7 +453,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼☺6*☼\n" +
+                "☼♥6*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
     }
@@ -468,7 +468,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*☺*☼\n" +
+                "☼*♥*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -477,7 +477,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼☺7*☼\n" +
+                "☼♥7*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
     }
@@ -492,7 +492,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*☺*☼\n" +
+                "☼*♥*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -500,9 +500,9 @@ public class GameTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼☻☻☻☼\n" +
-                "☼☻8☻☼\n" +
-                "☼☻Ѡ☻☼\n" +
+                "☼ooo☼\n" +
+                "☼o8o☼\n" +
+                "☼oXo☼\n" +
                 "☼☼☼☼☼\n");
     }
 
@@ -515,7 +515,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼   ☼\n" +
-                "☼ ☺x☼\n" +
+                "☼ ♥x☼\n" +
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -532,7 +532,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼   ☼\n" +
-                "☼x☺x☼\n" +
+                "☼x♥x☼\n" +
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -548,7 +548,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*☺‼☼\n" +
+                "☼*♥!☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -564,7 +564,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼   ☼\n" +
-                "☼ ☺ ☼\n" +
+                "☼ ♥ ☼\n" +
                 "☼ x ☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -579,8 +579,8 @@ public class GameTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼*‼*☼\n" +
-                "☼*☺*☼\n" +
+                "☼*!*☼\n" +
+                "☼*♥*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -596,7 +596,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼ x ☼\n" +
-                "☼ ☺ ☼\n" +
+                "☼ ♥ ☼\n" +
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -612,8 +612,8 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*☺*☼\n" +
-                "☼*‼*☼\n" +
+                "☼*♥*☼\n" +
+                "☼*!*☼\n" +
                 "☼☼☼☼☼\n");
 
         assertStillNotWin();
@@ -628,7 +628,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼   ☼\n" +
-                "☼x☺ ☼\n" +
+                "☼x♥ ☼\n" +
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -648,7 +648,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼‼☺*☼\n" +
+                "☼!♥*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -671,9 +671,9 @@ public class GameTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼*‼*☼\n" +
-                "☼‼☺‼☼\n" +
-                "☼*‼*☼\n" +
+                "☼*!*☼\n" +
+                "☼!♥!☼\n" +
+                "☼*!*☼\n" +
                 "☼☼☼☼☼\n");
 
         assertStillNotWin();
@@ -684,9 +684,9 @@ public class GameTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼‼☺‼☼\n" +
-                "☼‼2‼☼\n" +
-                "☼*‼*☼\n" +
+                "☼!♥!☼\n" +
+                "☼!2!☼\n" +
+                "☼*!*☼\n" +
                 "☼☼☼☼☼\n");
 
         assertStillNotWin();
@@ -696,9 +696,9 @@ public class GameTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼‼‼‼☼\n" +
-                "☼‼2‼☼\n" +
-                "☼*☺*☼\n" +
+                "☼!!!☼\n" +
+                "☼!2!☼\n" +
+                "☼*♥*☼\n" +
                 "☼☼☼☼☼\n");
 
         unbombLeft();
@@ -708,7 +708,7 @@ public class GameTest {
                 "☼☼☼☼☼\n" +
                 "☼xxx☼\n" +
                 "☼x x☼\n" +
-                "☼x☺x☼\n" +
+                "☼x♥x☼\n" +
                 "☼☼☼☼☼\n");
 
         assertWin();
@@ -723,7 +723,7 @@ public class GameTest {
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼***☼\n" +
-                "☼☺**☼\n" +
+                "☼♥**☼\n" +
                 "☼☼☼☼☼\n");
 
         moveRight();
@@ -732,7 +732,7 @@ public class GameTest {
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼***☼\n" +
-                "☼1☺*☼\n" +
+                "☼1♥*☼\n" +
                 "☼☼☼☼☼\n");
 
         moveRight();
@@ -741,7 +741,7 @@ public class GameTest {
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼***☼\n" +
-                "☼11☺☼\n" +
+                "☼11♥☼\n" +
                 "☼☼☼☼☼\n");
 
         moveUp();
@@ -749,7 +749,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼**☺☼\n" +
+                "☼**♥☼\n" +
                 "☼111☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -757,7 +757,7 @@ public class GameTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼**☺☼\n" +
+                "☼**♥☼\n" +
                 "☼**2☼\n" +
                 "☼111☼\n" +
                 "☼☼☼☼☼\n");
@@ -841,7 +841,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼ 11☼\n" +
-                "☼ 1Ѡ☼\n" +
+                "☼ 1X☼\n" +
                 "☼ 11☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -863,7 +863,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*1☺☼\n" +
+                "☼*1♥☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -879,7 +879,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*1☺☼\n" +
+                "☼*1♥☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -890,7 +890,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*☺ ☼\n" +
+                "☼*♥ ☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -908,8 +908,8 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*☺*☼\n" +
-                "☼*‼*☼\n" +
+                "☼*♥*☼\n" +
+                "☼*!*☼\n" +
                 "☼☼☼☼☼\n");
 
         unbombLeft();
@@ -917,8 +917,8 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼‼☺*☼\n" +
-                "☼*‼*☼\n" +
+                "☼!♥*☼\n" +
+                "☼*!*☼\n" +
                 "☼☼☼☼☼\n");
 
         unbombRight();
@@ -926,8 +926,8 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼   ☼\n" +
-                "☼‼☺‼☼\n" +
-                "☼☻‼ ☼\n" +
+                "☼!♥!☼\n" +
+                "☼o! ☼\n" +
                 "☼☼☼☼☼\n");
 
         verifyEvents(3, Events.FORGET_CHARGE);
@@ -956,7 +956,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼ x ☼\n" +
-                "☼x☺x☼\n" +
+                "☼x♥x☼\n" +
                 "☼ x ☼\n" +
                 "☼☼☼☼☼\n");
     }
@@ -978,9 +978,9 @@ public class GameTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼☻‼☻☼\n" +
-                "☼‼☺‼☼\n" +
-                "☼☻‼☻☼\n" +
+                "☼o!o☼\n" +
+                "☼!♥!☼\n" +
+                "☼o!o☼\n" +
                 "☼☼☼☼☼\n");
     }
 
@@ -997,9 +997,9 @@ public class GameTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼ 1☻☼\n" +
-                "☼‼☺‼☼\n" +
-                "☼ 1☻☼\n" +
+                "☼ 1o☼\n" +
+                "☼!♥!☼\n" +
+                "☼ 1o☼\n" +
                 "☼☼☼☼☼\n");
     }
 
@@ -1016,9 +1016,9 @@ public class GameTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼ 1☻☼\n" +
-                "☼‼☺2☼\n" +
-                "☼ ‼☻☼\n" +
+                "☼ 1o☼\n" +
+                "☼!♥2☼\n" +
+                "☼ !o☼\n" +
                 "☼☼☼☼☼\n");
     }
 
@@ -1035,7 +1035,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*☺‼☼\n" +
+                "☼*♥!☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -1051,7 +1051,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼   ☼\n" +
-                "☼x☺ ☼\n" +
+                "☼x♥ ☼\n" +
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -1069,7 +1069,7 @@ public class GameTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*☺‼☼\n" +
+                "☼*♥!☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -1089,7 +1089,7 @@ public class GameTest {
                 "☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
-                "☼☺  ☼\n" +
+                "☼♥  ☼\n" +
                 "☼☼☼☼☼\n");
 
         moveLeft();
@@ -1098,7 +1098,7 @@ public class GameTest {
                 "☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
-                "☼☺  ☼\n" +
+                "☼♥  ☼\n" +
                 "☼☼☼☼☼\n");
 
         moveDown();
@@ -1107,7 +1107,7 @@ public class GameTest {
                 "☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
-                "☼☺  ☼\n" +
+                "☼♥  ☼\n" +
                 "☼☼☼☼☼\n");
 
         moveRight();
@@ -1118,7 +1118,7 @@ public class GameTest {
                 "☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
-                "☼  ☺☼\n" +
+                "☼  ♥☼\n" +
                 "☼☼☼☼☼\n");
 
         moveUp();
@@ -1127,7 +1127,7 @@ public class GameTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼  ☺☼\n" +
+                "☼  ♥☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
@@ -1141,7 +1141,7 @@ public class GameTest {
                 "☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
-                "☼☺  ☼\n" +
+                "☼♥  ☼\n" +
                 "☼☼☼☼☼\n");
 
         unbombLeft();
@@ -1151,7 +1151,7 @@ public class GameTest {
                 "☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
-                "☼☺  ☼\n" +
+                "☼♥  ☼\n" +
                 "☼☼☼☼☼\n");
 
         unbombDown();
@@ -1161,7 +1161,7 @@ public class GameTest {
                 "☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
-                "☼☺  ☼\n" +
+                "☼♥  ☼\n" +
                 "☼☼☼☼☼\n");
 
         moveRight();
@@ -1175,7 +1175,7 @@ public class GameTest {
                 "☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
-                "☼  ☺☼\n" +
+                "☼  ♥☼\n" +
                 "☼☼☼☼☼\n");
 
         moveUp();
@@ -1187,7 +1187,7 @@ public class GameTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼  ☺☼\n" +
+                "☼  ♥☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
