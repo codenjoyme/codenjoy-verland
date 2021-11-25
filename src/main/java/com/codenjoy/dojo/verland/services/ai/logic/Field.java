@@ -35,9 +35,9 @@ import static java.util.stream.Collectors.toCollection;
 
 public class Field {
 
-    private int size;
-    private List<Cell> cells;
-    private List<Group> groups;
+    private final int size;
+    private final List<Cell> cells;
+    private final List<Group> groups;
 
     public Field(int size) {
         this.size = size;

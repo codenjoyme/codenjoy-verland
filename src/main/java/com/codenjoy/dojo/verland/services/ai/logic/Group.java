@@ -32,8 +32,8 @@ import static java.util.stream.Collectors.toList;
 
 public class Group {
 
-    private List<Cell> list;
-    private Element element;
+    private final List<Cell> list;
+    private final Element element;
 
     public Group(List<Cell> cells, Element element) {
         this.element = element;

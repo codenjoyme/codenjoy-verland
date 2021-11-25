@@ -36,7 +36,7 @@ public class RandomMinesGenerator implements MinesGenerator {
     public static int SAFE_AREA_Y_0 = 1;
     public static int SAFE_AREA_Y_1 = 3;
     private List<Point> freeCells;
-    private Dice dice;
+    private final Dice dice;
 
     public RandomMinesGenerator(Dice dice) {
         this.dice = dice;

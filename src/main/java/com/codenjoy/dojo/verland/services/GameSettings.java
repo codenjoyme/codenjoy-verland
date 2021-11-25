@@ -44,7 +44,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         MINES_ON_BOARD("Mines on board"),
         DETECTOR_CHARGE("Detector charge");
 
-        private String key;
+        private final String key;
 
         Keys(String key) {
             this.key = key;

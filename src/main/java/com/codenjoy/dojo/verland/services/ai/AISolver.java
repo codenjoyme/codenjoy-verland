@@ -48,7 +48,7 @@ public class AISolver implements Solver<Board> {
     private Point me;
     private Element underMe;
     private Direction where;
-    private Dice dice;
+    private final Dice dice;
 
     public AISolver(Dice dice) {
         this.dice = dice;
@@ -136,16 +136,18 @@ public class AISolver implements Solver<Board> {
                 // если на пути неизвестность
                 if (board.isAt(point, HIDDEN)) {
                     // мы смотрим соседей, если там нет ни одной пустой клетки - идти опасно
-                    if (QDirection.getValues().stream()
+                    // а тут мы не собираемся идти, а просто там флажок поставим
+                    // так же мы помним с прошлого хода, что под нами было
+                    return QDirection.getValues().stream()
                             .map(direction -> direction.change(point))
                             .filter(pt -> !pt.isOutOf(board.size()))
-                            .noneMatch(pt -> board.isAt(pt, CLEAR)
+                            .anyMatch(pt -> board.isAt(pt, CLEAR)
                                     // а тут мы не собираемся идти, а просто там флажок поставим
                                     || (point.equals(to) && to.action() == MARK)
                                     // так же мы помним с прошлого хода, что под нами было
                                     || (underMe != null
-                                        && pt.equals(board.getMe())
-                                        && underMe == CLEAR))) return false;
+                                    && pt.equals(board.getMe())
+                                    && underMe == CLEAR));
                 }
 
                 return true;
