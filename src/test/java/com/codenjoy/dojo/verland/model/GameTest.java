@@ -23,12 +23,12 @@ package com.codenjoy.dojo.verland.model;
  */
 
 
-import com.codenjoy.dojo.verland.model.items.Mine;
-import com.codenjoy.dojo.verland.services.Events;
-import com.codenjoy.dojo.verland.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.verland.model.items.Mine;
+import com.codenjoy.dojo.verland.services.Events;
+import com.codenjoy.dojo.verland.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -802,10 +802,10 @@ public class GameTest {
         game = new MockBoard(sapper, mines);
     }
 
-    private class MockBoard extends Minesweeper {
-        private Player player;
+    private class MockBoard extends Verland {
+        private final Player player;
 
-        public MockBoard(Hero hero, Mine...mines) {
+        public MockBoard(Hero hero, Mine... mines) {
             super((count, board) -> new ArrayList<>(),
                     settings.integer(MINES_ON_BOARD, mines.length));
 

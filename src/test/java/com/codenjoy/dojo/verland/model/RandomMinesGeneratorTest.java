@@ -23,11 +23,11 @@ package com.codenjoy.dojo.verland.model;
  */
 
 
-import com.codenjoy.dojo.verland.model.items.Mine;
-import com.codenjoy.dojo.verland.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
+import com.codenjoy.dojo.verland.model.items.Mine;
+import com.codenjoy.dojo.verland.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -97,7 +97,7 @@ public class RandomMinesGeneratorTest {
         return new RandomMinesGenerator(new RandomDice()).get(10, new MockBoard());
     }
 
-    private class MockBoard extends Minesweeper {
+    private class MockBoard extends Verland {
         public MockBoard() {
             super((count, board) -> Arrays.asList(), settings);
             newGame(new Player(mock(EventListener.class), settings));

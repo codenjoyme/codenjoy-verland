@@ -27,10 +27,6 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.games.verland.Board;
 import com.codenjoy.dojo.games.verland.Element;
-import com.codenjoy.dojo.verland.model.Minesweeper;
-import com.codenjoy.dojo.verland.model.Player;
-import com.codenjoy.dojo.verland.model.RandomMinesGenerator;
-import com.codenjoy.dojo.verland.services.ai.AISolver;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PlayerScores;
@@ -39,6 +35,10 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.verland.model.Player;
+import com.codenjoy.dojo.verland.model.RandomMinesGenerator;
+import com.codenjoy.dojo.verland.model.Verland;
+import com.codenjoy.dojo.verland.services.ai.AISolver;
 
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.BOARD_SIZE;
 
@@ -56,7 +56,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public GameField createGame(int levelNumber, GameSettings settings) {
-        return new Minesweeper(new RandomMinesGenerator(getDice()), settings);
+        return new Verland(new RandomMinesGenerator(getDice()), settings);
     }
 
     @Override

@@ -55,7 +55,7 @@ public class ScoresTest {
         scores.event(Events.CLEAN_BOARD);
     }
 
-    public void minesweeperWin() {
+    public void verlandWin() {
         scores.event(Events.WIN);
     }
 
@@ -82,7 +82,7 @@ public class ScoresTest {
         clearBoard();
         clearBoard();
 
-        minesweeperWin();
+        verlandWin();
 
         assertEquals(140
                         + 1 + 2 + 3 + 4
@@ -175,7 +175,7 @@ public class ScoresTest {
     public void shouldScore_whenWin() {
         scores = new Scores(0, settings);
 
-        minesweeperWin();
+        verlandWin();
 
         assertEquals(settings.integer(WIN_SCORE),
                 scores.getScore());

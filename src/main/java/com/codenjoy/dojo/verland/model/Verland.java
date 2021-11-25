@@ -24,32 +24,32 @@ package com.codenjoy.dojo.verland.model;
 
 
 import com.codenjoy.dojo.games.verland.Element;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.QDirection;
+import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.verland.model.items.Cell;
 import com.codenjoy.dojo.verland.model.items.Flag;
 import com.codenjoy.dojo.verland.model.items.Mine;
 import com.codenjoy.dojo.verland.model.items.Wall;
 import com.codenjoy.dojo.verland.services.Events;
 import com.codenjoy.dojo.verland.services.GameSettings;
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.QDirection;
-import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.*;
 import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.*;
 
-public class Minesweeper implements Field {
+public class Verland implements Field {
 
-    private Parameter<Integer> detectorCharge;
-    private Parameter<Integer> minesOnBoard;
+    private final Parameter<Integer> detectorCharge;
+    private final Parameter<Integer> minesOnBoard;
     private List<Point> cells;
     private List<Mine> mines;
     private List<Mine> removedMines;
     private int turnCount = 0;
-    private MinesGenerator minesGenerator;
+    private final MinesGenerator minesGenerator;
     private int maxScore;
     private int score;
     private List<Wall> walls;
@@ -58,9 +58,9 @@ public class Minesweeper implements Field {
     private int currentSize;
     private Player player;
 
-    private GameSettings settings;
+    private final GameSettings settings;
 
-    public Minesweeper(MinesGenerator minesGenerator, GameSettings settings) {
+    public Verland(MinesGenerator minesGenerator, GameSettings settings) {
         this.settings = settings;
         this.minesGenerator = minesGenerator;
         minesOnBoard = settings.integerValue(MINES_ON_BOARD);
@@ -214,7 +214,7 @@ public class Minesweeper implements Field {
     @Override
     public BoardReader reader() {
         return new BoardReader<Player>() {
-            private int size = Minesweeper.this.size();
+            private final int size = Verland.this.size();
 
             @Override
             public int size() {

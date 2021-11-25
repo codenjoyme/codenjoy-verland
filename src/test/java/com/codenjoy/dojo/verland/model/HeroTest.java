@@ -24,13 +24,13 @@ package com.codenjoy.dojo.verland.model;
 
 
 import com.codenjoy.dojo.games.verland.Element;
-import com.codenjoy.dojo.verland.model.items.Mine;
-import com.codenjoy.dojo.verland.services.GameSettings;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.verland.model.items.Mine;
+import com.codenjoy.dojo.verland.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -61,7 +61,7 @@ public class HeroTest {
                 .integer(GameSettings.Keys.MINES_ON_BOARD, MINES_COUNT)
                 .integer(GameSettings.Keys.DETECTOR_CHARGE, CHARGE_COUNT);
 
-        board = new Minesweeper(NO_MINES, settings);
+        board = new Verland(NO_MINES, settings);
         board.newGame(new Player(listener, settings));
         sapper = board.sapper();
         mines = board.getMines();
@@ -93,7 +93,7 @@ public class HeroTest {
         settings.integer(GameSettings.Keys.BOARD_SIZE, 0);
 
         // when
-        new Minesweeper(NO_MINES, settings)
+        new Verland(NO_MINES, settings)
                 .newGame(new Player(listener, settings));
 
         // then
@@ -107,7 +107,7 @@ public class HeroTest {
                 .integer(GameSettings.Keys.MINES_ON_BOARD, 100);
 
         // when
-        new Minesweeper(NO_MINES, settings)
+        new Verland(NO_MINES, settings)
                 .newGame(new Player(listener, settings));
 
         // then
@@ -122,7 +122,7 @@ public class HeroTest {
                 .integer(GameSettings.Keys.DETECTOR_CHARGE, 10);
 
         // when
-        new Minesweeper(NO_MINES, settings)
+        new Verland(NO_MINES, settings)
                 .newGame(new Player(listener, settings));
 
         // then
@@ -136,7 +136,7 @@ public class HeroTest {
         settings.integer(GameSettings.Keys.BOARD_SIZE, 10);
 
         // when
-        new Minesweeper(NO_MINES, settings)
+        new Verland(NO_MINES, settings)
                 .newGame(new Player(listener, settings));
 
         // then
