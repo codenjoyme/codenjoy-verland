@@ -93,6 +93,7 @@ public class Hero extends PlayerHero<Field> implements State<Element, Object> {
             return Element.HERO;
         }
     }
+
     @Override
     public void down() {
         nextStep = Direction.DOWN;

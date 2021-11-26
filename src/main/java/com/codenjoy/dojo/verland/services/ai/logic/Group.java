@@ -26,14 +26,14 @@ import com.codenjoy.dojo.games.verland.Element;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.games.verland.Element.HERO;
 import static com.codenjoy.dojo.games.verland.Element.CLEAR;
+import static com.codenjoy.dojo.games.verland.Element.HERO;
 import static java.util.stream.Collectors.toList;
 
 public class Group {
 
-    private final List<Cell> list;
-    private final Element element;
+    private List<Cell> list;
+    private Element element;
 
     public Group(List<Cell> cells, Element element) {
         this.element = element;

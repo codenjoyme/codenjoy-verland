@@ -23,20 +23,21 @@ package com.codenjoy.dojo.verland.model;
  */
 
 
-import com.codenjoy.dojo.verland.model.items.Mine;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.verland.model.items.Mine;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RandomMinesGenerator implements MinesGenerator {
+
     public static int SAFE_AREA_X_0 = 1;
     public static int SAFE_AREA_X_1 = 3;
     public static int SAFE_AREA_Y_0 = 1;
     public static int SAFE_AREA_Y_1 = 3;
     private List<Point> freeCells;
-    private final Dice dice;
+    private Dice dice;
 
     public RandomMinesGenerator(Dice dice) {
         this.dice = dice;

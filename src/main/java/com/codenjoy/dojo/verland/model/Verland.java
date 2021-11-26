@@ -43,13 +43,13 @@ import static com.codenjoy.dojo.verland.services.GameSettings.Keys.*;
 
 public class Verland implements Field {
 
-    private final Parameter<Integer> detectorCharge;
-    private final Parameter<Integer> minesOnBoard;
+    private Parameter<Integer> detectorCharge;
+    private Parameter<Integer> minesOnBoard;
     private List<Point> cells;
     private List<Mine> mines;
     private List<Mine> removedMines;
     private int turnCount = 0;
-    private final MinesGenerator minesGenerator;
+    private MinesGenerator minesGenerator;
     private int maxScore;
     private int score;
     private List<Wall> walls;
@@ -58,7 +58,7 @@ public class Verland implements Field {
     private int currentSize;
     private Player player;
 
-    private final GameSettings settings;
+    private GameSettings settings;
 
     public Verland(MinesGenerator minesGenerator, GameSettings settings) {
         this.settings = settings;

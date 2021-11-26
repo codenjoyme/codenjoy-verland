@@ -26,29 +26,29 @@ package com.codenjoy.dojo.verland.services.ai;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.games.verland.Board;
 import com.codenjoy.dojo.games.verland.Element;
-import com.codenjoy.dojo.verland.services.ai.logic.Cell;
-import com.codenjoy.dojo.verland.services.ai.logic.Field;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
+import com.codenjoy.dojo.verland.services.ai.logic.Cell;
+import com.codenjoy.dojo.verland.services.ai.logic.Field;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import static com.codenjoy.dojo.games.verland.Element.*;
-import static com.codenjoy.dojo.verland.services.ai.logic.Action.MARK;
 import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.verland.services.ai.logic.Action.MARK;
 
 public class AISolver implements Solver<Board> {
 
     private Point me;
     private Element underMe;
     private Direction where;
-    private final Dice dice;
+    private Dice dice;
 
     public AISolver(Dice dice) {
         this.dice = dice;
@@ -146,8 +146,8 @@ public class AISolver implements Solver<Board> {
                                     || (point.equals(to) && to.action() == MARK)
                                     // так же мы помним с прошлого хода, что под нами было
                                     || (underMe != null
-                                    && pt.equals(board.getMe())
-                                    && underMe == CLEAR));
+                                        && pt.equals(board.getMe())
+                                        && underMe == CLEAR));
                 }
 
                 return true;

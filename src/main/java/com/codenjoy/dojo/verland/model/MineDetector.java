@@ -23,6 +23,7 @@ package com.codenjoy.dojo.verland.model;
  */
 
 public class MineDetector {
+
     private int charge;
 
     public MineDetector(int charge) {
