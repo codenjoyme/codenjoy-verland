@@ -48,7 +48,7 @@ public class AISolver implements Solver<Board> {
     private Point me;
     private Element underMe;
     private Direction where;
-    private Dice dice;
+    private final Dice dice;
 
     public AISolver(Dice dice) {
         this.dice = dice;
@@ -146,8 +146,8 @@ public class AISolver implements Solver<Board> {
                                     || (point.equals(to) && to.action() == MARK)
                                     // так же мы помним с прошлого хода, что под нами было
                                     || (underMe != null
-                                        && pt.equals(board.getMe())
-                                        && underMe == CLEAR));
+                                    && pt.equals(board.getMe())
+                                    && underMe == CLEAR));
                 }
 
                 return true;
