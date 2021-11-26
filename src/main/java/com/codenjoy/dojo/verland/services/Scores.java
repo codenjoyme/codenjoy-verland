@@ -30,7 +30,7 @@ import static com.codenjoy.dojo.verland.services.GameSettings.Keys.*;
 public class Scores implements PlayerScores {
 
     private volatile int score;
-    private final GameSettings settings;
+    private GameSettings settings;
     private volatile int destroyed;
 
     public Scores(int startScore, GameSettings settings) {

@@ -48,7 +48,7 @@ public class AISolver implements Solver<Board> {
     private Point me;
     private Element underMe;
     private Direction where;
-    private final Dice dice;
+    private Dice dice;
 
     public AISolver(Dice dice) {
         this.dice = dice;

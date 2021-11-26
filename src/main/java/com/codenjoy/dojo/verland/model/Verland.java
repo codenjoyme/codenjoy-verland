@@ -214,7 +214,7 @@ public class Verland implements Field {
     @Override
     public BoardReader reader() {
         return new BoardReader<Player>() {
-            private final int size = Verland.this.size();
+            private int size = Verland.this.size();
 
             @Override
             public int size() {

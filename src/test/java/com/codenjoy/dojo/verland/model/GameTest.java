@@ -803,7 +803,7 @@ public class GameTest {
     }
 
     private class MockBoard extends Verland {
-        private final Player player;
+        private Player player;
 
         public MockBoard(Hero hero, Mine... mines) {
             super((count, board) -> new ArrayList<>(),
