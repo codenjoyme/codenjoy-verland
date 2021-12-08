@@ -146,8 +146,8 @@ public class AISolver implements Solver<Board> {
                                     || (point.equals(to) && to.action() == MARK)
                                     // так же мы помним с прошлого хода, что под нами было
                                     || (underMe != null
-                                    && pt.equals(board.getHero())
-                                    && underMe == CLEAR));
+                                        && pt.equals(board.getHero())
+                                        && underMe == CLEAR));
                 }
 
                 return true;
