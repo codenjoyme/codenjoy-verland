@@ -59,7 +59,7 @@ public class AISolver implements Solver<Board> {
             return STOP.toString();
         }
 
-        me = board.getMe();
+        me = board.getHero();
 
         if (isFirstTurn(board)) {
             return UP.toString();
@@ -146,7 +146,7 @@ public class AISolver implements Solver<Board> {
                                     || (point.equals(to) && to.action() == MARK)
                                     // так же мы помним с прошлого хода, что под нами было
                                     || (underMe != null
-                                    && pt.equals(board.getMe())
+                                    && pt.equals(board.getHero())
                                     && underMe == CLEAR));
                 }
 
