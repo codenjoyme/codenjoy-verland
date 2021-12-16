@@ -24,10 +24,10 @@ package com.codenjoy.dojo.verland.model.items;
 
 
 import com.codenjoy.dojo.games.verland.Element;
-import com.codenjoy.dojo.verland.model.Field;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.verland.model.Field;
 
 public class Cell extends PointImpl implements State<Element, Object> {
 
@@ -49,7 +49,7 @@ public class Cell extends PointImpl implements State<Element, Object> {
             if (minesNear == 0) {
                 return Element.CLEAR;
             } else {
-                return Element.get(minesNear);
+                return Element.valueOf(minesNear);
             }
         }
 
