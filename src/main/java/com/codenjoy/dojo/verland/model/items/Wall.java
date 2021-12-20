@@ -34,10 +34,6 @@ public class Wall extends PointImpl implements State<Element, Object> {
         super(x, y);
     }
 
-    public Wall(Point point) {
-        super(point);
-    }
-
     @Override
     public Element state(Object player, Object... alsoAtPoint) {
         return Element.PATHLESS;

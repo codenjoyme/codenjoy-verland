@@ -30,12 +30,8 @@ import com.codenjoy.dojo.services.State;
 
 public class Flag extends PointImpl implements State<Element, Object> {
 
-    public Flag(Point point) {
-        super(point);
-    }
-
-    public Flag(int x, int y) {
-        super(x, y);
+    public Flag(Point pt) {
+        super(pt);
     }
 
     @Override

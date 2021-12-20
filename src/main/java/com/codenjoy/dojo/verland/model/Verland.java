@@ -97,7 +97,9 @@ public class Verland implements Field {
         List<Point> result = new ArrayList<>();
         for (int x = 1; x < size() - 1; x++) {
             for (int y = 1; y < size() - 1; y++) {
-                result.add(new Cell(x, y, this));
+                Cell cell = new Cell(x, y);
+                cell.init(this);
+                result.add(cell);
             }
         }
         return result;

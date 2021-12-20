@@ -24,33 +24,29 @@ package com.codenjoy.dojo.verland.model.items;
 
 
 import com.codenjoy.dojo.games.verland.Element;
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.verland.model.Field;
 
 public class Cell extends PointImpl implements State<Element, Object> {
 
-    private Field board;
+    private Field field;
 
-    public Cell(Point point) {
-        super(point);
+    public Cell(int x, int y) {
+        super(x, y);
     }
 
-    public Cell(int x, int y, Field board) {
-        super(x, y);
-        this.board = board;
+    public void init(Field field) {
+        this.field = field;
     }
 
     @Override
     public Element state(Object player, Object... alsoAtPoint) {
-        if (board.walkAt(this) || board.isGameOver()) {
-            int minesNear = board.minesNear(this);
-            if (minesNear == 0) {
-                return Element.CLEAR;
-            } else {
-                return Element.valueOf(minesNear);
-            }
+        if (field.walkAt(this) || field.isGameOver()) {
+            int minesNear = field.minesNear(this);
+            return minesNear == 0
+                    ? Element.CLEAR
+                    : Element.valueOf(minesNear);
         }
 
         return Element.HIDDEN;

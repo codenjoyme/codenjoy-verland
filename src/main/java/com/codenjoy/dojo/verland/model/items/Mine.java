@@ -31,28 +31,28 @@ import com.codenjoy.dojo.services.State;
 
 public class Mine extends PointImpl implements State<Element, Object> {
 
-    private Field board;
+    private Field field;
 
-    public Mine(Point point) {
-        super(point);
+    public Mine(Point pt) {
+        super(pt);
     }
 
     public Mine(int x, int y) {
         super(x, y);
     }
 
+    public void init(Field field) {
+        this.field = field;
+    }
+
     @Override
     public Element state(Object player, Object... alsoAtPoint) {
-        if (!board.isGameOver()) return null;
+        if (!field.isGameOver()) return null;
 
-        if (board.isFlag(this)) {
+        if (field.isFlag(this)) {
             return Element.HERO_HEALING;
         } else {
             return Element.INFECTION;
         }
-    }
-
-    public void init(Field board) {
-        this.board = board;
     }
 }
