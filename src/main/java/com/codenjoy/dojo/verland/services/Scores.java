@@ -97,6 +97,6 @@ public class Scores implements PlayerScores {
 
     @Override
     public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
+        this.score = Integer.parseInt(score.toString());
     }
 }
