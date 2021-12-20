@@ -104,6 +104,11 @@ public class GameTest {
         game.tick();
     }
 
+    private void suicide() {
+        game.sapper().act(0);
+        game.tick();
+    }
+
     @Test
     public void shouldLeaveEmptySpaceshouldWalkOnBoardDown() {
         shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
@@ -811,6 +816,7 @@ public class GameTest {
 
             player = new Player(listener, settings);
             player.setHero(hero);
+            hero.setPlayer(player);
 
             GameTest.this.mines = new LinkedList<>();
             GameTest.this.mines.addAll(Arrays.asList(mines));
@@ -846,6 +852,36 @@ public class GameTest {
                 "☼☼☼☼☼\n");
 
         verifyEvents(Events.KILL_ON_MINE);
+    }
+
+    @Test
+    public void shouldFireEvent_whenSuicide() {
+        shouldBoardWith(new Hero(2, 2), new Mine(3, 2));
+
+        suicide();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ♥o☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
+
+        verifyEvents(Events.SUICIDE);
+
+        assertEquals(true, game.isGameOver());
+        assertEquals(false, game.sapper().isAlive());
+
+        // TODO дальше как-то странно, наверное тест под это не заточен
+        game.newGame(game.player);
+        game.tick();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ♥o☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
     }
 
     private void verifyEvents(Events... events) {

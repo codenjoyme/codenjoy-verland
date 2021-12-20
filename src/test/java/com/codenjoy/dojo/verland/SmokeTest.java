@@ -24,13 +24,13 @@ package com.codenjoy.dojo.verland;
 
 
 import com.codenjoy.dojo.games.verland.Board;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.utils.Smoke;
+import com.codenjoy.dojo.utils.SmokeUtils;
 import com.codenjoy.dojo.verland.services.Events;
 import com.codenjoy.dojo.verland.services.GameRunner;
 import com.codenjoy.dojo.verland.services.GameSettings;
 import com.codenjoy.dojo.verland.services.ai.AISolver;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.utils.Smoke;
-import com.codenjoy.dojo.utils.SmokeUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,6 +38,7 @@ import java.util.Arrays;
 
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.BOARD_SIZE;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.MINES_ON_BOARD;
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 public class SmokeTest {
@@ -74,6 +75,36 @@ public class SmokeTest {
                         return super.getSettings()
                                 .integer(BOARD_SIZE, 15)
                                 .integer(MINES_ON_BOARD, 10);
+                    }
+                },
+                Arrays.asList(new AISolver(dice)),
+                Arrays.asList(new Board()));
+    }
+
+    @Test
+    public void test2() {
+        // about 5 sec
+        int ticks = 1000;
+
+        SmokeUtils.recheck = actual -> {
+            // мы все же проиграли
+            assertFalse(actual.contains(Events.KILL_ON_MINE.name()));
+            assertTrue(actual.contains(Events.FORGET_CHARGE.name()));
+            assertTrue(actual.contains(Events.SUICIDE.name()));
+        };
+
+        smoke.play(ticks, "SmokeTest2.data",
+                new GameRunner() {
+                    @Override
+                    public Dice getDice() {
+                        return dice;
+                    }
+
+                    @Override
+                    public GameSettings getSettings() {
+                        return super.getSettings()
+                                .integer(BOARD_SIZE, 20)
+                                .integer(MINES_ON_BOARD, 50);
                     }
                 },
                 Arrays.asList(new AISolver(dice)),

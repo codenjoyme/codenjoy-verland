@@ -77,7 +77,7 @@ public class AISolver implements Solver<Board> {
             } else {
                 // а тут уже надо рисковать )
                 // TODO решить это
-                return STOP.toString();
+                return ACT(0);
             }
         } else {
             Cell to = getClosest(actions);

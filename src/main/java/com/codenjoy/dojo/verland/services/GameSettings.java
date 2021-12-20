@@ -37,6 +37,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
 
         WIN_SCORE("Win score"),
         BOARD_SIZE("Board size"),
+        SUICIDE_PENALTY("Suicide penalty"),
         GAME_OVER_PENALTY("Game over penalty"),
         DESTROYED_PENALTY("Forgot penalty"),
         DESTROYED_FORGOT_PENALTY("Destroyed forgot penalty"),
@@ -64,6 +65,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     public GameSettings() {
         integer(WIN_SCORE, 300);
         integer(GAME_OVER_PENALTY, 15);
+        integer(SUICIDE_PENALTY, 100);
         integer(DESTROYED_PENALTY, 5);
         integer(DESTROYED_FORGOT_PENALTY, 2);
         integer(CLEAR_BOARD_SCORE, 1);

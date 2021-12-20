@@ -28,12 +28,15 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
+import static com.codenjoy.dojo.verland.services.Events.SUICIDE;
+
 public class Hero extends PlayerHero<Field> implements State<Element, Object> {
 
     private boolean isDead = false;
     private MineDetector mineDetector;
     private Direction nextStep;
     private boolean useDetector;
+    private Player player;
 
     public Hero(int x, int y) {
         super(x, y);
@@ -116,7 +119,16 @@ public class Hero extends PlayerHero<Field> implements State<Element, Object> {
 
     @Override
     public void act(int... p) {
-        useDetector = true;
+        if (p.length == 0) {
+            useDetector = true;
+            return;
+        }
+
+        if (p.length == 1 && p[0] == 0) {
+            player.event(SUICIDE);
+            die();
+            return;
+        }
     }
 
     @Override
@@ -133,5 +145,9 @@ public class Hero extends PlayerHero<Field> implements State<Element, Object> {
         }
 
         nextStep = null;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

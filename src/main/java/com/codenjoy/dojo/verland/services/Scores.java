@@ -61,6 +61,8 @@ public class Scores implements PlayerScores {
             onNoMoreCharge();
         } else if (event.equals(Events.WIN)) {
             onWin();
+        } else if (event.equals(Events.SUICIDE)) {
+            onSuicide();
         } else if (event.equals(Events.CLEAN_BOARD)) {
             onClearBoard();
         }
@@ -73,6 +75,10 @@ public class Scores implements PlayerScores {
 
     private void onWin() {
         score += settings.integer(WIN_SCORE);
+    }
+
+    private void onSuicide() {
+        score -= settings.integer(SUICIDE_PENALTY);
     }
 
     private void onNoMoreCharge() {

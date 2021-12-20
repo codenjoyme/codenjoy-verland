@@ -23,10 +23,10 @@ package com.codenjoy.dojo.verland.model;
  */
 
 
-import com.codenjoy.dojo.verland.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.verland.services.GameSettings;
 
 public class Player extends GamePlayer<Hero, Field> {
 
@@ -36,7 +36,9 @@ public class Player extends GamePlayer<Hero, Field> {
 
     @Override
     public Hero createHero(Point pt) {
-        return new Hero(1, 1);
+        Hero hero = new Hero(1, 1);
+        hero.setPlayer(this); // TODO refactor like clifford/molly
+        return hero;
     }
 
 }

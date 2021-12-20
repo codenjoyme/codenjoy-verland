@@ -35,6 +35,10 @@ public class ScoresTest {
     private PlayerScores scores;
     private GameSettings settings;
 
+    public void suicide() {
+        scores.event(Events.SUICIDE);
+    }
+
     public void destroyMine() {
         scores.event(Events.DESTROY_MINE);
     }
@@ -100,6 +104,26 @@ public class ScoresTest {
         killOnMine();
 
         assertEquals(0, scores.getScore());
+    }
+
+    @Test
+    public void shouldStillZeroAfterSuicide() {
+        scores = new Scores(0, settings);
+
+        suicide();
+
+        assertEquals(0, scores.getScore());
+    }
+
+    @Test
+    public void shouldPenaltyAfterSuicide() {
+        scores = new Scores(110, settings);
+
+        suicide();
+
+        assertEquals(110
+                        - settings.integer(SUICIDE_PENALTY),
+                scores.getScore());
     }
 
     @Test

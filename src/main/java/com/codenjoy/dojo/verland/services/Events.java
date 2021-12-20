@@ -29,5 +29,6 @@ public enum Events {
     FORGET_CHARGE,
     NO_MORE_CHARGE,
     CLEAN_BOARD,
-    WIN
+    WIN,
+    SUICIDE
 }
