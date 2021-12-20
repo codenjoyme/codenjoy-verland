@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.verland;
+package com.codenjoy.dojo.verland.runner;
 
 /*-
  * #%L
@@ -27,7 +27,7 @@ import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.games.verland.Board;
 import com.codenjoy.dojo.verland.services.GameRunner;
 
-public class DryRunGame {
+public class Dry {
 
     public static void main(String[] args) {
         new LocalGameRunner()
