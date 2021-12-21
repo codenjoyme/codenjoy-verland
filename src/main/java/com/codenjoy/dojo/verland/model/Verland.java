@@ -60,7 +60,21 @@ public class Verland implements Field {
     public Verland(ContagionsGenerator generator, GameSettings settings) {
         this.settings = settings;
         this.generator = generator;
+
         buildWalls();
+    }
+
+    @Override
+    public void clearScore() {
+        cures = new LinkedList<>();
+        clean = new HashMap<>();
+        maxScore = 0;
+        score = 0;
+        cells = initializeBoardCells();
+        buildWalls();
+        hero().charge(settings.integer(POTIONS_COUNT));
+        contagions = generator.get(settings.integer(COUNT_CONTAGIONS), this);
+        cured = new LinkedList<>();
     }
 
     private void buildWalls() {
@@ -180,7 +194,7 @@ public class Verland implements Field {
     @Override
     public boolean isContagion(Point pt) {
         if (contagions() == null) return false;
-        return contagions().contains(pt) 
+        return contagions().contains(pt)
                 || (isGameOver() && cured.contains(pt));
     }
 
@@ -227,15 +241,8 @@ public class Verland implements Field {
     public void newGame(Player player) {
         validate();
         this.player = player;
-        cures = new LinkedList<>();
-        clean = new HashMap<>();
-        maxScore = 0;
-        score = 0;
-        cells = initializeBoardCells();
         player.newHero(this);
-        hero().charge(settings.integer(POTIONS_COUNT));
-        contagions = generator.get(settings.integer(COUNT_CONTAGIONS), this);
-        cured = new LinkedList<>();
+        clearScore();
         tick();
     }
 

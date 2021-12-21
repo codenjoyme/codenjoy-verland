@@ -70,7 +70,6 @@ public class RandomContagionsGenerator implements ContagionsGenerator {
                 && point.getY() >= SAFE_AREA_Y_0 && point.getY() <= SAFE_AREA_Y_1;
     }
 
-
     private Point freeCell() {
         if (!free.isEmpty()) {
             int place = dice.next(free.size());
