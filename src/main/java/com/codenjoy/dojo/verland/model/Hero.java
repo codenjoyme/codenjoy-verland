@@ -90,7 +90,7 @@ public class Hero extends PlayerHero<Field> implements State<Element, Object> {
 
     @Override
     public Element state(Object player, Object... alsoAtPoint) {
-        if (field.isOnContagion()) {
+        if (field.isContagion(this)) {
             return Element.HERO_DEAD;
         } else {
             return Element.HERO;

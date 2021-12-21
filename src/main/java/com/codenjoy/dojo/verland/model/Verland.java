@@ -153,8 +153,8 @@ public class Verland implements Field {
         }
 
         boolean cleaned = move(direction);
-        if (isOnContagion()) {
-            player.getHero().die();
+        if (isContagion(hero())) {
+            hero().die();
             openAllBoard();
             player.event(Events.GOT_INFECTED);
         } else {
@@ -180,11 +180,6 @@ public class Verland implements Field {
 
     private void nextTurn() {
         turnCount++;
-    }
-
-    @Override
-    public boolean isOnContagion() {
-        return contagions().contains(hero());
     }
 
     @Override
