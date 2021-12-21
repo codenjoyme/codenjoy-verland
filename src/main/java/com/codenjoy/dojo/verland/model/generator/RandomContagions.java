@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.verland.model;
+package com.codenjoy.dojo.verland.model.generator;
 
 /*-
  * #%L
@@ -25,12 +25,13 @@ package com.codenjoy.dojo.verland.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.verland.model.Field;
 import com.codenjoy.dojo.verland.model.items.Contagion;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RandomContagionsGenerator implements ContagionsGenerator {
+public class RandomContagions implements Contagions {
 
     public static int SAFE_AREA_X_0 = 1;
     public static int SAFE_AREA_X_1 = 3;
@@ -40,7 +41,7 @@ public class RandomContagionsGenerator implements ContagionsGenerator {
     private List<Point> free;
     private Dice dice;
 
-    public RandomContagionsGenerator(Dice dice) {
+    public RandomContagions(Dice dice) {
         this.dice = dice;
     }
 

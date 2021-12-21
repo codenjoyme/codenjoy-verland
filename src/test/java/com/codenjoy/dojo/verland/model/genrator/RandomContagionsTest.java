@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.verland.model;
+package com.codenjoy.dojo.verland.model.genrator;
 
 /*-
  * #%L
@@ -26,6 +26,9 @@ package com.codenjoy.dojo.verland.model;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
+import com.codenjoy.dojo.verland.model.Player;
+import com.codenjoy.dojo.verland.model.Verland;
+import com.codenjoy.dojo.verland.model.generator.RandomContagions;
 import com.codenjoy.dojo.verland.model.items.Contagion;
 import com.codenjoy.dojo.verland.services.GameSettings;
 import org.junit.Before;
@@ -37,7 +40,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
-public class RandomContagionsGeneratorTest {
+public class RandomContagionsTest {
 
     private GameSettings settings;
 
@@ -88,12 +91,12 @@ public class RandomContagionsGeneratorTest {
     }
 
     private boolean isInSafeArea(Point point) {
-        return point.getX() >= RandomContagionsGenerator.SAFE_AREA_X_0 && point.getX() <= RandomContagionsGenerator.SAFE_AREA_X_1
-                && point.getY() >= RandomContagionsGenerator.SAFE_AREA_Y_0 && point.getY() <= RandomContagionsGenerator.SAFE_AREA_Y_1;
+        return point.getX() >= RandomContagions.SAFE_AREA_X_0 && point.getX() <= RandomContagions.SAFE_AREA_X_1
+                && point.getY() >= RandomContagions.SAFE_AREA_Y_0 && point.getY() <= RandomContagions.SAFE_AREA_Y_1;
     }
 
     private List<Contagion> generate() {
-        return new RandomContagionsGenerator(new RandomDice()).get(10, new MockBoard());
+        return new RandomContagions(new RandomDice()).get(10, new MockBoard());
     }
 
     private class MockBoard extends Verland {

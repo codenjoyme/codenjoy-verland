@@ -36,7 +36,7 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.verland.model.Player;
-import com.codenjoy.dojo.verland.model.RandomContagionsGenerator;
+import com.codenjoy.dojo.verland.model.generator.RandomContagions;
 import com.codenjoy.dojo.verland.model.Verland;
 import com.codenjoy.dojo.verland.services.ai.AISolver;
 
@@ -56,7 +56,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public GameField createGame(int levelNumber, GameSettings settings) {
-        return new Verland(new RandomContagionsGenerator(getDice()), settings);
+        return new Verland(new RandomContagions(getDice()), settings);
     }
 
     @Override

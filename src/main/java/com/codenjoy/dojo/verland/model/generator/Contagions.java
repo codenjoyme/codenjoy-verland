@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.verland.model;
+package com.codenjoy.dojo.verland.model.generator;
 
 /*-
  * #%L
@@ -23,10 +23,11 @@ package com.codenjoy.dojo.verland.model;
  */
 
 
+import com.codenjoy.dojo.verland.model.Field;
 import com.codenjoy.dojo.verland.model.items.Contagion;
 
 import java.util.List;
 
-public interface ContagionsGenerator {
+public interface Contagions {
     List<Contagion> get(int count, Field board);
 }
