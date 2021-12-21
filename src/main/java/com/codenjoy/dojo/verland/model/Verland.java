@@ -37,7 +37,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static com.codenjoy.dojo.services.field.Generator.generate;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.COUNT_CONTAGIONS;
@@ -139,36 +139,26 @@ public class Verland implements Field {
     }
 
     @Override
-    public BoardReader<Player> reader() { // TODO сделать красиво
-        return new BoardReader<>() {
-            @Override
-            public int size() {
-                return field.size();
-            }
-
-            @Override
-            public void addAll(Player player, Consumer processor) {
-                if (Verland.this.isGameOver()) {
-                    process(player, processor,
-                            Hero.class,
-                            Wall.class,
-                            Contagion.class,
-                            Cured.class,
-                            Cure.class,
-                            Cell.class);
-                } else {
-                    process(player, processor,
-                            Hero.class,
-                            Wall.class,
-                            Cure.class,
-                            Cell.class);
-                }
-            }
-
-            private void process(Player player, Consumer processor, Class... classes) {
-                field.reader(classes).addAll(player, processor);
+    public BoardReader<Player> reader() {
+        // TODO может как-то по другому исключать объекты из отрисовки при gameOver?
+        Function function = (Object player) -> {
+            if (Verland.this.isGameOver()) {
+                return new Class[]{
+                        Hero.class,
+                        Wall.class,
+                        Contagion.class,
+                        Cured.class,
+                        Cure.class,
+                        Cell.class};
+            } else {
+                return new Class[]{
+                        Hero.class,
+                        Wall.class,
+                        Cure.class,
+                        Cell.class};
             }
         };
+        return field.reader(function);
     }
 
     // TODO удалить метод, когда полноценно будут юзеры
