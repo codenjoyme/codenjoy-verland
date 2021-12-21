@@ -28,7 +28,7 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.verland.model.generator.Contagions;
+import com.codenjoy.dojo.verland.model.generator.Generator;
 import com.codenjoy.dojo.verland.model.items.Contagion;
 import com.codenjoy.dojo.verland.services.GameSettings;
 import org.junit.Before;
@@ -46,7 +46,7 @@ public class HeroTest {
     private static final int CONTAGIONS_COUNT = 4;
     private static final int BOARD_SIZE = 5;
     private static final int POTIONS_COUNT = 8;
-    private static final Contagions NO_CONTAGIONS = new MockGenerator();
+    private static final Generator NO_CONTAGIONS = new MockGenerator();
 
     private Field board;
     private EventListener listener;
@@ -64,10 +64,10 @@ public class HeroTest {
         listener = mock(EventListener.class);
     }
 
-    static class MockGenerator implements Contagions {
+    static class MockGenerator implements Generator {
 
         @Override
-        public List<Contagion> get(int count, Field board) {
+        public List<Contagion> get(int count, Field field) {
             return new ArrayList<>();
         }
     }

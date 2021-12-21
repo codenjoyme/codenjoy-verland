@@ -29,7 +29,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.verland.model.generator.Contagions;
+import com.codenjoy.dojo.verland.model.generator.Generator;
 import com.codenjoy.dojo.verland.model.items.*;
 import com.codenjoy.dojo.verland.services.Events;
 import com.codenjoy.dojo.verland.services.GameSettings;
@@ -49,7 +49,7 @@ public class Verland implements Field {
     private List<Cure> cures;
 
     private int turnCount = 0;
-    private Contagions generator;
+    private Generator<Contagion> generator;
     private int maxScore;
     private int score;
     private Map<Point, Integer> clean;
@@ -58,7 +58,7 @@ public class Verland implements Field {
     private Player player;
     private GameSettings settings;
 
-    public Verland(Contagions generator, GameSettings settings) {
+    public Verland(Generator<Contagion> generator, GameSettings settings) {
         this.settings = settings;
         this.generator = generator;
 
