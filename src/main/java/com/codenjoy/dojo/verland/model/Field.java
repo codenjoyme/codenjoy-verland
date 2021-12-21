@@ -68,7 +68,7 @@ public interface Field extends GameField<Player> {
 
     boolean isHero(Point pt);
 
-    int contagionsNear(Point pt);
+    int visibleContagionsNear(Point pt);
 
     Hero hero();
 }

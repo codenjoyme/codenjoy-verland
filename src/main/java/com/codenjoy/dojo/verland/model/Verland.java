@@ -35,7 +35,6 @@ import com.codenjoy.dojo.verland.services.GameSettings;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.*;
 import static java.util.stream.Collectors.toList;
@@ -196,15 +195,6 @@ public class Verland implements Field {
     }
 
     @Override
-    public int contagionsNear(Point pt) {
-        Integer count = clean.get(pt);
-        if (count == null) {
-            return Element.CLEAR.value();
-        }
-        return count;
-    }
-
-    @Override
     public BoardReader reader() {
         return new BoardReader<Player>() {
             private int size = Verland.this.size();
@@ -273,16 +263,25 @@ public class Verland implements Field {
 
     @Override
     public int contagionsNear() {
-        return contagionsNear2(hero());
+        return contagionsNear(hero());
     }
 
-    // TODO какая разница в contagionsNear и contagionsNear2
-    private int contagionsNear2(Point pt) {
+    private int contagionsNear(Point pt) {
         return (int)Arrays.stream(QDirection.values())
                 .map(direction -> direction.change(pt))
                 .filter(to -> cells.contains(to))
                 .filter(to -> contagions().contains(to))
                 .count();
+    }
+
+    // TODO попытаться избавиться от этого метода в пользу contagionsNear
+    @Override
+    public int visibleContagionsNear(Point pt) {
+        Integer count = clean.get(pt);
+        if (count == null) {
+            return Element.CLEAR.value();
+        }
+        return count;
     }
 
     @Override
@@ -329,13 +328,13 @@ public class Verland implements Field {
         clean.clear();
 
         for (Point cell : cells())  {
-            clean.put(cell, contagionsNear2(cell));
+            clean.put(cell, contagionsNear(cell));
         }
     }
 
     private void recalculateWalkMap() {
         for (Map.Entry<Point, Integer> entry : clean.entrySet()) {
-            entry.setValue(contagionsNear2(entry.getKey()));
+            entry.setValue(contagionsNear(entry.getKey()));
         }
     }
 
