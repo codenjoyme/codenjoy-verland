@@ -88,7 +88,7 @@ public class SmokeTest {
         SmokeUtils.recheck = actual -> {
             // мы все же проиграли
             assertEquals(false, actual.contains(Events.GOT_INFECTED.name()));
-            assertEquals(true, actual.contains(Events.FORGOT_POTION.name()));
+            assertEquals(false, actual.contains(Events.FORGOT_POTION.name()));
             assertEquals(true, actual.contains(Events.SUICIDE.name()));
         };
 

@@ -121,7 +121,7 @@ public class Verland implements Field {
     public List<Point> freeCells() {
         return cells().stream()
                 .filter(cell -> !hero().itsMe(cell))
-                .filter(cell -> !walls().contains(cell)) // TODO test me
+                .filter(cell -> !isWall(cell)) // TODO test me
                 .filter(cell -> !isContagion(cell))
                 .collect(toList());
     }
@@ -203,6 +203,11 @@ public class Verland implements Field {
     }
 
     @Override
+    public boolean isWall(Point pt) {
+        return walls.contains(pt);
+    }
+
+    @Override
     public boolean isHero(Point pt) {
         return pt.equals(hero());
     }
@@ -221,12 +226,12 @@ public class Verland implements Field {
             public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
                 processor.accept(Arrays.asList(hero()));
                 if (isGameOver()) {
-                    processor.accept(contagions());
-                    processor.accept(cured());
+                    processor.accept(contagions()); // TODO to use contagions field
+                    processor.accept(cured);
                 }
-                processor.accept(cures());
-                processor.accept(cells());
-                processor.accept(walls());
+                processor.accept(cures);
+                processor.accept(cells);
+                processor.accept(walls);
             }
         };
     }
@@ -369,18 +374,6 @@ public class Verland implements Field {
         }
 
         hero().tick();
-    }
-
-    public List<Wall> walls() {
-        return walls;
-    }
-
-    public List<Cure> cures() {
-        return cures;
-    }
-
-    public List<Cured> cured() {
-        return cured;
     }
 
     @Override
