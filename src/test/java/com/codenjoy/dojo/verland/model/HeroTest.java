@@ -27,7 +27,6 @@ import com.codenjoy.dojo.games.verland.Element;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.verland.model.items.Contagion;
 import com.codenjoy.dojo.verland.services.GameSettings;
@@ -46,10 +45,9 @@ public class HeroTest {
     private static final int CONTAGIONS_COUNT = 4;
     private static final int BOARD_SIZE = 5;
     private static final int POTIONS_COUNT = 8;
+    private static final ContagionsGenerator NO_CONTAGIONS = new MockGenerator();
+
     private Field board;
-    private Hero hero;
-    private List<Contagion> contagions;
-    private final ContagionsGenerator NO_CONTAGIONS = new MockGenerator();
     private EventListener listener;
     private GameSettings settings;
 
@@ -62,12 +60,10 @@ public class HeroTest {
 
         board = new Verland(NO_CONTAGIONS, settings);
         board.newGame(new Player(listener, settings));
-        hero = board.hero();
-        contagions = board.contagions();
         listener = mock(EventListener.class);
     }
 
-    class MockGenerator implements ContagionsGenerator {
+    static class MockGenerator implements ContagionsGenerator {
 
         @Override
         public List<Contagion> get(int count, Field board) {
@@ -154,17 +150,17 @@ public class HeroTest {
 
     @Test
     public void shouldHeroOnBoard() {
-        assertNotNull(hero);
+        assertNotNull(hero());
     }
 
     @Test
     public void shouldHeroBeAtBoardDefaultPosition() {
-        assertEquals(hero, pt(1, 1));
+        assertEquals(hero(), pt(1, 1));
     }
 
     @Test
     public void shouldContagionsOnBoard() {
-        assertNotNull(contagions);
+        assertNotNull(board.contagions());
     }
 
     @Test
@@ -177,7 +173,7 @@ public class HeroTest {
         int borders = 0;
         int freeCells = board.freeCells().size();
         int hero = 1;
-        int contagions = this.contagions.size();
+        int contagions = board.contagions().size();
 
         assertEquals(board.cells().size(),
                 freeCells + contagions + hero + borders);
@@ -185,42 +181,42 @@ public class HeroTest {
 
     @Test
     public void shouldHeroMoveToUp() {
-        int oldYPosition = hero.getY();
+        int oldYPosition = hero().getY();
 
         board.moveTo(Direction.UP);
 
-        assertEquals(hero.getY(), oldYPosition + 1);
+        assertEquals(hero().getY(), oldYPosition + 1);
     }
 
     @Test
     public void shouldHeroMoveToDown() {
         board.moveTo(Direction.UP);
 
-        int oldYPosition = hero.getY();
+        int oldYPosition = hero().getY();
 
         board.moveTo(Direction.DOWN);
 
-        assertEquals(hero.getY(), oldYPosition - 1);
+        assertEquals(hero().getY(), oldYPosition - 1);
     }
 
     @Test
     public void shouldHeroMoveToLeft() {
         board.moveTo(Direction.RIGHT);
 
-        int oldXPosition = hero.getX();
+        int oldXPosition = hero().getX();
 
         board.moveTo(Direction.LEFT);
 
-        assertEquals(hero.getX(), oldXPosition - 1);
+        assertEquals(hero().getX(), oldXPosition - 1);
     }
 
     @Test
     public void shouldHeroMoveToRight() {
-        int oldXPosition = hero.getX();
+        int oldXPosition = hero().getX();
 
         board.moveTo(Direction.RIGHT);
 
-        assertEquals(hero.getX(), oldXPosition + 1);
+        assertEquals(hero().getX(), oldXPosition + 1);
     }
 
     private void givenHeroMovedToContagion() {
@@ -229,8 +225,8 @@ public class HeroTest {
     }
 
     private void placeContagionUpFromHero() {
-        Point result = pt(hero.getX(), hero.getY() + 1);
-        if (!contagions.contains(result)) {
+        Point result = pt(hero().getX(), hero().getY() + 1);
+        if (!board.contagions().contains(result)) {
             board.tryCreateContagion(result);
         }
     }
@@ -239,7 +235,7 @@ public class HeroTest {
     public void shouldGameIsOver_whenHeroIsDead() {
         givenHeroMovedToContagion();
 
-        assertEquals(board.isGameOver(), hero.isDead());
+        assertEquals(board.isGameOver(), hero().isDead());
     }
 
     @Test
@@ -261,12 +257,12 @@ public class HeroTest {
 
     @Test
     public void shouldPotionsHaveCharge() {
-        assertNotNull(hero.potions().charge());
+        assertNotNull(potions().charge());
     }
 
     @Test
     public void shouldPotionsChargeMoreThanContagionsOnBoard() {
-        assertEquals(true, hero.potions().charge() > board.contagions().size());
+        assertEquals(true, potions().charge() > board.contagions().size());
     }
 
     @Test
@@ -283,11 +279,15 @@ public class HeroTest {
 
     @Test
     public void shouldPotionsChargeDecreaseByOne_whenUse() {
-        int potionsCharge = hero.potions().charge();
+        int potionsCharge = potions().charge();
 
         board.cure(Direction.UP);
 
-        assertEquals(potionsCharge, hero.potions().charge() + 1);
+        assertEquals(potionsCharge, potions().charge() + 1);
+    }
+
+    private Potions potions() {
+        return hero().potions();
     }
 
     @Test
@@ -355,8 +355,12 @@ public class HeroTest {
                 "☼!!!☼\n" +
                 "☼☼☼☼☼\n", getBoardAsString(board));
 
-        assertEquals(false, hero.isDead());
+        assertEquals(false, hero().isDead());
         assertEquals(true, board.isGameOver());
+    }
+
+    private Hero hero() {
+        return board.hero();
     }
 
     private String getBoardAsString(Field board) {
