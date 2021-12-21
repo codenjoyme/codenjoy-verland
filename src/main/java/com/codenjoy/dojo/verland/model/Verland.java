@@ -43,16 +43,17 @@ public class Verland implements Field {
     private List<Point> cells;
     private List<Contagion> contagions;
     private List<Cured> cured;
+    private List<Wall> walls;
+    private List<Cure> cures;
+
     private int turnCount = 0;
     private ContagionsGenerator generator;
     private int maxScore;
     private int score;
-    private List<Wall> walls;
-    private List<Cure> cures;
     private Map<Point, Integer> clean;
     private int currentSize;
-    private Player player;
 
+    private Player player;
     private GameSettings settings;
 
     public Verland(ContagionsGenerator generator, GameSettings settings) {
@@ -104,10 +105,10 @@ public class Verland implements Field {
     public List<Point> freeCells() {
         List<Point> result = new LinkedList<>();
         for (Point cell : cells()) {
-            boolean isSapper = cell.equals(hero());
-            boolean isBoard = cell.getX() == 0 || cell.getY() == 0 || cell.getX() == size() - 1 || cell.getY() == size() - 1;  // TODO test me
-            boolean isMine = isContagion(cell);
-            if (!isSapper && !isMine && !isBoard) {
+            boolean isHero = hero().itsMe(cell);
+            boolean isBoard = walls().contains(cell);  // TODO test me
+            boolean isContagion = isContagion(cell);
+            if (!isHero && !isContagion && !isBoard) {
                 result.add(cell);
             }
         }
