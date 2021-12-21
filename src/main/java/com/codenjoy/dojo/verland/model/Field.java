@@ -23,7 +23,7 @@ package com.codenjoy.dojo.verland.model;
  */
 
 
-import com.codenjoy.dojo.verland.model.items.Mine;
+import com.codenjoy.dojo.verland.model.items.Contagion;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -32,45 +32,45 @@ import java.util.List;
 
 public interface Field extends GameField<Player> {
 
-    List<Point> getFreeCells();
+    List<Point> freeCells();
 
-    List<Point> getCells();
+    List<Point> cells();
 
     int size();
 
-    List<Mine> getMines();
+    List<Contagion> contagions();
 
-    int getMinesCount();
+    int contagionsCount();
 
-    void heroMoveTo(Direction direction);
+    void moveTo(Direction direction);
 
-    boolean isSapperOnMine();
+    boolean isOnContagion();
 
-    Point getCellPossiblePosition(Direction direction);
+    Point positionAfterMove(Direction direction);
 
-    int getMinesNearSapper();
+    int contagionsNear();
 
-    boolean isEmptyDetectorButPresentMines();
+    boolean isNoPotionsButPresentContagions();
 
     boolean isWin();
 
-    void useMineDetectorToGivenDirection(Direction direction);
+    void cure(Direction direction);
 
-    Mine createMineOnPositionIfPossible(Point cell);
+    Contagion tryCreateContagion(Point cell);
 
     int getTurn();
 
     boolean isGameOver();
 
-    boolean isMine(Point pt);
+    boolean isContagion(Point pt);
 
     boolean walkAt(Point pt);
 
-    boolean isFlag(Point pt);
+    boolean isCure(Point pt);
 
-    boolean isSapper(Point pt);
+    boolean isHero(Point pt);
 
-    int minesNear(Point pt);
+    int contagionsNear(Point pt);
 
-    Hero sapper();
+    Hero hero();
 }

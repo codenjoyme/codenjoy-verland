@@ -29,7 +29,7 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.verland.model.items.Mine;
+import com.codenjoy.dojo.verland.model.items.Contagion;
 import com.codenjoy.dojo.verland.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,48 +43,48 @@ import static org.mockito.Mockito.mock;
 
 public class HeroTest {
 
-    private static final int MINES_COUNT = 4;
+    private static final int CONTAGIONS_COUNT = 4;
     private static final int BOARD_SIZE = 5;
-    private static final int CHARGE_COUNT = 8;
+    private static final int POTIONS_COUNT = 8;
     private Field board;
-    private Hero sapper;
-    private List<Mine> mines;
-    private final MinesGenerator NO_MINES = new MockGenerator();
+    private Hero hero;
+    private List<Contagion> contagions;
+    private final ContagionsGenerator NO_CONTAGIONS = new MockGenerator();
     private EventListener listener;
     private PrinterFactory printer;
     private GameSettings settings;
 
     @Before
-    public void gameStart() {
+    public void before() {
         settings = new GameSettings()
                 .integer(GameSettings.Keys.BOARD_SIZE, BOARD_SIZE)
-                .integer(GameSettings.Keys.COUNT_CONTAGIONS, MINES_COUNT)
-                .integer(GameSettings.Keys.POTIONS_COUNT, CHARGE_COUNT);
+                .integer(GameSettings.Keys.COUNT_CONTAGIONS, CONTAGIONS_COUNT)
+                .integer(GameSettings.Keys.POTIONS_COUNT, POTIONS_COUNT);
 
-        board = new Verland(NO_MINES, settings);
+        board = new Verland(NO_CONTAGIONS, settings);
         board.newGame(new Player(listener, settings));
-        sapper = board.sapper();
-        mines = board.getMines();
+        hero = board.hero();
+        contagions = board.contagions();
         listener = mock(EventListener.class);
         printer = new PrinterFactoryImpl();
     }
 
-    class MockGenerator implements MinesGenerator {
+    class MockGenerator implements ContagionsGenerator {
 
         @Override
-        public List<Mine> get(int count, Field board) {
-            return new ArrayList<Mine>();
+        public List<Contagion> get(int count, Field board) {
+            return new ArrayList<>();
         }
     }
 
     @Test
     public void shouldBoardConsistOfCells() {
-        assertNotNull(board.getCells());
+        assertNotNull(board.cells());
     }
 
     @Test
     public void shouldFreeCellsNumberBeMoreThanZero() {
-        assertTrue(board.getFreeCells().size() > 0);
+        assertTrue(board.freeCells().size() > 0);
     }
 
     @Test
@@ -93,7 +93,7 @@ public class HeroTest {
         settings.integer(GameSettings.Keys.BOARD_SIZE, 0);
 
         // when
-        new Verland(NO_MINES, settings)
+        new Verland(NO_CONTAGIONS, settings)
                 .newGame(new Player(listener, settings));
 
         // then
@@ -101,13 +101,13 @@ public class HeroTest {
     }
 
     @Test
-    public void shouldMinesCountLessThenAllCells_whenGameStart() {
+    public void shouldContagionsCountLessThenAllCells_whenGameStart() {
         // given
         settings.integer(GameSettings.Keys.BOARD_SIZE, 2)
                 .integer(GameSettings.Keys.COUNT_CONTAGIONS, 100);
 
         // when
-        new Verland(NO_MINES, settings)
+        new Verland(NO_CONTAGIONS, settings)
                 .newGame(new Player(listener, settings));
 
         // then
@@ -115,14 +115,14 @@ public class HeroTest {
     }
 
     @Test
-    public void shouldMineDetectorChargeMoreThanMines_whenGameStart() {
+    public void shouldPotionsChargeMoreThanContagions_whenGameStart() {
         // given
         settings.integer(GameSettings.Keys.BOARD_SIZE, 100)
                 .integer(GameSettings.Keys.COUNT_CONTAGIONS, 20)
                 .integer(GameSettings.Keys.POTIONS_COUNT, 10);
 
         // when
-        new Verland(NO_MINES, settings)
+        new Verland(NO_CONTAGIONS, settings)
                 .newGame(new Player(listener, settings));
 
         // then
@@ -136,7 +136,7 @@ public class HeroTest {
         settings.integer(GameSettings.Keys.BOARD_SIZE, 10);
 
         // when
-        new Verland(NO_MINES, settings)
+        new Verland(NO_CONTAGIONS, settings)
                 .newGame(new Player(listener, settings));
 
         // then
@@ -146,177 +146,175 @@ public class HeroTest {
 
     @Test
     public void shouldBoardBeSquare() {
-        assertEquals(board.getCells().size() % (board.size() - 2), 0);
+        assertEquals(board.cells().size() % (board.size() - 2), 0);
     }
 
     @Test
     public void shouldBoardCellsNumberBeMoreThanOne() {
-        assertTrue(board.getCells().size() > 1);
+        assertTrue(board.cells().size() > 1);
     }
 
     @Test
-    public void shouldSapperOnBoard() {
-        assertNotNull(sapper);
+    public void shouldHeroOnBoard() {
+        assertNotNull(hero);
     }
 
     @Test
-    public void shouldSapperBeAtBoardDefaultPosition() {
-        assertEquals(sapper, pt(1, 1));
+    public void shouldHeroBeAtBoardDefaultPosition() {
+        assertEquals(hero, pt(1, 1));
     }
 
     @Test
-    public void shouldMinesOnBoard() {
-        assertNotNull(mines);
+    public void shouldContagionsOnBoard() {
+        assertNotNull(contagions);
     }
 
     @Test
-    public void shouldMinesCountSpecify_whenGameStart() {
-        assertNotNull(board.getMinesCount());
+    public void shouldContagionsCountSpecify_whenGameStart() {
+        assertNotNull(board.contagionsCount());
     }
 
     @Test
-    public void shouldFreeCellsDecrease_whenCreatesSapperAndMines() {
+    public void shouldFreeCellsDecrease_whenCreatesHeroAndContagions() {
         int borders = 0; // (board.getSize() - 1) * 4;
-        int freeCells = board.getFreeCells().size();
-        int sapper = 1;
-        int mines = this.mines.size();
+        int freeCells = board.freeCells().size();
+        int hero = 1;
+        int contagions = this.contagions.size();
 
-        assertEquals(board.getCells().size(),
-                freeCells + mines + sapper + borders);
+        assertEquals(board.cells().size(),
+                freeCells + contagions + hero + borders);
     }
 
     @Test
-    public void shouldSapperMoveToUp() {
-        int oldYPosition = sapper.getY();
+    public void shouldHeroMoveToUp() {
+        int oldYPosition = hero.getY();
 
-        board.heroMoveTo(Direction.UP);
+        board.moveTo(Direction.UP);
 
-        assertEquals(sapper.getY(), oldYPosition + 1);
+        assertEquals(hero.getY(), oldYPosition + 1);
     }
 
     @Test
-    public void shouldSapperMoveToDown() {
-        board.heroMoveTo(Direction.UP);
+    public void shouldHeroMoveToDown() {
+        board.moveTo(Direction.UP);
 
-        int oldYPosition = sapper.getY();
+        int oldYPosition = hero.getY();
 
-        board.heroMoveTo(Direction.DOWN);
+        board.moveTo(Direction.DOWN);
 
-        assertEquals(sapper.getY(), oldYPosition - 1);
+        assertEquals(hero.getY(), oldYPosition - 1);
     }
 
     @Test
-    public void shouldSapperMoveToLeft() {
-        board.heroMoveTo(Direction.RIGHT);
+    public void shouldHeroMoveToLeft() {
+        board.moveTo(Direction.RIGHT);
 
-        int oldXPosition = sapper.getX();
+        int oldXPosition = hero.getX();
 
-        board.heroMoveTo(Direction.LEFT);
+        board.moveTo(Direction.LEFT);
 
-        assertEquals(sapper.getX(), oldXPosition - 1);
+        assertEquals(hero.getX(), oldXPosition - 1);
     }
 
     @Test
-    public void shouldSapperMoveToRight() {
-        int oldXPosition = sapper.getX();
+    public void shouldHeroMoveToRight() {
+        int oldXPosition = hero.getX();
 
-        board.heroMoveTo(Direction.RIGHT);
+        board.moveTo(Direction.RIGHT);
 
-        assertEquals(sapper.getX(), oldXPosition + 1);
+        assertEquals(hero.getX(), oldXPosition + 1);
     }
 
-    private void givenSapperMovedToMine() {
-        placeMineUpFromSapper();
-        board.heroMoveTo(Direction.UP);
+    private void givenHeroMovedToContagion() {
+        placeContagionUpFromHero();
+        board.moveTo(Direction.UP);
     }
 
-    private void placeMineUpFromSapper() {
-        Point result = pt(sapper.getX(), sapper.getY() + 1);
-        if (!mines.contains(result)) {
-            board.createMineOnPositionIfPossible(result);
+    private void placeContagionUpFromHero() {
+        Point result = pt(hero.getX(), hero.getY() + 1);
+        if (!contagions.contains(result)) {
+            board.tryCreateContagion(result);
         }
     }
 
     @Test
-    public void shouldGameIsOver_whenSapperIsDead() {
-        givenSapperMovedToMine();
+    public void shouldGameIsOver_whenHeroIsDead() {
+        givenHeroMovedToContagion();
 
-        assertEquals(board.isGameOver(), sapper.isDead());
+        assertEquals(board.isGameOver(), hero.isDead());
     }
 
     @Test
-    public void shouldNextTurn_whenSapperMove() {
-        int turnBeforeSapperMotion = board.getTurn();
+    public void shouldNextTurn_whenHeroMove() {
+        int turnBeforeHeroMotion = board.getTurn();
 
-        board.heroMoveTo(Direction.UP);
-        int turnAfterSapperMotion = board.getTurn();
+        board.moveTo(Direction.UP);
+        int turnAfterHeroMotion = board.getTurn();
 
-        assertEquals(turnBeforeSapperMotion, turnAfterSapperMotion - 1);
+        assertEquals(turnBeforeHeroMotion, turnAfterHeroMotion - 1);
     }
 
     @Test
-    public void shouldSapperKnowsHowMuchMinesNearHim_whenAtLeastOneIsDownFromSapper() {
-        placeMineUpFromSapper();
+    public void shouldHeroKnowsHowMuchContagionsNearHim_whenAtLeastOneIsDownFromHero() {
+        placeContagionUpFromHero();
 
-        assertTrue(board.getMinesNearSapper() > 0);
+        assertTrue(board.contagionsNear() > 0);
     }
 
     @Test
-    public void shouldMineDetectorHaveCharge() {
-        assertNotNull(sapper.getMineDetector().getCharge());
+    public void shouldPotionsHaveCharge() {
+        assertNotNull(hero.potions().charge());
     }
 
     @Test
-    public void shouldMineDetectorChargeMoreThanMinesOnBoard() {
-        assertTrue(sapper.getMineDetector().getCharge() > board.getMinesCount());
+    public void shouldPotionsChargeMoreThanContagionsOnBoard() {
+        assertTrue(hero.potions().charge() > board.contagionsCount());
     }
 
     @Test
-    public void shouldSapperDestroyMine_whenMineExistInGivenDirection() {
+    public void shouldHeroDestroyMine_whenMineExistInGivenDirection() {
         for (Direction direction : Direction.values()) {
 
-            board.useMineDetectorToGivenDirection(direction);
-            boolean isMineInDirection = board.getMines().contains(
-                    board.getCellPossiblePosition(direction));
+            board.cure(direction);
+            boolean isMineInDirection = board.contagions().contains(
+                    board.positionAfterMove(direction));
 
             assertTrue(!isMineInDirection);
         }
     }
 
     @Test
-    public void shouldMineDetectorChargeDecreaseByOne_whenUse() {
-        int mineDetectorCharge = sapper.getMineDetector().getCharge();
+    public void shouldPotionsChargeDecreaseByOne_whenUse() {
+        int potionsCharge = hero.potions().charge();
 
-        board.useMineDetectorToGivenDirection(Direction.UP);
-        int mineDetectorChargeWhenUse = sapper.getMineDetector().getCharge();
+        board.cure(Direction.UP);
 
-        assertEquals(mineDetectorCharge, mineDetectorChargeWhenUse + 1);
+        assertEquals(potionsCharge, hero.potions().charge() + 1);
     }
 
     @Test
-    public void shouldMineCountDecreaseByOne_whenMineIsDestroyed() {
-        placeMineUpFromSapper();
-        int minesCount = board.getMinesCount();
+    public void shouldContagionsCountDecreaseByOne_whenContagionsIsCured() {
+        placeContagionUpFromHero();
+        int count = board.contagionsCount();
 
-        board.useMineDetectorToGivenDirection(Direction.UP);
-        int minesCountWhenMineDestroyed = board.getMinesCount();
+        board.cure(Direction.UP);
 
-        assertEquals(minesCount, minesCountWhenMineDestroyed + 1);
+        assertEquals(count, board.contagionsCount() + 1);
     }
 
     @Test
-    public void shouldWin_whenNoMoreMines() {
-        placeMineUpFromSapper();
+    public void shouldWin_whenNoMoreContagions() {
+        placeContagionUpFromHero();
 
-        board.useMineDetectorToGivenDirection(Direction.UP);
+        board.cure(Direction.UP);
 
         assertTrue(board.isWin());
     }
 
     @Test
     public void shouldGameOver_whenNoMoreCharge() {
-        board.heroMoveTo(Direction.UP);
-        placeMineUpFromSapper();
+        board.moveTo(Direction.UP);
+        placeContagionUpFromHero();
         assertEquals(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
@@ -324,11 +322,11 @@ public class HeroTest {
                 "☼ **☼\n" +
                 "☼☼☼☼☼\n", getBoardAsString(board));
 
-        board.useMineDetectorToGivenDirection(Direction.DOWN);
-//        board.useMineDetectorToGivenDirection(Direction.UP);  // there is bomb
-        board.useMineDetectorToGivenDirection(Direction.LEFT);
-        board.useMineDetectorToGivenDirection(Direction.RIGHT);
-        board.heroMoveTo(Direction.RIGHT);
+        board.cure(Direction.DOWN);
+//        board.usePotionsToGivenDirection(Direction.UP);  // there is contagion
+        board.cure(Direction.LEFT);
+        board.cure(Direction.RIGHT);
+        board.moveTo(Direction.RIGHT);
         assertEquals(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
@@ -336,11 +334,11 @@ public class HeroTest {
                 "☼!**☼\n" +
                 "☼☼☼☼☼\n", getBoardAsString(board));
 
-        board.useMineDetectorToGivenDirection(Direction.DOWN);
-        board.useMineDetectorToGivenDirection(Direction.UP);
-        board.useMineDetectorToGivenDirection(Direction.LEFT);
-        board.useMineDetectorToGivenDirection(Direction.RIGHT);
-        board.heroMoveTo(Direction.RIGHT);
+        board.cure(Direction.DOWN);
+        board.cure(Direction.UP);
+        board.cure(Direction.LEFT);
+        board.cure(Direction.RIGHT);
+        board.moveTo(Direction.RIGHT);
         assertEquals(
                 "☼☼☼☼☼\n" +
                 "☼*!*☼\n" +
@@ -348,10 +346,10 @@ public class HeroTest {
                 "☼!!*☼\n" +
                 "☼☼☼☼☼\n", getBoardAsString(board));
 
-        board.useMineDetectorToGivenDirection(Direction.DOWN);
-        board.useMineDetectorToGivenDirection(Direction.UP);
-        board.useMineDetectorToGivenDirection(Direction.LEFT);
-        board.useMineDetectorToGivenDirection(Direction.RIGHT);
+        board.cure(Direction.DOWN);
+        board.cure(Direction.UP);
+        board.cure(Direction.LEFT);
+        board.cure(Direction.RIGHT);
         assertEquals(
                 "☼☼☼☼☼\n" +
                 "☼o!!☼\n" +
@@ -359,7 +357,7 @@ public class HeroTest {
                 "☼!!!☼\n" +
                 "☼☼☼☼☼\n", getBoardAsString(board));
 
-        assertFalse(sapper.isDead());
+        assertFalse(hero.isDead());
         assertTrue(board.isGameOver());
     }
 

@@ -29,15 +29,15 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Mine extends PointImpl implements State<Element, Object> {
+public class Contagion extends PointImpl implements State<Element, Object> {
 
     private Field field;
 
-    public Mine(Point pt) {
+    public Contagion(Point pt) {
         super(pt);
     }
 
-    public Mine(int x, int y) {
+    public Contagion(int x, int y) {
         super(x, y);
     }
 
@@ -49,7 +49,7 @@ public class Mine extends PointImpl implements State<Element, Object> {
     public Element state(Object player, Object... alsoAtPoint) {
         if (!field.isGameOver()) return null;
 
-        if (field.isFlag(this)) {
+        if (field.isCure(this)) {
             return Element.HERO_HEALING;
         } else {
             return Element.INFECTION;

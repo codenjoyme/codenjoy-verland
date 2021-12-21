@@ -23,10 +23,10 @@ package com.codenjoy.dojo.verland.model;
  */
 
 
-import com.codenjoy.dojo.verland.model.items.Mine;
+import com.codenjoy.dojo.verland.model.items.Contagion;
 
 import java.util.List;
 
-public interface MinesGenerator {
-    List<Mine> get(int count, Field board);
+public interface ContagionsGenerator {
+    List<Contagion> get(int count, Field board);
 }

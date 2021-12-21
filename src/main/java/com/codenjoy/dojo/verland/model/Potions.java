@@ -22,6 +22,20 @@ package com.codenjoy.dojo.verland.model;
  * #L%
  */
 
-public interface DetectorAction {
-    void used();
+public class Potions {
+
+    private int charge;
+
+    public Potions(int charge) {
+        this.charge = charge;
+    }
+
+    public int charge() {
+        return charge;
+    }
+
+    public void useMe() {
+        this.charge--;
+    }
+
 }

@@ -43,10 +43,10 @@ public class Cell extends PointImpl implements State<Element, Object> {
     @Override
     public Element state(Object player, Object... alsoAtPoint) {
         if (field.walkAt(this) || field.isGameOver()) {
-            int minesNear = field.minesNear(this);
-            return minesNear == 0
+            int count = field.contagionsNear(this);
+            return count == 0
                     ? Element.CLEAR
-                    : Element.valueOf(minesNear);
+                    : Element.valueOf(count);
         }
 
         return Element.HIDDEN;

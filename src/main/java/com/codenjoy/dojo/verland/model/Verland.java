@@ -31,7 +31,7 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.verland.model.items.Cell;
 import com.codenjoy.dojo.verland.model.items.Flag;
-import com.codenjoy.dojo.verland.model.items.Mine;
+import com.codenjoy.dojo.verland.model.items.Contagion;
 import com.codenjoy.dojo.verland.model.items.Wall;
 import com.codenjoy.dojo.verland.services.Events;
 import com.codenjoy.dojo.verland.services.GameSettings;
@@ -46,23 +46,23 @@ public class Verland implements Field {
     private Parameter<Integer> detectorCharge;
     private Parameter<Integer> minesOnBoard;
     private List<Point> cells;
-    private List<Mine> mines;
-    private List<Mine> removedMines;
+    private List<Contagion> mines;
+    private List<Contagion> cured;
     private int turnCount = 0;
-    private MinesGenerator minesGenerator;
+    private ContagionsGenerator generator;
     private int maxScore;
     private int score;
     private List<Wall> walls;
-    private List<Flag> flags;
+    private List<Flag> cures;
     private Map<Point, Integer> walkAt;
     private int currentSize;
     private Player player;
 
     private GameSettings settings;
 
-    public Verland(MinesGenerator minesGenerator, GameSettings settings) {
+    public Verland(ContagionsGenerator generator, GameSettings settings) {
         this.settings = settings;
-        this.minesGenerator = minesGenerator;
+        this.generator = generator;
         minesOnBoard = settings.integerValue(COUNT_CONTAGIONS);
         detectorCharge = settings.integerValue(POTIONS_COUNT);
         buildWalls();
@@ -106,12 +106,12 @@ public class Verland implements Field {
     }
 
     @Override
-    public List<Point> getFreeCells() {
+    public List<Point> freeCells() {
         List<Point> result = new LinkedList<>();
-        for (Point cell : getCells()) {
-            boolean isSapper = cell.equals(sapper());
+        for (Point cell : cells()) {
+            boolean isSapper = cell.equals(hero());
             boolean isBoard = cell.getX() == 0 || cell.getY() == 0 || cell.getX() == size() - 1 || cell.getY() == size() - 1;  // TODO test me
-            boolean isMine = isMine(cell);
+            boolean isMine = isContagion(cell);
             if (!isSapper && !isMine && !isBoard) {
                 result.add(cell);
             }
@@ -120,7 +120,7 @@ public class Verland implements Field {
     }
 
     @Override
-    public List<Point> getCells() {
+    public List<Point> cells() {
         return cells;
     }
 
@@ -130,20 +130,20 @@ public class Verland implements Field {
     }
 
     @Override
-    public List<Mine> getMines() {
+    public List<Contagion> contagions() {
         return mines;
     }
 
     @Override
-    public int getMinesCount() {
-        return getMines().size();
+    public int contagionsCount() {
+        return contagions().size();
     }
 
     @Override
-    public void heroMoveTo(Direction direction) {
-        if (isSapperCanMoveToDirection(direction)) {
+    public void moveTo(Direction direction) {
+        if (canMove(direction)) {
             boolean cleaned = moveSapperAndFillFreeCell(direction);
-            if (isSapperOnMine()) {
+            if (isOnContagion()) {
                 player.getHero().die();
                 openAllBoard();
                 player.event(Events.GOT_INFECTED);
@@ -157,15 +157,15 @@ public class Verland implements Field {
     }
 
     private boolean moveSapperAndFillFreeCell(Direction direction) {
-        walkAt.put(sapper().copy(), getMinesNearSapper());
-        sapper().move(direction);
+        walkAt.put(hero().copy(), contagionsNear());
+        hero().move(direction);
 
-        boolean wasHere = walkAt.containsKey(sapper());
+        boolean wasHere = walkAt.containsKey(hero());
         return !wasHere;
     }
 
-    private boolean isSapperCanMoveToDirection(Direction direction) {
-        Point cell = getCellPossiblePosition(direction);
+    private boolean canMove(Direction direction) {
+        Point cell = positionAfterMove(direction);
         return cells.contains(cell);
     }
 
@@ -174,19 +174,20 @@ public class Verland implements Field {
     }
 
     @Override
-    public boolean isSapperOnMine() {
-        return getMines().contains(sapper());
+    public boolean isOnContagion() {
+        return contagions().contains(hero());
     }
 
     @Override
-    public Hero sapper() {
+    public Hero hero() {
         return player.getHero();
     }
 
     @Override
-    public boolean isMine(Point pt) {
-        if (getMines() == null) return false;
-        return getMines().contains(pt) || (isGameOver() && removedMines.contains(pt));
+    public boolean isContagion(Point pt) {
+        if (contagions() == null) return false;
+        return contagions().contains(pt) 
+                || (isGameOver() && cured.contains(pt));
     }
 
     @Override
@@ -195,17 +196,17 @@ public class Verland implements Field {
     }
 
     @Override
-    public boolean isFlag(Point pt) {
-        return flags.contains(pt);
+    public boolean isCure(Point pt) {
+        return cures.contains(pt);
     }
 
     @Override
-    public boolean isSapper(Point pt) {
-        return pt.equals(sapper());
+    public boolean isHero(Point pt) {
+        return pt.equals(hero());
     }
 
     @Override
-    public int minesNear(Point pt) {
+    public int contagionsNear(Point pt) {
         Integer count = walkAt.get(pt);
         if (count == null) {
             return Element.CLEAR.value();
@@ -225,12 +226,12 @@ public class Verland implements Field {
 
             @Override
             public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
-                processor.accept(Arrays.asList(sapper()));
-                processor.accept(getMines());
-                processor.accept(removedMines);
-                processor.accept(getFlags());
-                processor.accept(getCells());
-                processor.accept(getWalls());
+                processor.accept(Arrays.asList(hero()));
+                processor.accept(contagions());
+                processor.accept(cured);
+                processor.accept(cures());
+                processor.accept(cells());
+                processor.accept(walls());
             }
         };
     }
@@ -241,15 +242,15 @@ public class Verland implements Field {
     public void newGame(Player player) {
         validate();
         this.player = player;
-        flags = new LinkedList<>();
+        cures = new LinkedList<>();
         walkAt = new HashMap<>();
         maxScore = 0;
         score = 0;
         cells = initializeBoardCells();
         player.newHero(this);
-        sapper().charge(detectorCharge.getValue());
-        mines = minesGenerator.get(minesOnBoard.getValue(), this);
-        removedMines = new LinkedList<>();
+        hero().charge(detectorCharge.getValue());
+        mines = generator.get(minesOnBoard.getValue(), this);
+        cured = new LinkedList<>();
         tick();
     }
 
@@ -259,15 +260,15 @@ public class Verland implements Field {
     }
 
     @Override
-    public Point getCellPossiblePosition(Direction direction) {
-        return direction.change(sapper().copy());
+    public Point positionAfterMove(Direction direction) {
+        return direction.change(hero());
     }
 
     @Override
-    public Mine createMineOnPositionIfPossible(Point cell) {
-        Mine result = new Mine(cell);
+    public Contagion tryCreateContagion(Point cell) {
+        Contagion result = new Contagion(cell);
         result.init(this);
-        getMines().add(result);
+        contagions().add(result);
         return result;
     }
 
@@ -278,19 +279,20 @@ public class Verland implements Field {
 
     @Override
     public boolean isGameOver() {
-        return !sapper().isAlive();
+        return !hero().isAlive();
     }
 
     @Override
-    public int getMinesNearSapper() {
-        return getMinesNear(sapper());
+    public int contagionsNear() {
+        return contagionsNear2(hero());
     }
 
-    private int getMinesNear(Point position) {
+    // TODO какая разница в contagionsNear и contagionsNear2
+    private int contagionsNear2(Point pt) {
         int result = 0;
         for (QDirection direction : QDirection.values()) {
-            Point newPosition = direction.change(position.copy());
-            if (cells.contains(newPosition) && getMines().contains(newPosition)) {
+            Point to = direction.change(pt.copy());
+            if (cells.contains(to) && contagions().contains(to)) {
                 result++;
             }
         }
@@ -298,27 +300,27 @@ public class Verland implements Field {
     }
 
     @Override
-    public void useMineDetectorToGivenDirection(Direction direction) {
-        final Point result = getCellPossiblePosition(direction);
+    public void cure(Direction direction) {
+        final Point result = positionAfterMove(direction);
         if (cells.contains(result)) {
-            if (sapper().isEmptyCharge()) {
+            if (hero().noMorePotions()) {
                 return;
             }
 
-            if (flags.contains(result)) {
+            if (cures.contains(result)) {
                 return;
             }
 
-            sapper().tryToUseDetector(() -> {
-                flags.add(new Flag(result));
-                if (getMines().contains(result)) {
+            hero().tryToCure(() -> {
+                cures.add(new Flag(result));
+                if (contagions().contains(result)) {
                     removeMine(result);
                 } else {
                     player.event(Events.FORGOT_POTION);
                 }
             });
 
-            if (isEmptyDetectorButPresentMines()) {
+            if (isNoPotionsButPresentContagions()) {
                 openAllBoard();
                 player.event(Events.NO_MORE_POTIONS);
             }
@@ -326,14 +328,14 @@ public class Verland implements Field {
     }
 
     private void removeMine(Point result) {
-        Mine mine = new Mine(result);
+        Contagion mine = new Contagion(result);
         mine.init(this);
-        removedMines.add(mine);
-        getMines().remove(result);
+        cured.add(mine);
+        contagions().remove(result);
         increaseScore();
         recalculateWalkMap();
         player.event(Events.CURE);
-        if (getMines().isEmpty()) {
+        if (contagions().isEmpty()) {
             openAllBoard();
             player.event(Events.WIN);
         }
@@ -342,14 +344,14 @@ public class Verland implements Field {
     private void openAllBoard() {
         walkAt.clear();
 
-        for (Point cell : getCells())  {
-            walkAt.put(cell, getMinesNear(cell));
+        for (Point cell : cells())  {
+            walkAt.put(cell, contagionsNear2(cell));
         }
     }
 
     private void recalculateWalkMap() {
         for (Map.Entry<Point, Integer> entry : walkAt.entrySet()) {
-            entry.setValue(getMinesNear(entry.getKey()));
+            entry.setValue(contagionsNear2(entry.getKey()));
         }
     }
 
@@ -359,13 +361,14 @@ public class Verland implements Field {
     }
 
     @Override
-    public boolean isEmptyDetectorButPresentMines() {
-        return getMines().size() != 0 && sapper().isEmptyCharge();
+    public boolean isNoPotionsButPresentContagions() {
+        return contagions().size() != 0
+                && hero().noMorePotions();
     }
 
     @Override
     public boolean isWin() {
-        return getMines().size() == 0 && !sapper().isDead();
+        return contagions().size() == 0 && !hero().isDead();
     }
 
     @Override
@@ -376,15 +379,15 @@ public class Verland implements Field {
             return;
         }
 
-        sapper().tick();
+        hero().tick();
     }
 
-    public List<Wall> getWalls() {
+    public List<Wall> walls() {
         return walls;
     }
 
-    public List<Flag> getFlags() {
-        return flags;
+    public List<Flag> cures() {
+        return cures;
     }
 
     @Override

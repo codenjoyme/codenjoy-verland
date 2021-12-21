@@ -96,10 +96,10 @@ public class Field {
                 .flatMap(group -> group.list().stream())
                 // пропускаем клеточки в отношении которых ничего не поделать
                 .filter(cell -> cell.action() != Action.NOTHING)
-                // активные действия MARK совершаются в направлении '*' а значит туда мы не зайдем
+                // активные действия CURE совершаются в направлении '*' а значит туда мы не пойдем
                 // а вот GO надо бы проверить на доступность клеточки
                 .filter(cell -> cell.action() == Action.CURE || isReachable(cell))
-                // сперва нас интересуют активные действия в устранении мин
+                // сперва нас интересуют активные действия в устранении заразы
                 .sorted((cell1, cell2) -> Boolean.compare(cell1.action() != Action.CURE, cell2.action() != Action.CURE))
                 // мы исключаем все дубликаты
                 .collect(toCollection(LinkedHashSet::new));

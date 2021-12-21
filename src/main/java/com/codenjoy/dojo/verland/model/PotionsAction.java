@@ -22,20 +22,6 @@ package com.codenjoy.dojo.verland.model;
  * #L%
  */
 
-public class MineDetector {
-
-    private int charge;
-
-    public MineDetector(int charge) {
-        this.charge = charge;
-    }
-
-    public int getCharge() {
-        return charge;
-    }
-
-    public void useMe() {
-        this.charge--;
-    }
-
+public interface PotionsAction {
+    void used();
 }

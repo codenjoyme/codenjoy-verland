@@ -39,27 +39,27 @@ public class ScoresTest {
         scores.event(Events.SUICIDE);
     }
 
-    public void destroyMine() {
+    public void cure() {
         scores.event(Events.CURE);
     }
 
-    public void forgetCharge() {
+    public void forgotPotion() {
         scores.event(Events.FORGOT_POTION);
     }
 
-    public void killOnMine() {
+    public void gotInfected() {
         scores.event(Events.GOT_INFECTED);
     }
 
-    public void noMoreCharge() {
+    public void noMorePotions() {
         scores.event(Events.NO_MORE_POTIONS);
     }
 
-    public void clearBoard() {
+    public void cleanArea() {
         scores.event(Events.CLEAN_AREA);
     }
 
-    public void gameWin() {
+    public void win() {
         scores.event(Events.WIN);
     }
 
@@ -72,21 +72,21 @@ public class ScoresTest {
     public void shouldCollectScores() {
         scores = new Scores(140, settings);
 
-        destroyMine();
-        destroyMine();
-        destroyMine();
-        destroyMine();
+        cure();
+        cure();
+        cure();
+        cure();
 
-        forgetCharge();
+        forgotPotion();
 
-        noMoreCharge();
+        noMorePotions();
 
-        killOnMine();
+        gotInfected();
 
-        clearBoard();
-        clearBoard();
+        cleanArea();
+        cleanArea();
 
-        gameWin();
+        win();
 
         assertEquals(140
                         + 1 + 2 + 3 + 4
@@ -98,16 +98,16 @@ public class ScoresTest {
     }
 
     @Test
-    public void shouldStillZeroAfterDead() {
+    public void shouldStillZero_whenDead() {
         scores = new Scores(0, settings);
 
-        killOnMine();
+        gotInfected();
 
         assertEquals(0, scores.getScore());
     }
 
     @Test
-    public void shouldStillZeroAfterSuicide() {
+    public void shouldStillZero_whenSuicide() {
         scores = new Scores(0, settings);
 
         suicide();
@@ -116,7 +116,7 @@ public class ScoresTest {
     }
 
     @Test
-    public void shouldPenaltyAfterSuicide() {
+    public void shouldPenalty_whenSuicide() {
         scores = new Scores(110, settings);
 
         suicide();
@@ -127,52 +127,52 @@ public class ScoresTest {
     }
 
     @Test
-    public void shouldStillZeroAfterForgotCharge() {
+    public void shouldStillZero_whenForgotPotion() {
         scores = new Scores(0, settings);
 
-        forgetCharge();
+        forgotPotion();
 
         assertEquals(0, scores.getScore());
     }
 
     @Test
-    public void shouldStillZeroAfterNoMoreCharge() {
+    public void shouldStillZero_whenNoMorePotions() {
         scores = new Scores(0, settings);
 
-        noMoreCharge();
+        noMorePotions();
 
         assertEquals(0, scores.getScore());
     }
 
     @Test
-    public void shouldDestroyMinesCountStartsFromZeroAfterDead() {
+    public void shouldDestroyMinesCountStartsFromZero_whenDead() {
         scores = new Scores(0, settings);
 
-        destroyMine();
-        killOnMine();
+        cure();
+        gotInfected();
 
-        destroyMine();
+        cure();
 
         assertEquals(1, scores.getScore());
     }
 
     @Test
-    public void shouldDecreaseMinesCountAfterForgotCharge() {
+    public void shouldDecreaseMinesCount_whenForgotPotions() {
         settings.integer(DESTROYED_PENALTY, 2);
 
         scores = new Scores(0, settings);
 
-        destroyMine();
-        destroyMine();
-        destroyMine();
-        destroyMine();
-        destroyMine();
+        cure();
+        cure();
+        cure();
+        cure();
+        cure();
 
-        forgetCharge();
+        forgotPotion();
 
-        destroyMine();
-        destroyMine();
-        destroyMine();
+        cure();
+        cure();
+        cure();
 
         assertEquals(1 + 2 + 3 + 4 + 5
                 - settings.integer(DESTROYED_FORGOT_PENALTY)
@@ -180,17 +180,17 @@ public class ScoresTest {
     }
 
     @Test
-    public void shouldMinesCountIsZeroAfterManyTimesForgotCharge() {
+    public void shouldMinesCountIsZero_whenManyTimesForgotPotions() {
         scores = new Scores(0, settings);
 
-        destroyMine();
-        destroyMine();
+        cure();
+        cure();
 
-        forgetCharge();
-        forgetCharge();
-        forgetCharge();
+        forgotPotion();
+        forgotPotion();
+        forgotPotion();
 
-        destroyMine();
+        cure();
 
         assertEquals(1, scores.getScore());
     }
@@ -199,34 +199,30 @@ public class ScoresTest {
     public void shouldScore_whenWin() {
         scores = new Scores(0, settings);
 
-        gameWin();
+        win();
 
         assertEquals(settings.integer(WIN_SCORE),
                 scores.getScore());
     }
 
     @Test
-    public void shouldScore_whenClearBoard() {
+    public void shouldScore_whenCleanArea() {
         scores = new Scores(0, settings);
 
-        clearBoard();
+        cleanArea();
 
         assertEquals(settings.integer(CLEAN_AREA_SCORE),
                 scores.getScore());
-
     }
 
     @Test
     public void shouldClearScore() {
         scores = new Scores(0, settings);
 
-        clearBoard();
+        cleanArea();
 
         scores.clear();
 
         assertEquals(0, scores.getScore());
     }
-
-
-
 }

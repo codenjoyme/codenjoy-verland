@@ -25,42 +25,43 @@ package com.codenjoy.dojo.verland.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.verland.model.items.Mine;
+import com.codenjoy.dojo.verland.model.items.Contagion;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RandomMinesGenerator implements MinesGenerator {
+public class RandomContagionsGenerator implements ContagionsGenerator {
 
     public static int SAFE_AREA_X_0 = 1;
     public static int SAFE_AREA_X_1 = 3;
     public static int SAFE_AREA_Y_0 = 1;
     public static int SAFE_AREA_Y_1 = 3;
-    private List<Point> freeCells;
+
+    private List<Point> free;
     private Dice dice;
 
-    public RandomMinesGenerator(Dice dice) {
+    public RandomContagionsGenerator(Dice dice) {
         this.dice = dice;
     }
 
-    public List<Mine> get(int count, Field board) {
-        freeCells = board.getFreeCells();
+    public List<Contagion> get(int count, Field field) {
+        free = field.freeCells();
         removeSafeAreaFromFreeCells();
-        List<Mine> result = new ArrayList<Mine>();
+        List<Contagion> result = new ArrayList<>();
         for (int index = 0; index < count; index++) {
-            Mine mine = new Mine(getRandomFreeCellOnBoard());
-            mine.init(board);
+            Contagion mine = new Contagion(freeCell());
+            mine.init(field);
             result.add(mine);
-            freeCells.remove(mine);
+            free.remove(mine);
         }
         return result;
     }
 
     private void removeSafeAreaFromFreeCells() {
-        for (int i = 0; i < freeCells.size(); i++) {
-            Point point = freeCells.get(i);
+        for (int i = 0; i < free.size(); i++) {
+            Point point = free.get(i);
             if (isInSafeArea(point)) {
-                freeCells.remove(i--);
+                free.remove(i--);
             }
         }
     }
@@ -71,10 +72,10 @@ public class RandomMinesGenerator implements MinesGenerator {
     }
 
 
-    private Point getRandomFreeCellOnBoard() {
-        if (!freeCells.isEmpty()) {
-            int place = dice.next(freeCells.size());
-            return freeCells.get(place);
+    private Point freeCell() {
+        if (!free.isEmpty()) {
+            int place = dice.next(free.size());
+            return free.get(place);
         }
 
         throw new IllegalStateException("This exception should not be present");

@@ -33,14 +33,14 @@ import static com.codenjoy.dojo.verland.services.Events.SUICIDE;
 public class Hero extends PlayerHero<Field> implements State<Element, Object> {
 
     private boolean isDead = false;
-    private MineDetector mineDetector;
-    private Direction nextStep;
-    private boolean useDetector;
+    private Potions potions;
+    private Direction direction;
+    private boolean cure;
     private Player player;
 
     public Hero(int x, int y) {
         super(x, y);
-        useDetector = false;
+        cure = false;
     }
 
     public boolean isDead() {
@@ -54,43 +54,43 @@ public class Hero extends PlayerHero<Field> implements State<Element, Object> {
     @Override
     public boolean isAlive() {
         return !isDead() &&
-                !field.isEmptyDetectorButPresentMines() &&
+                !field.isNoPotionsButPresentContagions() &&
                 !field.isWin();
     }
     
-    private void useMineDetector() {
-        if (mineDetector.getCharge() > 0) {
-            mineDetector.useMe();
+    private void cure() {
+        if (potions.charge() > 0) {
+            potions.useMe();
         }
     }
 
     public void charge(int charge) {
-        this.mineDetector = new MineDetector(charge);
+        this.potions = new Potions(charge);
     }
 
-    public boolean isEmptyCharge() {
-        return mineDetector.getCharge() == 0;
+    public boolean noMorePotions() {
+        return potions.charge() == 0;
     }
 
-    public void tryToUseDetector(DetectorAction detectorAction) {
-        if (isEmptyCharge()) {
+    public void tryToCure(PotionsAction action) {
+        if (noMorePotions()) {
             return;
         }
 
-        useMineDetector();
+        cure();
 
-        if (detectorAction != null) {
-            detectorAction.used();
+        if (action != null) {
+            action.used();
         }
     }
 
-    public MineDetector getMineDetector() {
-        return mineDetector;
+    public Potions potions() {
+        return potions;
     }
 
     @Override
     public Element state(Object player, Object... alsoAtPoint) {
-        if (field.isSapperOnMine()) {
+        if (field.isOnContagion()) {
             return Element.HERO_DEAD;
         } else {
             return Element.HERO;
@@ -99,28 +99,28 @@ public class Hero extends PlayerHero<Field> implements State<Element, Object> {
 
     @Override
     public void down() {
-        nextStep = Direction.DOWN;
+        direction = Direction.DOWN;
     }
 
     @Override
     public void up() {
-        nextStep = Direction.UP;
+        direction = Direction.UP;
     }
 
     @Override
     public void left() {
-        nextStep = Direction.LEFT;
+        direction = Direction.LEFT;
     }
 
     @Override
     public void right() {
-        nextStep = Direction.RIGHT;
+        direction = Direction.RIGHT;
     }
 
     @Override
     public void act(int... p) {
         if (p.length == 0) {
-            useDetector = true;
+            cure = true;
             return;
         }
 
@@ -133,18 +133,18 @@ public class Hero extends PlayerHero<Field> implements State<Element, Object> {
 
     @Override
     public void tick() {
-        if (nextStep == null) {
+        if (direction == null) {
             return;
         }
 
-        if (useDetector) {
-            field.useMineDetectorToGivenDirection(nextStep);
-            useDetector = false;
+        if (cure) {
+            field.cure(direction);
+            cure = false;
         } else {
-            field.heroMoveTo(nextStep);
+            field.moveTo(direction);
         }
 
-        nextStep = null;
+        direction = null;
     }
 
     public void setPlayer(Player player) {

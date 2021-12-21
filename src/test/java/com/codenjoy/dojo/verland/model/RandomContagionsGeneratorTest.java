@@ -26,7 +26,7 @@ package com.codenjoy.dojo.verland.model;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
-import com.codenjoy.dojo.verland.model.items.Mine;
+import com.codenjoy.dojo.verland.model.items.Contagion;
 import com.codenjoy.dojo.verland.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,11 +34,10 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
-public class RandomMinesGeneratorTest {
+public class RandomContagionsGeneratorTest {
 
     private GameSettings settings;
 
@@ -51,23 +50,23 @@ public class RandomMinesGeneratorTest {
     }
 
     @Test
-    public void shouldMinesRandomPlacedOnBoard() {
+    public void shouldContagionsRandomPlacedOnBoard() {
         for (int index = 0; index < 100; index++) {
-            List<Mine> mines = generate();
-            List<Mine> minesAnother = generate();
+            List<Contagion> one = generate();
+            List<Contagion> another = generate();
 
-            assertTrue(!mines.equals(minesAnother));
+            assertNotEquals(one.toString(), another.toString());
         }
     }
 
     @Test
-    public void hasOnlyOneMineAtSamePlace() {
+    public void hasOnlyOneContagionAtSamePlace() {
         for (int index = 0; index < 100; index++) {
-            List<Mine> mines = generate();
-            for (int i = 0; i < mines.size() - 1; i++) {
-                Mine first = mines.get(i);
-                for (int j = i + 1; j < mines.size(); j++) {
-                    Mine second = mines.get(j);
+            List<Contagion> contagions = generate();
+            for (int i = 0; i < contagions.size() - 1; i++) {
+                Contagion first = contagions.get(i);
+                for (int j = i + 1; j < contagions.size(); j++) {
+                    Contagion second = contagions.get(j);
                     if (first.getX() == second.getX() && first.getY() == second.getY()) {
                         fail();
                     }
@@ -77,9 +76,9 @@ public class RandomMinesGeneratorTest {
     }
 
     @Test
-    public void hasNoMinesInSafeArea() {
+    public void hasNoContagionsInSafeArea() {
         for (int index = 0; index < 100; index++) {
-            List<Mine> mines = generate();
+            List<Contagion> mines = generate();
             for (int i = 0; i < mines.size(); i++) {
                 if (isInSafeArea(mines.get(i))) {
                     fail();
@@ -89,12 +88,12 @@ public class RandomMinesGeneratorTest {
     }
 
     private boolean isInSafeArea(Point point) {
-        return point.getX() >= RandomMinesGenerator.SAFE_AREA_X_0 && point.getX() <= RandomMinesGenerator.SAFE_AREA_X_1
-                && point.getY() >= RandomMinesGenerator.SAFE_AREA_Y_0 && point.getY() <= RandomMinesGenerator.SAFE_AREA_Y_1;
+        return point.getX() >= RandomContagionsGenerator.SAFE_AREA_X_0 && point.getX() <= RandomContagionsGenerator.SAFE_AREA_X_1
+                && point.getY() >= RandomContagionsGenerator.SAFE_AREA_Y_0 && point.getY() <= RandomContagionsGenerator.SAFE_AREA_Y_1;
     }
 
-    private List<Mine> generate() {
-        return new RandomMinesGenerator(new RandomDice()).get(10, new MockBoard());
+    private List<Contagion> generate() {
+        return new RandomContagionsGenerator(new RandomDice()).get(10, new MockBoard());
     }
 
     private class MockBoard extends Verland {

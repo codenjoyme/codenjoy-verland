@@ -26,7 +26,7 @@ package com.codenjoy.dojo.verland.model;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.verland.model.items.Mine;
+import com.codenjoy.dojo.verland.model.items.Contagion;
 import com.codenjoy.dojo.verland.services.Events;
 import com.codenjoy.dojo.verland.services.GameSettings;
 import org.junit.Before;
@@ -44,7 +44,7 @@ import static org.mockito.Mockito.*;
 public class GameTest {
 
     private MockBoard game;
-    private List<Mine> mines;
+    private List<Contagion> contagions;
     private EventListener listener;
     private PrinterFactory printerFactory;
     private GameSettings settings;
@@ -58,8 +58,8 @@ public class GameTest {
     }
 
     @Test
-    public void shouldLeaveEmptySpace_shouldWalkOnBoardRight() {
-        shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
+    public void shouldLeaveEmptySpace_whenWalkOnBoardRight() {
+        shouldBoardWith(new Hero(2, 2), new Contagion(1, 1));
 
         moveRight();
 
@@ -90,28 +90,28 @@ public class GameTest {
     }
 
     private void moveLeft() {
-        game.sapper().left();
+        game.hero().left();
         game.tick();
     }
 
     private void moveDown() {
-        game.sapper().down();
+        game.hero().down();
         game.tick();
     }
 
     private void moveRight() {
-        game.sapper().right();
+        game.hero().right();
         game.tick();
     }
 
     private void suicide() {
-        game.sapper().act(0);
+        game.hero().act(0);
         game.tick();
     }
 
     @Test
-    public void shouldLeaveEmptySpaceshouldWalkOnBoardDown() {
-        shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
+    public void shouldLeaveEmptySpace_whenWalkOnBoardDown() {
+        shouldBoardWith(new Hero(2, 2), new Contagion(1, 1));
 
         moveDown();
 
@@ -151,8 +151,8 @@ public class GameTest {
     }
 
     @Test
-    public void shouldLeaveEmptySpace_shouldWalkOnBoardUp() {
-        shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
+    public void shouldLeaveEmptySpace_whenWalkOnBoardUp() {
+        shouldBoardWith(new Hero(2, 2), new Contagion(1, 1));
 
         moveUp();
 
@@ -183,8 +183,8 @@ public class GameTest {
     }
 
     @Test
-    public void shouldLeaveEmptySpace_shouldWalkOnBoardLeft() {
-        shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
+    public void shouldLeaveEmptySpace_whenWalkOnBoardLeft() {
+        shouldBoardWith(new Hero(2, 2), new Contagion(1, 1));
 
         moveLeft();
 
@@ -197,8 +197,8 @@ public class GameTest {
     }
 
     @Test
-    public void shouldSetFlag_whenSetRight() {
-        shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
+    public void shouldCure_whenSetRight() {
+        shouldBoardWith(new Hero(2, 2), new Contagion(1, 1));
 
         unbombRight();
 
@@ -211,10 +211,10 @@ public class GameTest {
     }
 
     @Test
-    public void shouldSetFlag_whenSetUp() {
-        shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
+    public void shouldCure_whenSetUp() {
+        shouldBoardWith(new Hero(2, 2), new Contagion(1, 1));
 
-        unbombUp();
+        cureUp();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -225,10 +225,10 @@ public class GameTest {
     }
 
     @Test
-    public void shouldSetFlag_whenSetDown() {
-        shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
+    public void shouldCure_whenSetDown() {
+        shouldBoardWith(new Hero(2, 2), new Contagion(1, 1));
 
-        unbombDown();
+        cureDown();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -239,10 +239,10 @@ public class GameTest {
     }
 
     @Test
-    public void shouldSetFlag_whenSetLeft() {
-        shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
+    public void shouldCure_whenSetLeft() {
+        shouldBoardWith(new Hero(2, 2), new Contagion(1, 1));
 
-        unbombLeft();
+        cureLeft();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -253,8 +253,8 @@ public class GameTest {
     }
 
     @Test
-    public void shouldDie_whenSapperAtBombs() {
-        shouldBoardWith(new Hero(2, 2), new Mine(3, 2));
+    public void shouldDie_whenHeroAtContagion() {
+        shouldBoardWith(new Hero(2, 2), new Contagion(3, 2));
 
         moveRight();
 
@@ -270,9 +270,9 @@ public class GameTest {
 
     @Test
     public void shouldSaveCommandAndActAfterTick() {
-        shouldBoardWith(new Hero(2, 2), new Mine(3, 2));
+        shouldBoardWith(new Hero(2, 2), new Contagion(3, 2));
 
-        game.sapper().right();
+        game.hero().right();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -294,14 +294,14 @@ public class GameTest {
     }
 
     @Test
-    public void shouldPrintAllBombs_whenSapperAtBombs() {
+    public void shouldPrintAllContagions_whenHeroAtContagion() {
         shouldBoardWith(new Hero(2, 2),
-                new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
-                new Mine(2, 1), new Mine(2, 3));
+                new Contagion(3, 3), new Contagion(3, 2), new Contagion(3, 1),
+                new Contagion(2, 1), new Contagion(2, 3));
 
-        unbombUp();
-        unbombDown();
-        unbombLeft();
+        cureUp();
+        cureDown();
+        cureLeft();
         moveRight();
 
         assertBoard(
@@ -315,8 +315,8 @@ public class GameTest {
     }
 
     @Test
-    public void shouldPrintBoard_whenNearSapperNoBombs() {
-        shouldBoardWith(new Hero(3, 3), new Mine(1, 1));
+    public void shouldPrintBoard_whenNearHeroNoContagions() {
+        shouldBoardWith(new Hero(3, 3), new Contagion(1, 1));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -327,9 +327,9 @@ public class GameTest {
     }
 
     @Test
-    public void shouldPrintBoard_whenNearSapperOneBombs() {
+    public void shouldPrintBoard_whenNearHeroOneContagion() {
         shouldBoardWith(new Hero(2, 2),
-                new Mine(3, 3));
+                new Contagion(3, 3));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -349,9 +349,9 @@ public class GameTest {
     }
 
     @Test
-    public void shouldPrintBoard_whenNearSapperTwoBombs() {
+    public void shouldPrintBoard_whenNearHeroTwoContagions() {
         shouldBoardWith(new Hero(2, 2),
-                new Mine(3, 3), new Mine(3, 2));
+                new Contagion(3, 3), new Contagion(3, 2));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -371,9 +371,9 @@ public class GameTest {
     }
 
     @Test
-    public void shouldPrintBoard_whenNearSapperThreeBombs() {
+    public void shouldPrintBoard_whenNearHeroThreeContagions() {
         shouldBoardWith(new Hero(2, 2),
-                new Mine(3, 3), new Mine(3, 2), new Mine(3, 1));
+                new Contagion(3, 3), new Contagion(3, 2), new Contagion(3, 1));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -393,10 +393,10 @@ public class GameTest {
     }
 
     @Test
-    public void shouldPrintBoard_whenNearSapperFourBombs() {
+    public void shouldPrintBoard_whenNearHeroFourContagions() {
         shouldBoardWith(new Hero(2, 2),
-                new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
-                new Mine(2, 1));
+                new Contagion(3, 3), new Contagion(3, 2), new Contagion(3, 1),
+                new Contagion(2, 1));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -416,10 +416,10 @@ public class GameTest {
     }
 
     @Test
-    public void shouldPrintBoard_whenNearSapperFiveBombs() {
+    public void shouldPrintBoard_whenNearHeroFiveContagions() {
         shouldBoardWith(new Hero(2, 2),
-                new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
-                new Mine(2, 1), new Mine(2, 3));
+                new Contagion(3, 3), new Contagion(3, 2), new Contagion(3, 1),
+                new Contagion(2, 1), new Contagion(2, 3));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -440,11 +440,11 @@ public class GameTest {
     }
 
     @Test
-    public void shouldPrintBoard_whenNearSapperSixBombs() {
+    public void shouldPrintBoard_whenNearHeroSixContagions() {
         shouldBoardWith(new Hero(2, 2),
-                new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
-                new Mine(2, 1), new Mine(2, 3),
-                new Mine(1, 3));
+                new Contagion(3, 3), new Contagion(3, 2), new Contagion(3, 1),
+                new Contagion(2, 1), new Contagion(2, 3),
+                new Contagion(1, 3));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -464,11 +464,11 @@ public class GameTest {
     }
 
     @Test
-    public void shouldPrintBoard_whenNearSapperSevenBombs() {
+    public void shouldPrintBoard_whenNearHeroSevenContagions() {
         shouldBoardWith(new Hero(2, 2),
-                new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
-                new Mine(2, 1), new Mine(2, 3),
-                new Mine(1, 3), new Mine(1, 1));
+                new Contagion(3, 3), new Contagion(3, 2), new Contagion(3, 1),
+                new Contagion(2, 1), new Contagion(2, 3),
+                new Contagion(1, 3), new Contagion(1, 1));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -488,11 +488,11 @@ public class GameTest {
     }
 
     @Test
-    public void shouldPrintBoard_whenNearSapperEightBombs() {
+    public void shouldPrintBoard_whenNearHeroEightContagions() {
         shouldBoardWith(new Hero(2, 2),
-                new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
-                new Mine(2, 1), new Mine(2, 3),
-                new Mine(1, 3), new Mine(1, 2), new Mine(1, 1));
+                new Contagion(3, 3), new Contagion(3, 2), new Contagion(3, 1),
+                new Contagion(2, 1), new Contagion(2, 3),
+                new Contagion(1, 3), new Contagion(1, 2), new Contagion(1, 1));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -512,8 +512,8 @@ public class GameTest {
     }
 
     @Test
-    public void shouldSetFlagOnBomb_whenBombRight() {
-        shouldBoardWith(new Hero(2, 2), new Mine(3, 2));
+    public void shouldCure_whenContagionAtRight() {
+        shouldBoardWith(new Hero(2, 2), new Contagion(3, 2));
 
         unbombRight();
 
@@ -528,11 +528,11 @@ public class GameTest {
     }
 
     @Test
-    public void shouldSetFlagOnBomb_whenBombRightAndLeft() {
-        shouldBoardWith(new Hero(2, 2), new Mine(3, 2), new Mine(1, 2));
+    public void shouldCure_whenContagionAtRightAndLeft() {
+        shouldBoardWith(new Hero(2, 2), new Contagion(3, 2), new Contagion(1, 2));
 
         unbombRight();
-        unbombLeft();
+        cureLeft();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -545,8 +545,8 @@ public class GameTest {
     }
 
     @Test
-    public void shouldSetFlagOnEmptySpace_whenBombRight() {
-        shouldBoardWith(new Hero(2, 2), new Mine(1, 2));
+    public void shouldCureOnEmptySpace_whenContagionAtRight() {
+        shouldBoardWith(new Hero(2, 2), new Contagion(1, 2));
 
         unbombRight();
 
@@ -561,10 +561,10 @@ public class GameTest {
     }
 
     @Test
-    public void shouldSetFlagOnBomb_whenBombDown() {
-        shouldBoardWith(new Hero(2, 2), new Mine(2, 1));
+    public void shouldCure_whenContagionAtDown() {
+        shouldBoardWith(new Hero(2, 2), new Contagion(2, 1));
 
-        unbombDown();
+        cureDown();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -577,10 +577,10 @@ public class GameTest {
     }
 
     @Test
-    public void shouldSetFlagOnEmptySpace_whenBombDown() {
-        shouldBoardWith(new Hero(2, 2), new Mine(2, 1));
+    public void shouldCureOnEmptySpace_whenContagionAtDown() {
+        shouldBoardWith(new Hero(2, 2), new Contagion(2, 1));
 
-        unbombUp();
+        cureUp();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -593,10 +593,10 @@ public class GameTest {
     }
 
     @Test
-    public void shouldSetFlagOnBomb_whenBombUp() {
-        shouldBoardWith(new Hero(2, 2), new Mine(2, 3));
+    public void shouldCure_whenContagionAtUp() {
+        shouldBoardWith(new Hero(2, 2), new Contagion(2, 3));
 
-        unbombUp();
+        cureUp();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -609,10 +609,10 @@ public class GameTest {
     }
 
     @Test
-    public void shouldSetFlagOnEmptySpace_whenBombUp() {
-        shouldBoardWith(new Hero(2, 2), new Mine(2, 3));
+    public void shouldCureOnEmptySpace_whenContagionAtUp() {
+        shouldBoardWith(new Hero(2, 2), new Contagion(2, 3));
 
-        unbombDown();
+        cureDown();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -625,10 +625,10 @@ public class GameTest {
     }
 
     @Test
-    public void shouldSetFlagOnBomb_whenBombLeft() {
-        shouldBoardWith(new Hero(2, 2), new Mine(1, 2));
+    public void shouldCure_whenContagionAtLeft() {
+        shouldBoardWith(new Hero(2, 2), new Contagion(1, 2));
 
-        unbombLeft();
+        cureLeft();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -645,10 +645,10 @@ public class GameTest {
     }
 
     @Test
-    public void shouldSetFlagOnEmptySpace_whenBombLeft() {
-        shouldBoardWith(new Hero(2, 2), new Mine(3, 2));
+    public void shouldCureOnEmptySpace_whenContagionAtLeft() {
+        shouldBoardWith(new Hero(2, 2), new Contagion(3, 2));
 
-        unbombLeft();
+        cureLeft();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -661,18 +661,18 @@ public class GameTest {
     }
 
     @Test
-    public void shouldWin_whenDestroyAllBombs() {
+    public void shouldWin_whenDestroyAllContagions() {
         settings.integer(POTIONS_COUNT, 8);
 
         shouldBoardWith(new Hero(2, 2),
-                new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
-                new Mine(2, 1), new Mine(2, 3),
-                new Mine(1, 3), new Mine(1, 2), new Mine(1, 1));
+                new Contagion(3, 3), new Contagion(3, 2), new Contagion(3, 1),
+                new Contagion(2, 1), new Contagion(2, 3),
+                new Contagion(1, 3), new Contagion(1, 2), new Contagion(1, 1));
 
-        unbombLeft();
-        unbombDown();
+        cureLeft();
+        cureDown();
         unbombRight();
-        unbombUp();
+        cureUp();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -684,7 +684,7 @@ public class GameTest {
         assertStillNotWin();
 
         moveUp();
-        unbombLeft();
+        cureLeft();
         unbombRight();
 
         assertBoard(
@@ -706,7 +706,7 @@ public class GameTest {
                 "☼*♥*☼\n" +
                 "☼☼☼☼☼\n");
 
-        unbombLeft();
+        cureLeft();
         unbombRight();
 
         assertBoard(
@@ -720,9 +720,9 @@ public class GameTest {
     }
 
     @Test
-    public void shouldLeaveBombMap_whenWalkBetweenBombs() {
+    public void shouldLeaveContagionOnMap_whenWalkBetweenContagions() {
         shouldBoardWith(new Hero(1, 1),
-                new Mine(2, 3), new Mine(2, 2));
+                new Contagion(2, 3), new Contagion(2, 2));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -769,7 +769,7 @@ public class GameTest {
     }
 
     private void moveUp() {
-        game.sapper().up();
+        game.hero().up();
         game.tick();
     }
 
@@ -777,23 +777,23 @@ public class GameTest {
         assertFalse(game.isWin());
     }
 
-    private void unbombUp() {
-        game.sapper().act();
+    private void cureUp() {
+        game.hero().act();
         moveUp();
     }
 
     private void unbombRight() {
-        game.sapper().act();
+        game.hero().act();
         moveRight();
     }
 
-    private void unbombDown() {
-        game.sapper().act();
+    private void cureDown() {
+        game.hero().act();
         moveDown();
     }
 
-    private void unbombLeft() {
-        game.sapper().act();
+    private void cureLeft() {
+        game.hero().act();
         moveLeft();
     }
 
@@ -802,7 +802,7 @@ public class GameTest {
                 game.reader(), null).print());
     }
 
-    private void shouldBoardWith(Hero sapper, Mine... mines) {
+    private void shouldBoardWith(Hero sapper, Contagion... mines) {
         listener = mock(EventListener.class);
         game = new MockBoard(sapper, mines);
     }
@@ -810,7 +810,7 @@ public class GameTest {
     private class MockBoard extends Verland {
         private Player player;
 
-        public MockBoard(Hero hero, Mine... mines) {
+        public MockBoard(Hero hero, Contagion... mines) {
             super((count, board) -> new ArrayList<>(),
                     settings.integer(COUNT_CONTAGIONS, mines.length));
 
@@ -818,9 +818,9 @@ public class GameTest {
             player.setHero(hero);
             hero.setPlayer(player);
 
-            GameTest.this.mines = new LinkedList<>();
-            GameTest.this.mines.addAll(Arrays.asList(mines));
-            for (Mine mine : mines) {
+            GameTest.this.contagions = new LinkedList<>();
+            GameTest.this.contagions.addAll(Arrays.asList(mines));
+            for (Contagion mine : mines) {
                 mine.init(this);
             }
 
@@ -828,19 +828,19 @@ public class GameTest {
         }
 
         @Override
-        public List<Mine> getMines() {
-            return GameTest.this.mines;
+        public List<Contagion> contagions() {
+            return GameTest.this.contagions;
         }
 
         @Override
-        public int getMinesCount() {
-            return getMines().size();
+        public int contagionsCount() {
+            return contagions().size();
         }
     }
 
     @Test
     public void shouldFireEvent_whenDie() {
-        shouldBoardWith(new Hero(2, 2), new Mine(3, 2));
+        shouldBoardWith(new Hero(2, 2), new Contagion(3, 2));
 
         moveRight();
 
@@ -856,7 +856,7 @@ public class GameTest {
 
     @Test
     public void shouldFireEvent_whenSuicide() {
-        shouldBoardWith(new Hero(2, 2), new Mine(3, 2));
+        shouldBoardWith(new Hero(2, 2), new Contagion(3, 2));
 
         suicide();
 
@@ -870,7 +870,7 @@ public class GameTest {
         verifyEvents(Events.SUICIDE);
 
         assertEquals(true, game.isGameOver());
-        assertEquals(false, game.sapper().isAlive());
+        assertEquals(false, game.hero().isAlive());
 
         // TODO дальше как-то странно, наверное тест под это не заточен
         game.newGame(game.player);
@@ -892,7 +892,7 @@ public class GameTest {
 
     @Test
     public void shouldFireEvent_whenOpenSpace() {
-        shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
+        shouldBoardWith(new Hero(2, 2), new Contagion(1, 1));
 
         moveRight();
 
@@ -908,7 +908,7 @@ public class GameTest {
 
     @Test
     public void shouldNotFireEvent_whenReturnsHome() {
-        shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
+        shouldBoardWith(new Hero(2, 2), new Contagion(1, 1));
 
         moveRight();
 
@@ -937,9 +937,9 @@ public class GameTest {
     public void shouldFireEvent_whenNoMoreCharge() {
         settings.integer(POTIONS_COUNT, 3);
 
-        shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
+        shouldBoardWith(new Hero(2, 2), new Contagion(1, 1));
 
-        unbombDown();
+        cureDown();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -948,7 +948,7 @@ public class GameTest {
                 "☼*!*☼\n" +
                 "☼☼☼☼☼\n");
 
-        unbombLeft();
+        cureLeft();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -969,25 +969,25 @@ public class GameTest {
         verifyEvents(3, Events.FORGOT_POTION);
         verifyEvents(Events.NO_MORE_POTIONS);
 
-        unbombUp();
+        cureUp();
 
         verifyNoMoreInteractions(listener);
     }
 
     @Test
-    public void shouldPrintAllBoardBombs_whenNoMoreCharge_case1() {
+    public void shouldPrintAllBoardContagions_whenNoMoreCharge_case1() {
         settings.integer(POTIONS_COUNT, 4);
 
         shouldBoardWith(new Hero(2, 2),
-                new Mine(2, 1),
-                new Mine(2, 3),
-                new Mine(1, 2),
-                new Mine(3, 2));
+                new Contagion(2, 1),
+                new Contagion(2, 3),
+                new Contagion(1, 2),
+                new Contagion(3, 2));
 
         unbombRight();
-        unbombLeft();
-        unbombDown();
-        unbombUp();
+        cureLeft();
+        cureDown();
+        cureUp();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -998,19 +998,19 @@ public class GameTest {
     }
 
     @Test
-    public void shouldPrintAllBoardBombs_whenNoMoreCharge_case2() {
+    public void shouldPrintAllBoardContagions_whenNoMoreCharge_case2() {
         settings.integer(POTIONS_COUNT, 4);
 
         shouldBoardWith(new Hero(2, 2),
-                new Mine(1, 1),
-                new Mine(1, 3),
-                new Mine(3, 3),
-                new Mine(3, 1));
+                new Contagion(1, 1),
+                new Contagion(1, 3),
+                new Contagion(3, 3),
+                new Contagion(3, 1));
 
         unbombRight();
-        unbombLeft();
-        unbombDown();
-        unbombUp();
+        cureLeft();
+        cureDown();
+        cureUp();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -1021,15 +1021,15 @@ public class GameTest {
     }
 
     @Test
-    public void shouldPrintAllBoardBombs_whenNoMoreCharge_case3() {
+    public void shouldPrintAllBoardContagions_whenNoMoreCharge_case3() {
         settings.integer(POTIONS_COUNT, 2);
 
         shouldBoardWith(new Hero(2, 2),
-                new Mine(3, 3),
-                new Mine(3, 1));
+                new Contagion(3, 3),
+                new Contagion(3, 1));
 
         unbombRight();
-        unbombLeft();
+        cureLeft();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -1040,15 +1040,15 @@ public class GameTest {
     }
 
     @Test
-    public void shouldPrintAllBoardBombs_whenNoMoreCharge_case4() {
+    public void shouldPrintAllBoardContagions_whenNoMoreCharge_case4() {
         settings.integer(POTIONS_COUNT, 2);
 
         shouldBoardWith(new Hero(2, 2),
-                new Mine(3, 3),
-                new Mine(3, 1));
+                new Contagion(3, 3),
+                new Contagion(3, 1));
 
-        unbombLeft();
-        unbombDown();
+        cureLeft();
+        cureDown();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -1063,8 +1063,8 @@ public class GameTest {
     }
 
     @Test
-    public void shouldFireEvent_whenCleanMine() {
-        shouldBoardWith(new Hero(2, 2), new Mine(3, 2), new Mine(1, 2));
+    public void shouldFireEvent_whenCureContagion() {
+        shouldBoardWith(new Hero(2, 2), new Contagion(3, 2), new Contagion(1, 2));
 
         unbombRight();
 
@@ -1079,10 +1079,10 @@ public class GameTest {
     }
 
     @Test
-    public void shouldFireEvent_whenCleanAllMines() {
-        shouldBoardWith(new Hero(2, 2), new Mine(1, 2));
+    public void shouldFireEvent_whenCleanAllContagions() {
+        shouldBoardWith(new Hero(2, 2), new Contagion(1, 2));
 
-        unbombLeft();
+        cureLeft();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -1098,7 +1098,7 @@ public class GameTest {
 
     @Test
     public void shouldOnlyOneFlagPerSpace() {
-        shouldBoardWith(new Hero(2, 2), new Mine(1, 2));
+        shouldBoardWith(new Hero(2, 2), new Contagion(1, 2));
 
         unbombRight();
 
@@ -1180,7 +1180,7 @@ public class GameTest {
                 "☼♥  ☼\n" +
                 "☼☼☼☼☼\n");
 
-        unbombLeft();
+        cureLeft();
         verifyNoMoreInteractions(listener);
 
         assertBoard(
@@ -1190,7 +1190,7 @@ public class GameTest {
                 "☼♥  ☼\n" +
                 "☼☼☼☼☼\n");
 
-        unbombDown();
+        cureDown();
         verifyNoMoreInteractions(listener);
 
         assertBoard(
@@ -1218,7 +1218,7 @@ public class GameTest {
         moveUp();
         reset(listener);
 
-        unbombUp();
+        cureUp();
         verifyNoMoreInteractions(listener);
 
         assertBoard(
