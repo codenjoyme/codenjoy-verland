@@ -29,10 +29,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.verland.model.items.Cell;
-import com.codenjoy.dojo.verland.model.items.Cure;
-import com.codenjoy.dojo.verland.model.items.Contagion;
-import com.codenjoy.dojo.verland.model.items.Wall;
+import com.codenjoy.dojo.verland.model.items.*;
 import com.codenjoy.dojo.verland.services.Events;
 import com.codenjoy.dojo.verland.services.GameSettings;
 
@@ -45,7 +42,7 @@ public class Verland implements Field {
 
     private List<Point> cells;
     private List<Contagion> contagions;
-    private List<Contagion> cured;
+    private List<Cured> cured;
     private int turnCount = 0;
     private ContagionsGenerator generator;
     private int maxScore;
@@ -226,7 +223,7 @@ public class Verland implements Field {
             public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
                 processor.accept(Arrays.asList(hero()));
                 processor.accept(contagions());
-                processor.accept(cured);
+                processor.accept(cured());
                 processor.accept(cures());
                 processor.accept(cells());
                 processor.accept(walls());
@@ -323,9 +320,9 @@ public class Verland implements Field {
     }
 
     private void removeContagion(Point pt) {
-        Contagion contagion = new Contagion(pt);
-        contagion.init(this);
-        cured.add(contagion);
+        Cured it = new Cured(pt);
+        it.init(this);
+        cured.add(it);
         contagions().remove(pt);
         increaseScore();
         recalculateWalkMap();
@@ -383,6 +380,10 @@ public class Verland implements Field {
 
     public List<Cure> cures() {
         return cures;
+    }
+
+    public List<Cured> cured() {
+        return cured;
     }
 
     @Override

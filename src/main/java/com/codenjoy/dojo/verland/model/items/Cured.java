@@ -24,20 +24,20 @@ package com.codenjoy.dojo.verland.model.items;
 
 
 import com.codenjoy.dojo.games.verland.Element;
-import com.codenjoy.dojo.verland.model.Field;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.verland.model.Field;
 
-public class Contagion extends PointImpl implements State<Element, Object> {
+public class Cured extends PointImpl implements State<Element, Object> {
 
     private Field field;
 
-    public Contagion(Point pt) {
+    public Cured(Point pt) {
         super(pt);
     }
 
-    public Contagion(int x, int y) {
+    public Cured(int x, int y) {
         super(x, y);
     }
 
@@ -49,6 +49,6 @@ public class Contagion extends PointImpl implements State<Element, Object> {
     public Element state(Object player, Object... alsoAtPoint) {
         if (!field.isGameOver()) return null;
 
-        return Element.INFECTION;
+        return Element.HERO_HEALING;
     }
 }
