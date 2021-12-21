@@ -23,8 +23,8 @@ package com.codenjoy.dojo.verland.model;
  */
 
 
-import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.verland.model.items.Contagion;
+import com.codenjoy.dojo.services.field.Accessor;
+import com.codenjoy.dojo.verland.model.items.*;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -33,43 +33,33 @@ import java.util.List;
 
 public interface Field extends GameField<Player> {
 
-    List<Point> freeCells();
-
-    List<Point> cells();
+    boolean isFree(Point pt);
 
     int size();
 
-    void moveTo(Direction direction);
+    void cure(Hero hero, Direction direction);
 
-    Point positionAfterMove(Direction direction);
-
-    int contagionsNear();
-
-    boolean isNoPotionsButPresentContagions();
-
-    boolean isWin();
-
-    void cure(Direction direction);
+    // TODO тут не точно
+    Hero hero();
 
     Contagion tryCreateContagion(Point cell);
 
-    int getTurn();
-
-    boolean isGameOver();
-
     boolean isContagion(Point pt);
 
-    boolean isClean(Point pt);
+    int contagionsNear(Point pt);
 
-    boolean isCure(Point pt);
+    Accessor<Contagion> contagions();
 
-    boolean isWall(Point pt);
+    void openAllBoard();
 
-    boolean isHero(Point pt);
+    Accessor<Cell> cells();
 
-    int visibleContagionsNear(Point pt);
+    Accessor<Cured> cured();
 
-    Hero hero();
+    Accessor<Wall> walls();
 
-    List<Contagion> contagions();
+    Accessor<Cure> cures();
+
+    Accessor<Hero> heroes();
+    List<Cell> clean();
 }

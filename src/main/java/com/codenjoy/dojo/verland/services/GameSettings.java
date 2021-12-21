@@ -23,21 +23,24 @@ package com.codenjoy.dojo.verland.services;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.level.LevelsSettings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
+import com.codenjoy.dojo.verland.model.Level;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.*;
 
-public final class GameSettings extends SettingsImpl
-        implements SettingsReader<GameSettings> {
+public class GameSettings extends SettingsImpl
+        implements SettingsReader<GameSettings>,
+                   LevelsSettings<GameSettings> {
 
     public enum Keys implements Key {
 
         WIN_SCORE("[Score] Win score"),
-        BOARD_SIZE("[Map] Board size"),
         SUICIDE_PENALTY("[Game] Suicide penalty"),
         GOT_INFECTED_PENALTY("[Game] Got infected penalty"),
         DESTROYED_PENALTY("[Score] Forgot penalty"),
@@ -64,6 +67,8 @@ public final class GameSettings extends SettingsImpl
     }
 
     public GameSettings() {
+        initLevels();
+
         integer(WIN_SCORE, 300);
         integer(GOT_INFECTED_PENALTY, 15);
         integer(SUICIDE_PENALTY, 100);
@@ -71,9 +76,13 @@ public final class GameSettings extends SettingsImpl
         integer(DESTROYED_FORGOT_PENALTY, 2);
         integer(CLEAN_AREA_SCORE, 1);
 
-        integer(BOARD_SIZE, 15);
         integer(COUNT_CONTAGIONS, 30);
         integer(POTIONS_COUNT, 100);
+
+        Levels.setup(this);
     }
 
+    public Level level(int level, Dice dice) {
+        return new Level(getRandomLevelMap(level, dice));
+    }
 }

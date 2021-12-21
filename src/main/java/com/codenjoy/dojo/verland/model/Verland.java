@@ -23,78 +23,67 @@ package com.codenjoy.dojo.verland.model;
  */
 
 
-import com.codenjoy.dojo.games.verland.Element;
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.QDirection;
+import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.field.Accessor;
+import com.codenjoy.dojo.services.field.PointField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.verland.model.generator.Generator;
 import com.codenjoy.dojo.verland.model.items.*;
 import com.codenjoy.dojo.verland.services.Events;
 import com.codenjoy.dojo.verland.services.GameSettings;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
-import static com.codenjoy.dojo.verland.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.services.field.Generator.generate;
+import static com.codenjoy.dojo.verland.services.GameSettings.Keys.COUNT_CONTAGIONS;
+import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
 import static java.util.stream.Collectors.toList;
 
 public class Verland implements Field {
 
-    private List<Point> cells;
-    private List<Contagion> contagions;
-    private List<Cured> cured;
-    private List<Wall> walls;
-    private List<Cure> cures;
-
-    private int turnCount = 0;
-    private Generator<Contagion> generator;
-    private int maxScore;
-    private int score;
-    private Map<Point, Integer> clean;
-    private int currentSize;
-
-    private Player player;
+    private Level level;
+    private PointField field;
+    private List<Player> players;
+    private Dice dice;
     private GameSettings settings;
 
-    public Verland(Generator<Contagion> generator, GameSettings settings) {
-        this.settings = settings;
-        this.generator = generator;
+    private int maxScore;
+    private int score;
 
-        buildWalls();
+    private Player player;
+
+    public Verland(Dice dice, Level level, GameSettings settings) {
+        this.level = level;
+        this.dice = dice;
+        this.settings = settings;
+        this.field = new PointField();
+        this.players = new LinkedList<>();
+
+        clearScore();
     }
 
     @Override
     public void clearScore() {
-        cures = new LinkedList<>();
-        contagions = new LinkedList<>();
-        cured = new LinkedList<>();
-        clean = new HashMap<>();
+        level.saveTo(field);
+        field.init(this);
+
         maxScore = 0;
         score = 0;
-        cells = initializeBoardCells();
-        buildWalls();
-        hero().charge(settings.integer(POTIONS_COUNT));
-        contagions = generator.get(settings.integer(COUNT_CONTAGIONS), this);
+
+        generateAll();
     }
 
-    private void buildWalls() {
-        walls = new LinkedList<>();
-        for (int i = 0; i < size(); i++) {
-            walls.add(new Wall(0, i));
-            walls.add(new Wall(size() - 1, i));
-
-            walls.add(new Wall(i, 0));
-            walls.add(new Wall(i, size() - 1));
-        }
+    private void generateAll() {
+        validateContagions();
+        generateContagions();
     }
 
-    private void validate() {
-        if (size() < 5) {
-            settings.integer(BOARD_SIZE, 5);
-        }
-
+    private void validateContagions() {
         Parameter<Integer> contagions = settings.integerValue(COUNT_CONTAGIONS);
         Parameter<Integer> potions = settings.integerValue(POTIONS_COUNT);
         while (contagions.getValue() > ((size() - 1) * (size() - 1) - 1)) {
@@ -105,244 +94,170 @@ public class Verland implements Field {
             potions.update(contagions.getValue());
         }
     }
-    
-    private List<Point> initializeBoardCells() {
-        List<Point> result = new ArrayList<>();
-        for (int x = 1; x < size() - 1; x++) {
-            for (int y = 1; y < size() - 1; y++) {
-                Cell cell = new Cell(x, y);
-                cell.init(this);
-                result.add(cell);
-            }
-        }
-        return result;
+
+    @Override
+    public boolean isFree(Point pt) {
+        return clean().contains(pt)
+                && !walls().contains(pt);
+    }
+
+    public boolean isFreeForContagion(Point pt) {
+        return !contagions().contains(pt)
+                && !walls().contains(pt);
     }
 
     @Override
-    public List<Point> freeCells() {
-        return cells().stream()
-                .filter(cell -> !isHero(cell))
-                .filter(cell -> !isWall(cell)) // TODO test me
-                .filter(cell -> !isContagion(cell))
+    public Optional<Point> freeRandom(Player player) {
+        // метод отдает только те координаты, которые в изначальной
+        // карте отмечены как стартовые для героев, когда точек больше
+        // не останется, будет возвращать -1 на что isFree скажет false
+        List<Integer> numbers = level.heroes().stream()
+                .flatMap(pt -> Arrays.stream(new Integer[]{pt.getX(), pt.getY()}))
                 .collect(toList());
+
+        return BoardUtils.freeRandom(size(), new NumbersDice(numbers, -1), this::isFree);
     }
 
-    @Override
-    public List<Point> cells() {
-        return cells;
+    private Optional<Point> freeRandomForContagions(GamePlayer player) {
+        return BoardUtils.freeRandom(size(), dice, this::isFreeForContagion);
+    }
+
+    private void generateContagions() {
+        generate(contagions(), settings, COUNT_CONTAGIONS,
+                this::freeRandomForContagions,
+                Contagion::new);
     }
 
     @Override
     public int size() {
-        return settings.integer(BOARD_SIZE);
-    }
-
-    @Override
-    public void moveTo(Direction direction) {
-        if (!canMove(direction)) {
-            return;
-        }
-
-        boolean cleaned = move(direction);
-        if (isContagion(hero())) {
-            hero().die();
-            openAllBoard();
-            player.event(Events.GOT_INFECTED);
-        } else {
-            if (cleaned) {
-                player.event(Events.CLEAN_AREA);
-            }
-        }
-        nextTurn();
-    }
-
-    private boolean move(Direction direction) {
-        clean.put(hero().copy(), contagionsNear());
-        hero().move(direction);
-
-        boolean wasHere = clean.containsKey(hero());
-        return !wasHere;
-    }
-
-    private boolean canMove(Direction direction) {
-        Point cell = positionAfterMove(direction);
-        return cells.contains(cell);
-    }
-
-    private void nextTurn() {
-        turnCount++;
-    }
-
-    @Override
-    public Hero hero() {
-        return player.getHero();
-    }
-
-    @Override
-    public List<Contagion> contagions() {
-        return contagions;
+        return field.size();
     }
 
     @Override
     public boolean isContagion(Point pt) {
-        return contagions.contains(pt);
+        return contagions().contains(pt);
     }
 
     @Override
-    public boolean isClean(Point pt) {
-        return clean.containsKey(pt);
-    }
-
-    @Override
-    public boolean isCure(Point pt) {
-        return cures.contains(pt);
-    }
-
-    @Override
-    public boolean isWall(Point pt) {
-        return walls.contains(pt);
-    }
-
-    @Override
-    public boolean isHero(Point pt) {
-        return hero().itsMe(pt);
-    }
-
-    @Override
-    public BoardReader reader() {
-        return new BoardReader<Player>() {
-            private int size = Verland.this.size();
-
+    public BoardReader<Player> reader() { // TODO сделать красиво
+        return new BoardReader<>() {
             @Override
             public int size() {
-                return size;
+                return field.size();
             }
 
             @Override
-            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
-                processor.accept(Arrays.asList(hero()));
-                if (isGameOver()) {
-                    processor.accept(contagions);
-                    processor.accept(cured);
+            public void addAll(Player player, Consumer processor) {
+                if (Verland.this.isGameOver()) {
+                    process(player, processor,
+                            Hero.class,
+                            Wall.class,
+                            Contagion.class,
+                            Cured.class,
+                            Cure.class,
+                            Cell.class);
+                } else {
+                    process(player, processor,
+                            Hero.class,
+                            Wall.class,
+                            Cure.class,
+                            Cell.class);
                 }
-                processor.accept(cures);
-                processor.accept(cells);
-                processor.accept(walls);
+            }
+
+            private void process(Player player, Consumer processor, Class... classes) {
+                field.reader(classes).addAll(player, processor);
             }
         };
     }
 
+    // TODO удалить метод, когда полноценно будут юзеры
+    private boolean isGameOver() {
+        return hero() == null || hero().isGameOver();
+    }
+
+    // TODO удалить метод, когда полноценно будут юзеры
+    @Override
+    public Hero hero() {
+        List<Hero> heroes = heroes().all();
+        return (heroes.isEmpty()) ? null : heroes.get(0);
+    }
+
     @Override
     public void newGame(Player player) {
-        validate();
+        remove(player);
         this.player = player;
         player.newHero(this);
-        clearScore();
-        tick();
     }
 
     @Override
     public void remove(Player player) {
         this.player = null;
-    }
-
-    @Override
-    public Point positionAfterMove(Direction direction) {
-        return direction.change(hero());
+        if (player.getHero() != null) {
+            heroes().removeExact(player.getHero());
+        }
     }
 
     @Override
     public Contagion tryCreateContagion(Point cell) {
         Contagion result = new Contagion(cell);
-        contagions.add(result);
+        contagions().add(result);
         return result;
     }
 
     @Override
-    public int getTurn() {
-        return turnCount;
-    }
-
-    @Override
-    public boolean isGameOver() {
-        return !hero().isAlive();
-    }
-
-    @Override
-    public int contagionsNear() {
-        return contagionsNear(hero());
-    }
-
-    private int contagionsNear(Point pt) {
+    public int contagionsNear(Point pt) {
         return (int)Arrays.stream(QDirection.values())
                 .map(direction -> direction.change(pt))
-                .filter(to -> cells.contains(to))
-                .filter(to -> contagions.contains(to))
+                .filter(to -> cells().contains(to))
+                .filter(to -> contagions().contains(to))
                 .count();
     }
 
-    // TODO попытаться избавиться от этого метода в пользу contagionsNear
     @Override
-    public int visibleContagionsNear(Point pt) {
-        Integer count = clean.get(pt);
-        if (count == null) {
-            return Element.CLEAR.value();
+    public void cure(Hero hero, Direction direction) {
+        Point to = direction.change(hero);
+        if (walls().contains(to)) {
+            return;
         }
-        return count;
-    }
 
-    @Override
-    public void cure(Direction direction) {
-        Point result = positionAfterMove(direction);
-        if (cells.contains(result)) {
-            if (hero().noMorePotions()) {
-                return;
+        if (hero.noMorePotions()) {
+            return;
+        }
+
+        if (cures().contains(to)) {
+            return;
+        }
+
+        hero.tryToCure(() -> {
+            cures().add(new Cure(to));
+            if (contagions().contains(to)) {
+                removeContagion(to);
+            } else {
+                player.event(Events.FORGOT_POTION);
             }
+        });
 
-            if (cures.contains(result)) {
-                return;
-            }
-
-            hero().tryToCure(() -> {
-                cures.add(new Cure(result));
-                if (contagions.contains(result)) {
-                    removeContagion(result);
-                } else {
-                    player.event(Events.FORGOT_POTION);
-                }
-            });
-
-            if (isNoPotionsButPresentContagions()) {
-                openAllBoard();
-                player.event(Events.NO_MORE_POTIONS);
-            }
+        if (hero.isNoPotionsButPresentContagions()) {
+            openAllBoard();
+            player.event(Events.NO_MORE_POTIONS);
         }
     }
 
     private void removeContagion(Point pt) {
-        cured.add(new Cured(pt));
-        contagions.remove(pt);
+        cured().add(new Cured(pt));
+        contagions().removeAt(pt);
         increaseScore();
-        recalculateWalkMap();
         player.event(Events.CURE);
-        if (contagions.isEmpty()) {
+        if (contagions().size() == 0) {
             openAllBoard();
             player.event(Events.WIN);
         }
     }
 
-    private void openAllBoard() {
-        clean.clear();
-
-        for (Point cell : cells())  {
-            clean.put(cell, contagionsNear(cell));
-        }
-    }
-
-    private void recalculateWalkMap() {
-        for (Map.Entry<Point, Integer> entry : clean.entrySet()) {
-            entry.setValue(contagionsNear(entry.getKey()));
-        }
+    @Override
+    public void openAllBoard() {
+        cells().forEach(Cell::open);
     }
 
     private void increaseScore() {
@@ -351,29 +266,47 @@ public class Verland implements Field {
     }
 
     @Override
-    public boolean isNoPotionsButPresentContagions() {
-        return contagions.size() != 0
-                && hero().noMorePotions();
-    }
-
-    @Override
-    public boolean isWin() {
-        return contagions.size() == 0 && !hero().isDead();
-    }
-
-    @Override
     public void tick() {
-        if (currentSize != size()) {  // TODO потестить это
-            currentSize = size();
-            newGame(player);
-            return;
-        }
-
-        hero().tick();
+        heroes().forEach(Hero::tick);
     }
 
     @Override
     public GameSettings settings() {
         return settings;
+    }
+
+    @Override
+    public Accessor<Cell> cells() {
+        return field.of(Cell.class);
+    }
+
+    @Override
+    public Accessor<Contagion> contagions() {
+        return field.of(Contagion.class);
+    }
+
+    @Override
+    public Accessor<Cured> cured() {
+        return field.of(Cured.class);
+    }
+
+    @Override
+    public Accessor<Wall> walls() {
+        return field.of(Wall.class);
+    }
+
+    @Override
+    public Accessor<Cure> cures() {
+        return field.of(Cure.class);
+    }
+
+    @Override
+    public Accessor<Hero> heroes() {
+        return field.of(Hero.class);
+    }
+
+    @Override
+    public List<Cell> clean() {
+        return cells().filter(Cell::isClean);
     }
 }

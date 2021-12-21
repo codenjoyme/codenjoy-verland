@@ -32,15 +32,16 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.verland.model.Level;
 import com.codenjoy.dojo.verland.model.Player;
-import com.codenjoy.dojo.verland.model.generator.Contagions;
 import com.codenjoy.dojo.verland.model.Verland;
 import com.codenjoy.dojo.verland.services.ai.AISolver;
 
-import static com.codenjoy.dojo.verland.services.GameSettings.Keys.BOARD_SIZE;
+import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType<GameSettings> {
 
@@ -56,12 +57,14 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public GameField createGame(int levelNumber, GameSettings settings) {
-        return new Verland(new Contagions(getDice()), settings);
+        Level level = settings.level(levelNumber, getDice());
+        return new Verland(getDice(), level, settings);
     }
 
     @Override
     public Parameter<Integer> getBoardSize(GameSettings settings) {
-        return settings.integerValue(BOARD_SIZE);
+        // TODO точно так норм, левел вернется рендомный, а что если они будут разного размера?
+        return v(settings.level(LevelProgress.levelsStartsFrom1, getDice()).size());
     }
 
     @Override

@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.verland.model.generator;
+package com.codenjoy.dojo.verland;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2021 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,14 +22,17 @@ package com.codenjoy.dojo.verland.model.generator;
  * #L%
  */
 
+import com.codenjoy.dojo.verland.services.GameSettings;
 
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.verland.model.Field;
-import com.codenjoy.dojo.verland.model.items.Contagion;
+import static com.codenjoy.dojo.verland.services.GameSettings.Keys.*;
 
-import java.util.List;
+public class TestGameSettings extends GameSettings {
 
-public interface Generator<T extends Point> {
+    public TestGameSettings() {
+        integer(WIN_SCORE, 30);
+        integer(GOT_INFECTED_PENALTY, 100);
+        integer(POTIONS_COUNT, 3);
 
-    List<T> get(int count, Field field);
+        // тут можно переопределить настройки для всех тестов
+    }
 }

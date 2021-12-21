@@ -3986,7 +3986,7 @@
 201: 1:
 201: 1:Scores: 514
 201: 1:Answer: STOP
-201: 1:PLAYER_GAME_OVER -> START_NEW_GAME
+201: 1:PLAYER_GAME_OVER -> REMOVE_FROM_GAME
 ------------------------------------------
 202: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 202: 1:☼*************☼
@@ -7941,7 +7941,7 @@
 400: 1:
 400: 1:Scores: 1131
 400: 1:Answer: STOP
-400: 1:PLAYER_GAME_OVER -> START_NEW_GAME
+400: 1:PLAYER_GAME_OVER -> REMOVE_FROM_GAME
 ------------------------------------------
 401: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 401: 1:☼*************☼
@@ -10652,7 +10652,7 @@
 536: 1:
 536: 1:Scores: 1801
 536: 1:Answer: STOP
-536: 1:PLAYER_GAME_OVER -> START_NEW_GAME
+536: 1:PLAYER_GAME_OVER -> REMOVE_FROM_GAME
 ------------------------------------------
 537: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 537: 1:☼*************☼
@@ -14317,7 +14317,7 @@
 720: 1:
 720: 1:Scores: 2613
 720: 1:Answer: STOP
-720: 1:PLAYER_GAME_OVER -> START_NEW_GAME
+720: 1:PLAYER_GAME_OVER -> REMOVE_FROM_GAME
 ------------------------------------------
 721: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 721: 1:☼*************☼
@@ -16969,7 +16969,7 @@
 853: 1:
 853: 1:Scores: 3481
 853: 1:Answer: STOP
-853: 1:PLAYER_GAME_OVER -> START_NEW_GAME
+853: 1:PLAYER_GAME_OVER -> REMOVE_FROM_GAME
 ------------------------------------------
 854: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 854: 1:☼*************☼

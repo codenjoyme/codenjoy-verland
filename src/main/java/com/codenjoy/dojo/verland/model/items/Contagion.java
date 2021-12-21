@@ -35,10 +35,6 @@ public class Contagion extends PointImpl implements State<Element, Object> {
         super(pt);
     }
 
-    public Contagion(int x, int y) {
-        super(x, y);
-    }
-
     @Override
     public Element state(Object player, Object... alsoAtPoint) {
         return Element.INFECTION;

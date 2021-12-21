@@ -30,8 +30,8 @@ import com.codenjoy.dojo.services.State;
 
 public class Wall extends PointImpl implements State<Element, Object> {
 
-    public Wall(int x, int y) {
-        super(x, y);
+    public Wall(Point pt) {
+        super(pt);
     }
 
     @Override

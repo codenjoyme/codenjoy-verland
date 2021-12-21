@@ -25,6 +25,7 @@ package com.codenjoy.dojo.verland;
 
 import com.codenjoy.dojo.games.verland.Board;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.utils.Smoke;
 import com.codenjoy.dojo.utils.SmokeUtils;
 import com.codenjoy.dojo.verland.services.Events;
@@ -36,7 +37,6 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-import static com.codenjoy.dojo.verland.services.GameSettings.Keys.BOARD_SIZE;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.COUNT_CONTAGIONS;
 import static junit.framework.TestCase.assertEquals;
 
@@ -53,14 +53,18 @@ public class SmokeTest {
 
     @Test
     public void test() {
-        // about 5 sec
+        // about 5 sec -> 7 sec
         int ticks = 1000;
 
         SmokeUtils.recheck = actual -> {
-            // мы ни разу не проиграли и всегда правильно отгадывали где мины
+            // мы ни разу не проиграли и всегда правильно отгадывали, где мины
             assertEquals(false, actual.contains(Events.GOT_INFECTED.name()));
             assertEquals(false, actual.contains(Events.FORGOT_POTION.name()));
         };
+
+        smoke.settings().removeWhenGameOver(true);
+        smoke.settings().reloadPlayersWhenGameOverAll(true);
+        smoke.settings().increaseLevelAfterReload(true);
 
         smoke.play(ticks, "SmokeTest.data",
                 new GameRunner() {
@@ -71,8 +75,105 @@ public class SmokeTest {
 
                     @Override
                     public GameSettings getSettings() {
+                        int level = LevelProgress.levelsStartsFrom1;
                         return super.getSettings()
-                                .integer(BOARD_SIZE, 15)
+                                .clearLevelMaps(level)
+                                .setLevelMaps(level,
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                                        "☼*o***********☼\n" +
+                                        "☼*******o*****☼\n" +
+                                        "☼**o**********☼\n" +
+                                        "☼******o******☼\n" +
+                                        "☼*******o*****☼\n" +
+                                        "☼**o**********☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*****o*******☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼***oo********☼\n" +
+                                        "☼******o******☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼♥************☼\n" +
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n")
+                                .setLevelMaps(level + 1,
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                                        "☼******o******☼\n" +
+                                        "☼*****oo******☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼o***o********☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*******o*****☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*o***********☼\n" +
+                                        "☼********o****☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼♥**o*o*******☼\n" +
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n")
+                                .setLevelMaps(level + 2,
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                                        "☼*****o*******☼\n" +
+                                        "☼*******o*****☼\n" +
+                                        "☼***o*********☼\n" +
+                                        "☼o************☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*******o*****☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*****o**o****☼\n" +
+                                        "☼***o*********☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼******o******☼\n" +
+                                        "☼***o*********☼\n" +
+                                        "☼♥************☼\n" +
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n")
+                                .setLevelMaps(level + 3,
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼o*****o******☼\n" +
+                                        "☼******o******☼\n" +
+                                        "☼******o******☼\n" +
+                                        "☼***o*o*******☼\n" +
+                                        "☼**o**********☼\n" +
+                                        "☼***o*********☼\n" +
+                                        "☼*******o*****☼\n" +
+                                        "☼***o*********☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼♥************☼\n" +
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n")
+                                .setLevelMaps(level + 4,
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                                        "☼***o*********☼\n" +
+                                        "☼****o********☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*******o*****☼\n" +
+                                        "☼o***o********☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼***o*********☼\n" +
+                                        "☼****o********☼\n" +
+                                        "☼**o***o******☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼♥**o*********☼\n" +
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n")
+                                .setLevelMaps(level + 5,
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                                        "☼**o*o********☼\n" +
+                                        "☼****o*o******☼\n" +
+                                        "☼*****o*******☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼**o**********☼\n" +
+                                        "☼***o*********☼\n" +
+                                        "☼******o******☼\n" +
+                                        "☼***o****o****☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼♥************☼\n" +
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n")
                                 .integer(COUNT_CONTAGIONS, 10);
                     }
                 },
@@ -82,7 +183,7 @@ public class SmokeTest {
 
     @Test
     public void test2() {
-        // about 50 sec
+        // about 50 sec -> 23 sec
         int ticks = 1000;
 
         SmokeUtils.recheck = actual -> {
@@ -91,6 +192,10 @@ public class SmokeTest {
             assertEquals(false, actual.contains(Events.FORGOT_POTION.name()));
             assertEquals(true, actual.contains(Events.SUICIDE.name()));
         };
+
+        smoke.settings().removeWhenGameOver(true);
+        smoke.settings().reloadPlayersWhenGameOverAll(true);
+        smoke.settings().increaseLevelAfterReload(true);
 
         smoke.play(ticks, "SmokeTest2.data",
                 new GameRunner() {
@@ -101,8 +206,72 @@ public class SmokeTest {
 
                     @Override
                     public GameSettings getSettings() {
+                        int level = LevelProgress.levelsStartsFrom1;
                         return super.getSettings()
-                                .integer(BOARD_SIZE, 20)
+                                .clearLevelMaps(level)
+                                .setLevelMaps(level,
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                                        "☼*******ooo*****ooo☼\n" +
+                                        "☼*****o****o*o*****☼\n" +
+                                        "☼o**o*****o*****o**☼\n" +
+                                        "☼******************☼\n" +
+                                        "☼***o****o****o*o**☼\n" +
+                                        "☼*********o********☼\n" +
+                                        "☼*******o**********☼\n" +
+                                        "☼***o*o*o**o***o***☼\n" +
+                                        "☼************o**o**☼\n" +
+                                        "☼******o***********☼\n" +
+                                        "☼o*****************☼\n" +
+                                        "☼**o*o*********o***☼\n" +
+                                        "☼**o*o*************☼\n" +
+                                        "☼**************o***☼\n" +
+                                        "☼****o****o********☼\n" +
+                                        "☼***o*********o****☼\n" +
+                                        "☼********o*********☼\n" +
+                                        "☼♥***o********o****☼\n" +
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n")
+                                .setLevelMaps(level + 1,
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                                        "☼*o****************☼\n" +
+                                        "☼***o*o************☼\n" +
+                                        "☼***o*o************☼\n" +
+                                        "☼*****o************☼\n" +
+                                        "☼*oo*o*************☼\n" +
+                                        "☼*o**ooo***********☼\n" +
+                                        "☼o**o**************☼\n" +
+                                        "☼oooo*oo***********☼\n" +
+                                        "☼ooo***************☼\n" +
+                                        "☼o*****oo**********☼\n" +
+                                        "☼*o**o*************☼\n" +
+                                        "☼****oo************☼\n" +
+                                        "☼*o*o**o***********☼\n" +
+                                        "☼ooo***************☼\n" +
+                                        "☼**oo**************☼\n" +
+                                        "☼***o**************☼\n" +
+                                        "☼******************☼\n" +
+                                        "☼♥*****************☼\n" +
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n")
+                                .setLevelMaps(level + 2,
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                                        "☼******************☼\n" +
+                                        "☼******************☼\n" +
+                                        "☼******************☼\n" +
+                                        "☼******************☼\n" +
+                                        "☼******************☼\n" +
+                                        "☼******************☼\n" +
+                                        "☼******************☼\n" +
+                                        "☼******************☼\n" +
+                                        "☼******************☼\n" +
+                                        "☼******************☼\n" +
+                                        "☼******************☼\n" +
+                                        "☼******************☼\n" +
+                                        "☼******************☼\n" +
+                                        "☼******************☼\n" +
+                                        "☼******************☼\n" +
+                                        "☼******************☼\n" +
+                                        "☼******************☼\n" +
+                                        "☼♥*****************☼\n" +
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n")
                                 .integer(COUNT_CONTAGIONS, 40);
                     }
                 },

@@ -23,66 +23,52 @@ package com.codenjoy.dojo.verland.model;
  */
 
 
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.verland.model.items.Contagion;
-import com.codenjoy.dojo.verland.services.Events;
-import com.codenjoy.dojo.verland.services.GameSettings;
-import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
 
-import static com.codenjoy.dojo.verland.services.GameSettings.Keys.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
-public class GameTest {
-
-    private MockBoard game;
-    private List<Contagion> contagions;
-    private EventListener listener;
-    private PrinterFactory printerFactory;
-    private GameSettings settings;
-
-    @Before
-    public void setup() {
-        printerFactory = new PrinterFactoryImpl();
-        settings = new GameSettings()
-                .integer(BOARD_SIZE, 5)
-                .integer(POTIONS_COUNT, 3);
-    }
+public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldLeaveEmptySpace_whenWalkOnBoardRight() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(1, 1));
+        // given
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥*☼\n" +
+                "☼o**☼\n" +
+                "☼☼☼☼☼\n");
 
+        assertF("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        // when
         moveRight();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        // then
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*1♥☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
+        // when
         moveDown();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        // then
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*1 ☼\n" +
                 "☼**♥☼\n" +
                 "☼☼☼☼☼\n");
 
+        // when
         moveLeft();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        // then
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*1 ☼\n" +
                 "☼*♥ ☼\n" +
@@ -90,60 +76,69 @@ public class GameTest {
     }
 
     private void moveLeft() {
-        game.hero().left();
-        game.tick();
+        hero().left();
+        tick();
     }
 
     private void moveDown() {
-        game.hero().down();
-        game.tick();
+        hero().down();
+        tick();
     }
 
     private void moveRight() {
-        game.hero().right();
-        game.tick();
+        hero().right();
+        tick();
     }
 
     private void suicide() {
-        game.hero().act(0);
-        game.tick();
+        hero().act(0);
+        tick();
     }
 
     @Test
     public void shouldLeaveEmptySpace_whenWalkOnBoardDown() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(1, 1));
+        // given
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥*☼\n" +
+                "☼o**☼\n" +
+                "☼☼☼☼☼\n");
 
+        // when
         moveDown();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        // then
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*1*☼\n" +
                 "☼*♥*☼\n" +
                 "☼☼☼☼☼\n");
 
+        // when
         moveRight();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        // then
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*1*☼\n" +
                 "☼*1♥☼\n" +
                 "☼☼☼☼☼\n");
 
+        // when
         moveUp();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        // then
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*1♥☼\n" +
                 "☼*1 ☼\n" +
                 "☼☼☼☼☼\n");
 
+        // when
         moveUp();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        // then
+        assertF("☼☼☼☼☼\n" +
                 "☼**♥☼\n" +
                 "☼*1 ☼\n" +
                 "☼*1 ☼\n" +
@@ -152,12 +147,15 @@ public class GameTest {
 
     @Test
     public void shouldLeaveEmptySpace_whenWalkOnBoardUp() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(1, 1));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥*☼\n" +
+                "☼o**☼\n" +
+                "☼☼☼☼☼\n");
 
         moveUp();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼*♥*☼\n" +
                 "☼*1*☼\n" +
                 "☼***☼\n" +
@@ -165,8 +163,7 @@ public class GameTest {
 
         moveLeft();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼♥ *☼\n" +
                 "☼*1*☼\n" +
                 "☼***☼\n" +
@@ -174,8 +171,7 @@ public class GameTest {
 
         moveDown();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼  *☼\n" +
                 "☼♥1*☼\n" +
                 "☼***☼\n" +
@@ -184,12 +180,15 @@ public class GameTest {
 
     @Test
     public void shouldLeaveEmptySpace_whenWalkOnBoardLeft() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(1, 1));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥*☼\n" +
+                "☼o**☼\n" +
+                "☼☼☼☼☼\n");
 
         moveLeft();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼♥1*☼\n" +
                 "☼***☼\n" +
@@ -198,12 +197,15 @@ public class GameTest {
 
     @Test
     public void shouldCure_whenSetRight() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(1, 1));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥*☼\n" +
+                "☼o**☼\n" +
+                "☼☼☼☼☼\n");
 
-        unbombRight();
+        cureRight();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥!☼\n" +
                 "☼***☼\n" +
@@ -212,12 +214,15 @@ public class GameTest {
 
     @Test
     public void shouldCure_whenSetUp() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(1, 1));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥*☼\n" +
+                "☼o**☼\n" +
+                "☼☼☼☼☼\n");
 
         cureUp();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼*!*☼\n" +
                 "☼*♥*☼\n" +
                 "☼***☼\n" +
@@ -226,12 +231,15 @@ public class GameTest {
 
     @Test
     public void shouldCure_whenSetDown() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(1, 1));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥*☼\n" +
+                "☼o**☼\n" +
+                "☼☼☼☼☼\n");
 
         cureDown();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼*!*☼\n" +
@@ -240,12 +248,15 @@ public class GameTest {
 
     @Test
     public void shouldCure_whenSetLeft() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(1, 1));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥*☼\n" +
+                "☼o**☼\n" +
+                "☼☼☼☼☼\n");
 
         cureLeft();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼!♥*☼\n" +
                 "☼***☼\n" +
@@ -254,72 +265,81 @@ public class GameTest {
 
     @Test
     public void shouldDie_whenHeroAtContagion() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(3, 2));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥o☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
 
         moveRight();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼ 11☼\n" +
                 "☼ 1X☼\n" +
                 "☼ 11☼\n" +
                 "☼☼☼☼☼\n");
 
-        assertTrue(game.isGameOver());
+        assertEquals(true, hero().isGameOver());
     }
 
     @Test
     public void shouldSaveCommandAndActAfterTick() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(3, 2));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥o☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
 
-        game.hero().right();
+        hero().right();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        game.tick();
+        tick();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼ 11☼\n" +
                 "☼ 1X☼\n" +
                 "☼ 11☼\n" +
                 "☼☼☼☼☼\n");
 
-        assertTrue(game.isGameOver());
+        assertEquals(true, game().isGameOver());
     }
 
     @Test
     public void shouldPrintAllContagions_whenHeroAtContagion() {
-        shouldBoardWith(new Hero(2, 2),
-                new Contagion(3, 3), new Contagion(3, 2), new Contagion(3, 1),
-                new Contagion(2, 1), new Contagion(2, 3));
+        givenFl("☼☼☼☼☼\n" +
+                "☼*oo☼\n" +
+                "☼*♥o☼\n" +
+                "☼*oo☼\n" +
+                "☼☼☼☼☼\n");
 
         cureUp();
         cureDown();
         cureLeft();
         moveRight();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼ xo☼\n" +
                 "☼!3X☼\n" +
                 "☼ xo☼\n" +
                 "☼☼☼☼☼\n");
 
-        assertTrue(game.isGameOver());
+        assertEquals(true, game().isGameOver());
     }
 
     @Test
     public void shouldPrintBoard_whenNearHeroNoContagions() {
-        shouldBoardWith(new Hero(3, 3), new Contagion(1, 1));
+        givenFl("☼☼☼☼☼\n" +
+                "☼**♥☼\n" +
+                "☼***☼\n" +
+                "☼o**☼\n" +
+                "☼☼☼☼☼\n");
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼**♥☼\n" +
                 "☼***☼\n" +
                 "☼***☼\n" +
@@ -328,11 +348,13 @@ public class GameTest {
 
     @Test
     public void shouldPrintBoard_whenNearHeroOneContagion() {
-        shouldBoardWith(new Hero(2, 2),
-                new Contagion(3, 3));
+        givenFl("☼☼☼☼☼\n" +
+                "☼**o☼\n" +
+                "☼*♥*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼***☼\n" +
@@ -340,8 +362,7 @@ public class GameTest {
 
         moveLeft();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼♥1*☼\n" +
                 "☼***☼\n" +
@@ -350,11 +371,13 @@ public class GameTest {
 
     @Test
     public void shouldPrintBoard_whenNearHeroTwoContagions() {
-        shouldBoardWith(new Hero(2, 2),
-                new Contagion(3, 3), new Contagion(3, 2));
+        givenFl("☼☼☼☼☼\n" +
+                "☼**o☼\n" +
+                "☼*♥o☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼***☼\n" +
@@ -362,8 +385,7 @@ public class GameTest {
 
         moveLeft();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼♥2*☼\n" +
                 "☼***☼\n" +
@@ -372,11 +394,13 @@ public class GameTest {
 
     @Test
     public void shouldPrintBoard_whenNearHeroThreeContagions() {
-        shouldBoardWith(new Hero(2, 2),
-                new Contagion(3, 3), new Contagion(3, 2), new Contagion(3, 1));
+        givenFl("☼☼☼☼☼\n" +
+                "☼**o☼\n" +
+                "☼*♥o☼\n" +
+                "☼**o☼\n" +
+                "☼☼☼☼☼\n");
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼***☼\n" +
@@ -384,8 +408,7 @@ public class GameTest {
 
         moveLeft();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼♥3*☼\n" +
                 "☼***☼\n" +
@@ -394,12 +417,13 @@ public class GameTest {
 
     @Test
     public void shouldPrintBoard_whenNearHeroFourContagions() {
-        shouldBoardWith(new Hero(2, 2),
-                new Contagion(3, 3), new Contagion(3, 2), new Contagion(3, 1),
-                new Contagion(2, 1));
+        givenFl("☼☼☼☼☼\n" +
+                "☼**o☼\n" +
+                "☼*♥o☼\n" +
+                "☼*oo☼\n" +
+                "☼☼☼☼☼\n");
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼***☼\n" +
@@ -407,8 +431,7 @@ public class GameTest {
 
         moveLeft();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼♥4*☼\n" +
                 "☼***☼\n" +
@@ -417,12 +440,13 @@ public class GameTest {
 
     @Test
     public void shouldPrintBoard_whenNearHeroFiveContagions() {
-        shouldBoardWith(new Hero(2, 2),
-                new Contagion(3, 3), new Contagion(3, 2), new Contagion(3, 1),
-                new Contagion(2, 1), new Contagion(2, 3));
+        givenFl("☼☼☼☼☼\n" +
+                "☼*oo☼\n" +
+                "☼*♥o☼\n" +
+                "☼*oo☼\n" +
+                "☼☼☼☼☼\n");
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼***☼\n" +
@@ -430,8 +454,7 @@ public class GameTest {
 
         moveLeft();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼♥5*☼\n" +
                 "☼***☼\n" +
@@ -441,13 +464,13 @@ public class GameTest {
 
     @Test
     public void shouldPrintBoard_whenNearHeroSixContagions() {
-        shouldBoardWith(new Hero(2, 2),
-                new Contagion(3, 3), new Contagion(3, 2), new Contagion(3, 1),
-                new Contagion(2, 1), new Contagion(2, 3),
-                new Contagion(1, 3));
+        givenFl("☼☼☼☼☼\n" +
+                "☼ooo☼\n" +
+                "☼*♥o☼\n" +
+                "☼*oo☼\n" +
+                "☼☼☼☼☼\n");
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼***☼\n" +
@@ -455,8 +478,7 @@ public class GameTest {
 
         moveLeft();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼♥6*☼\n" +
                 "☼***☼\n" +
@@ -465,13 +487,13 @@ public class GameTest {
 
     @Test
     public void shouldPrintBoard_whenNearHeroSevenContagions() {
-        shouldBoardWith(new Hero(2, 2),
-                new Contagion(3, 3), new Contagion(3, 2), new Contagion(3, 1),
-                new Contagion(2, 1), new Contagion(2, 3),
-                new Contagion(1, 3), new Contagion(1, 1));
+        givenFl("☼☼☼☼☼\n" +
+                "☼ooo☼\n" +
+                "☼*♥o☼\n" +
+                "☼ooo☼\n" +
+                "☼☼☼☼☼\n");
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼***☼\n" +
@@ -479,8 +501,7 @@ public class GameTest {
 
         moveLeft();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼♥7*☼\n" +
                 "☼***☼\n" +
@@ -489,13 +510,13 @@ public class GameTest {
 
     @Test
     public void shouldPrintBoard_whenNearHeroEightContagions() {
-        shouldBoardWith(new Hero(2, 2),
-                new Contagion(3, 3), new Contagion(3, 2), new Contagion(3, 1),
-                new Contagion(2, 1), new Contagion(2, 3),
-                new Contagion(1, 3), new Contagion(1, 2), new Contagion(1, 1));
+        givenFl("☼☼☼☼☼\n" +
+                "☼ooo☼\n" +
+                "☼o♥o☼\n" +
+                "☼ooo☼\n" +
+                "☼☼☼☼☼\n");
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼***☼\n" +
@@ -503,8 +524,7 @@ public class GameTest {
 
         moveDown();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼ooo☼\n" +
                 "☼o8o☼\n" +
                 "☼oXo☼\n" +
@@ -513,12 +533,15 @@ public class GameTest {
 
     @Test
     public void shouldCure_whenContagionAtRight() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(3, 2));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥o☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
 
-        unbombRight();
+        cureRight();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼ ♥x☼\n" +
                 "☼   ☼\n" +
@@ -529,13 +552,16 @@ public class GameTest {
 
     @Test
     public void shouldCure_whenContagionAtRightAndLeft() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(3, 2), new Contagion(1, 2));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼o♥o☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
 
-        unbombRight();
+        cureRight();
         cureLeft();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼x♥x☼\n" +
                 "☼   ☼\n" +
@@ -546,12 +572,15 @@ public class GameTest {
 
     @Test
     public void shouldCureOnEmptySpace_whenContagionAtRight() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(1, 2));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼o♥*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
 
-        unbombRight();
+        cureRight();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥!☼\n" +
                 "☼***☼\n" +
@@ -562,12 +591,15 @@ public class GameTest {
 
     @Test
     public void shouldCure_whenContagionAtDown() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(2, 1));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥*☼\n" +
+                "☼*o*☼\n" +
+                "☼☼☼☼☼\n");
 
         cureDown();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼ ♥ ☼\n" +
                 "☼ x ☼\n" +
@@ -578,12 +610,15 @@ public class GameTest {
 
     @Test
     public void shouldCureOnEmptySpace_whenContagionAtDown() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(2, 1));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥*☼\n" +
+                "☼*o*☼\n" +
+                "☼☼☼☼☼\n");
 
         cureUp();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼*!*☼\n" +
                 "☼*♥*☼\n" +
                 "☼***☼\n" +
@@ -594,12 +629,15 @@ public class GameTest {
 
     @Test
     public void shouldCure_whenContagionAtUp() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(2, 3));
+        givenFl("☼☼☼☼☼\n" +
+                "☼*o*☼\n" +
+                "☼*♥*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
 
         cureUp();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼ x ☼\n" +
                 "☼ ♥ ☼\n" +
                 "☼   ☼\n" +
@@ -610,12 +648,15 @@ public class GameTest {
 
     @Test
     public void shouldCureOnEmptySpace_whenContagionAtUp() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(2, 3));
+        givenFl("☼☼☼☼☼\n" +
+                "☼*o*☼\n" +
+                "☼*♥*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
 
         cureDown();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼*!*☼\n" +
@@ -626,12 +667,15 @@ public class GameTest {
 
     @Test
     public void shouldCure_whenContagionAtLeft() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(1, 2));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼o♥*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
 
         cureLeft();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼x♥ ☼\n" +
                 "☼   ☼\n" +
@@ -641,17 +685,20 @@ public class GameTest {
     }
 
     private void assertWin() {
-        assertTrue(game.isWin());
+        assertEquals(true, hero().isWin());
     }
 
     @Test
     public void shouldCureOnEmptySpace_whenContagionAtLeft() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(3, 2));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥o☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
 
         cureLeft();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼!♥*☼\n" +
                 "☼***☼\n" +
@@ -662,20 +709,20 @@ public class GameTest {
 
     @Test
     public void shouldWin_whenDestroyAllContagions() {
-        settings.integer(POTIONS_COUNT, 8);
+        settings().integer(POTIONS_COUNT, 8);
 
-        shouldBoardWith(new Hero(2, 2),
-                new Contagion(3, 3), new Contagion(3, 2), new Contagion(3, 1),
-                new Contagion(2, 1), new Contagion(2, 3),
-                new Contagion(1, 3), new Contagion(1, 2), new Contagion(1, 1));
+        givenFl("☼☼☼☼☼\n" +
+                "☼ooo☼\n" +
+                "☼o♥o☼\n" +
+                "☼ooo☼\n" +
+                "☼☼☼☼☼\n");
 
         cureLeft();
         cureDown();
-        unbombRight();
+        cureRight();
         cureUp();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼*!*☼\n" +
                 "☼!♥!☼\n" +
                 "☼*!*☼\n" +
@@ -685,10 +732,9 @@ public class GameTest {
 
         moveUp();
         cureLeft();
-        unbombRight();
+        cureRight();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼!♥!☼\n" +
                 "☼!2!☼\n" +
                 "☼*!*☼\n" +
@@ -699,18 +745,16 @@ public class GameTest {
         moveDown();
         moveDown();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼!!!☼\n" +
                 "☼!2!☼\n" +
                 "☼*♥*☼\n" +
                 "☼☼☼☼☼\n");
 
         cureLeft();
-        unbombRight();
+        cureRight();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼xxx☼\n" +
                 "☼x x☼\n" +
                 "☼x♥x☼\n" +
@@ -721,11 +765,13 @@ public class GameTest {
 
     @Test
     public void shouldLeaveContagionOnMap_whenWalkBetweenContagions() {
-        shouldBoardWith(new Hero(1, 1),
-                new Contagion(2, 3), new Contagion(2, 2));
+        givenFl("☼☼☼☼☼\n" +
+                "☼*o*☼\n" +
+                "☼*o*☼\n" +
+                "☼♥**☼\n" +
+                "☼☼☼☼☼\n");
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼***☼\n" +
                 "☼♥**☼\n" +
@@ -733,8 +779,7 @@ public class GameTest {
 
         moveRight();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼***☼\n" +
                 "☼1♥*☼\n" +
@@ -742,8 +787,7 @@ public class GameTest {
 
         moveRight();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼***☼\n" +
                 "☼11♥☼\n" +
@@ -751,8 +795,7 @@ public class GameTest {
 
         moveUp();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼**♥☼\n" +
                 "☼111☼\n" +
@@ -760,8 +803,7 @@ public class GameTest {
 
         moveUp();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼**♥☼\n" +
                 "☼**2☼\n" +
                 "☼111☼\n" +
@@ -769,163 +811,145 @@ public class GameTest {
     }
 
     private void moveUp() {
-        game.hero().up();
-        game.tick();
+        hero().up();
+        tick();
     }
 
     private void assertStillNotWin() {
-        assertFalse(game.isWin());
+        assertEquals(false, hero().isWin());
     }
 
     private void cureUp() {
-        game.hero().act();
+        hero().act();
         moveUp();
     }
 
-    private void unbombRight() {
-        game.hero().act();
+    private void cureRight() {
+        hero().act();
         moveRight();
     }
 
     private void cureDown() {
-        game.hero().act();
+        hero().act();
         moveDown();
     }
 
     private void cureLeft() {
-        game.hero().act();
+        hero().act();
         moveLeft();
-    }
-
-    private void assertBoard(String expected) {
-        assertEquals(expected, printerFactory.getPrinter(
-                game.reader(), null).print());
-    }
-
-    private void shouldBoardWith(Hero hero, Contagion... mines) {
-        listener = mock(EventListener.class);
-        game = new MockBoard(hero, mines);
-    }
-
-    private class MockBoard extends Verland {
-        private Player player;
-
-        public MockBoard(Hero hero, Contagion... contagions) {
-            super((count, board) -> new LinkedList<>(Arrays.asList(contagions)),
-                    settings.integer(COUNT_CONTAGIONS, contagions.length));
-
-            player = new Player(listener, settings);
-            player.setHero(hero);
-            hero.setPlayer(player);
-            newGame(player);
-        }
     }
 
     @Test
     public void shouldFireEvent_whenDie() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(3, 2));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥o☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
 
         moveRight();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼ 11☼\n" +
                 "☼ 1X☼\n" +
                 "☼ 11☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(Events.GOT_INFECTED);
+        verifyAllEvents("[GOT_INFECTED]");
     }
 
     @Test
     public void shouldFireEvent_whenSuicide() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(3, 2));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥o☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
 
         suicide();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
-                "☼   ☼\n" +
+        assertF("☼☼☼☼☼\n" +
+                "☼ 11☼\n" +
                 "☼ ♥o☼\n" +
-                "☼   ☼\n" +
+                "☼ 11☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(Events.SUICIDE);
+        verifyAllEvents("[SUICIDE]");
 
-        assertEquals(true, game.isGameOver());
-        assertEquals(false, game.hero().isAlive());
+        assertEquals(true, game().isGameOver());
+        assertEquals(false, hero().isAlive());
 
-        // TODO дальше как-то странно, наверное тест под это не заточен
-        game.newGame(game.player);
-        game.tick();
+        field().newGame(player());
+        tick();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
-                "☼   ☼\n" +
-                "☼ ♥o☼\n" +
-                "☼   ☼\n" +
+        assertF("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥*☼\n" +
+                "☼***☼\n" +
                 "☼☼☼☼☼\n");
-    }
-
-    private void verifyEvents(Events... events) {
-        for (Events event : events) {
-            verify(listener).event(event);
-        }
     }
 
     @Test
     public void shouldFireEvent_whenOpenSpace() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(1, 1));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥*☼\n" +
+                "☼o**☼\n" +
+                "☼☼☼☼☼\n");
 
         moveRight();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*1♥☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(Events.CLEAN_AREA);
+        verifyAllEvents("[CLEAN_AREA]");
     }
 
     @Test
     public void shouldNotFireEvent_whenReturnsHome() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(1, 1));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥*☼\n" +
+                "☼o**☼\n" +
+                "☼☼☼☼☼\n");
 
         moveRight();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*1♥☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(Events.CLEAN_AREA);
+        verifyAllEvents("[CLEAN_AREA]");
 
         moveLeft();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥ ☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyNoMoreInteractions(listener);
+        verifyAllEvents("");
     }
 
     @Test
     public void shouldFireEvent_whenNoMoreCharge() {
-        settings.integer(POTIONS_COUNT, 3);
+        settings().integer(POTIONS_COUNT, 3);
 
-        shouldBoardWith(new Hero(2, 2), new Contagion(1, 1));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥*☼\n" +
+                "☼o**☼\n" +
+                "☼☼☼☼☼\n");
 
         cureDown();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼*!*☼\n" +
@@ -933,47 +957,43 @@ public class GameTest {
 
         cureLeft();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼!♥*☼\n" +
                 "☼*!*☼\n" +
                 "☼☼☼☼☼\n");
 
-        unbombRight();
+        cureRight();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼!♥!☼\n" +
                 "☼o! ☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(3, Events.FORGOT_POTION);
-        verifyEvents(Events.NO_MORE_POTIONS);
+        verifyAllEvents("[FORGOT_POTION, FORGOT_POTION, FORGOT_POTION, NO_MORE_POTIONS]");
 
         cureUp();
 
-        verifyNoMoreInteractions(listener);
+        verifyAllEvents("");
     }
 
     @Test
     public void shouldPrintAllBoardContagions_whenNoMoreCharge_case1() {
-        settings.integer(POTIONS_COUNT, 4);
+        settings().integer(POTIONS_COUNT, 4);
 
-        shouldBoardWith(new Hero(2, 2),
-                new Contagion(2, 1),
-                new Contagion(2, 3),
-                new Contagion(1, 2),
-                new Contagion(3, 2));
+        givenFl("☼☼☼☼☼\n" +
+                "☼*o*☼\n" +
+                "☼o♥o☼\n" +
+                "☼*o*☼\n" +
+                "☼☼☼☼☼\n");
 
-        unbombRight();
+        cureRight();
         cureLeft();
         cureDown();
         cureUp();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼ x ☼\n" +
                 "☼x♥x☼\n" +
                 "☼ x ☼\n" +
@@ -982,21 +1002,20 @@ public class GameTest {
 
     @Test
     public void shouldPrintAllBoardContagions_whenNoMoreCharge_case2() {
-        settings.integer(POTIONS_COUNT, 4);
+        settings().integer(POTIONS_COUNT, 4);
 
-        shouldBoardWith(new Hero(2, 2),
-                new Contagion(1, 1),
-                new Contagion(1, 3),
-                new Contagion(3, 3),
-                new Contagion(3, 1));
+        givenFl("☼☼☼☼☼\n" +
+                "☼o*o☼\n" +
+                "☼*♥*☼\n" +
+                "☼o*o☼\n" +
+                "☼☼☼☼☼\n");
 
-        unbombRight();
+        cureRight();
         cureLeft();
         cureDown();
         cureUp();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼o!o☼\n" +
                 "☼!♥!☼\n" +
                 "☼o!o☼\n" +
@@ -1005,17 +1024,18 @@ public class GameTest {
 
     @Test
     public void shouldPrintAllBoardContagions_whenNoMoreCharge_case3() {
-        settings.integer(POTIONS_COUNT, 2);
+        settings().integer(POTIONS_COUNT, 2);
 
-        shouldBoardWith(new Hero(2, 2),
-                new Contagion(3, 3),
-                new Contagion(3, 1));
+        givenFl("☼☼☼☼☼\n" +
+                "☼**o☼\n" +
+                "☼*♥*☼\n" +
+                "☼**o☼\n" +
+                "☼☼☼☼☼\n");
 
-        unbombRight();
+        cureRight();
         cureLeft();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼ 1o☼\n" +
                 "☼!♥!☼\n" +
                 "☼ 1o☼\n" +
@@ -1024,88 +1044,92 @@ public class GameTest {
 
     @Test
     public void shouldPrintAllBoardContagions_whenNoMoreCharge_case4() {
-        settings.integer(POTIONS_COUNT, 2);
+        settings().integer(POTIONS_COUNT, 2);
 
-        shouldBoardWith(new Hero(2, 2),
-                new Contagion(3, 3),
-                new Contagion(3, 1));
+        givenFl("☼☼☼☼☼\n" +
+                "☼**o☼\n" +
+                "☼*♥*☼\n" +
+                "☼**o☼\n" +
+                "☼☼☼☼☼\n");
 
         cureLeft();
         cureDown();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼ 1o☼\n" +
                 "☼!♥2☼\n" +
                 "☼ !o☼\n" +
                 "☼☼☼☼☼\n");
     }
 
-    private void verifyEvents(int count, Events event) {
-        verify(listener, times(count)).event(event);
-    }
-
     @Test
     public void shouldFireEvent_whenCureContagion() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(3, 2), new Contagion(1, 2));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼o♥o☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
 
-        unbombRight();
+        cureRight();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥!☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(Events.CURE);
+        verifyAllEvents("[CURE]");
     }
 
     @Test
     public void shouldFireEvent_whenCleanAllContagions() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(1, 2));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼o♥*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
 
         cureLeft();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼x♥ ☼\n" +
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(
-                Events.CURE,
-                Events.WIN);
+        verifyAllEvents("[CURE, WIN]");
     }
 
     @Test
     public void shouldOnlyOneFlagPerSpace() {
-        shouldBoardWith(new Hero(2, 2), new Contagion(1, 2));
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼o♥*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
 
-        unbombRight();
+        cureRight();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥!☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(Events.FORGOT_POTION);
+        verifyAllEvents("[FORGOT_POTION]");
 
-        unbombRight();
-
-        verifyNoMoreInteractions(listener);
+        cureRight();
     }
-
 
     @Test
     public void shouldCantGoOnBoard() {
-        shouldBoardWith(new Hero(1, 1));
+        givenFl("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼♥  ☼\n" +
+                "☼☼☼☼☼\n");
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
                 "☼♥  ☼\n" +
@@ -1113,8 +1137,7 @@ public class GameTest {
 
         moveLeft();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
                 "☼♥  ☼\n" +
@@ -1122,8 +1145,7 @@ public class GameTest {
 
         moveDown();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
                 "☼♥  ☼\n" +
@@ -1133,8 +1155,7 @@ public class GameTest {
         moveRight();
         moveRight();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
                 "☼  ♥☼\n" +
@@ -1144,8 +1165,7 @@ public class GameTest {
         moveUp();
         moveUp();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼  ♥☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
@@ -1153,31 +1173,32 @@ public class GameTest {
     }
 
     @Test
-    public void shouldCantUnbombOnBoard() {
-        shouldBoardWith(new Hero(1, 1));
+    public void shouldCantCureOnBoard() {
+        givenFl("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼♥  ☼\n" +
+                "☼☼☼☼☼\n");
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
                 "☼♥  ☼\n" +
                 "☼☼☼☼☼\n");
 
         cureLeft();
-        verifyNoMoreInteractions(listener);
+        verifyAllEvents("");
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
                 "☼♥  ☼\n" +
                 "☼☼☼☼☼\n");
 
         cureDown();
-        verifyNoMoreInteractions(listener);
+        verifyAllEvents("");
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
                 "☼♥  ☼\n" +
@@ -1185,13 +1206,11 @@ public class GameTest {
 
         moveRight();
         moveRight();
-        reset(listener);
 
-        unbombRight();
-        verifyNoMoreInteractions(listener);
+        cureRight();
+        verifyAllEvents("");
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
                 "☼  ♥☼\n" +
@@ -1199,13 +1218,11 @@ public class GameTest {
 
         moveUp();
         moveUp();
-        reset(listener);
 
         cureUp();
-        verifyNoMoreInteractions(listener);
+        verifyAllEvents("");
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼\n" +
                 "☼  ♥☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +

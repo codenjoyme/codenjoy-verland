@@ -25,10 +25,16 @@ package com.codenjoy.dojo.verland.model;
 
 import com.codenjoy.dojo.games.verland.Element;
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.verland.model.items.Cell;
+import com.codenjoy.dojo.verland.services.Events;
+
+import java.util.List;
 
 import static com.codenjoy.dojo.verland.services.Events.SUICIDE;
+import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
 
 public class Hero extends PlayerHero<Field> implements State<Element, Object> {
 
@@ -37,10 +43,19 @@ public class Hero extends PlayerHero<Field> implements State<Element, Object> {
     private Direction direction;
     private boolean cure;
     private Player player;
+    private int turnCount;
 
-    public Hero(int x, int y) {
-        super(x, y);
+    public Hero(Point pt) {
+        super(pt);
         cure = false;
+    }
+
+    @Override
+    public void init(Field field) {
+        super.init(field);
+
+        field.heroes().add(this);
+        recharge();
     }
 
     public boolean isDead() {
@@ -54,8 +69,8 @@ public class Hero extends PlayerHero<Field> implements State<Element, Object> {
     @Override
     public boolean isAlive() {
         return !isDead() &&
-                !field.isNoPotionsButPresentContagions() &&
-                !field.isWin();
+                !isNoPotionsButPresentContagions() &&
+                !isWin();
     }
     
     private void cure() {
@@ -138,10 +153,10 @@ public class Hero extends PlayerHero<Field> implements State<Element, Object> {
         }
 
         if (cure) {
-            field.cure(direction);
+            field.cure(this, direction);
             cure = false;
         } else {
-            field.moveTo(direction);
+            moveTo(direction);
         }
 
         direction = null;
@@ -149,5 +164,63 @@ public class Hero extends PlayerHero<Field> implements State<Element, Object> {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public void moveTo(Direction direction) {
+        if (!canMove(direction)) {
+            return;
+        }
+
+        boolean cleaned = moveMe(direction);
+        if (field.isContagion(this)) {
+            die();
+            field.openAllBoard();
+            player.event(Events.GOT_INFECTED);
+        } else {
+            if (cleaned) {
+                player.event(Events.CLEAN_AREA);
+            }
+        }
+        nextTurn();
+    }
+
+    private boolean canMove(Direction direction) {
+        Point to = direction.change(this);
+        return !field.walls().contains(to);
+    }
+
+    private void nextTurn() {
+        turnCount++;
+    }
+
+    public int getTurn() {
+        return turnCount;
+    }
+
+    public boolean isGameOver() {
+        return !this.isAlive();
+    }
+
+    public boolean isNoPotionsButPresentContagions() {
+        return field.contagions().size() != 0
+                && noMorePotions();
+    }
+
+    public boolean isWin() {
+        return field.contagions().size() == 0 && !this.isDead();
+    }
+
+    public boolean moveMe(Direction direction) {
+        this.move(direction);
+
+        List<Cell> at = field.cells().getAt(this);
+        boolean wasHere = at.stream().anyMatch(Cell::isClean);
+        at.forEach(Cell::open);
+
+        return !wasHere;
+    }
+
+    public void recharge() {
+        charge(settings().integer(POTIONS_COUNT));
     }
 }

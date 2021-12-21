@@ -24,129 +24,131 @@ package com.codenjoy.dojo.verland.model;
 
 
 import com.codenjoy.dojo.games.verland.Element;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.verland.model.generator.Generator;
-import com.codenjoy.dojo.verland.model.items.Contagion;
+import com.codenjoy.dojo.verland.model.items.Cell;
 import com.codenjoy.dojo.verland.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Predicate;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class HeroTest {
 
     private static final int CONTAGIONS_COUNT = 4;
     private static final int BOARD_SIZE = 5;
     private static final int POTIONS_COUNT = 8;
-    private static final Generator NO_CONTAGIONS = new MockGenerator();
 
-    private Field board;
+    private Field field;
     private EventListener listener;
     private GameSettings settings;
+    private Dice dice = mock(Dice.class);
 
     @Before
-    public void before() {
+    public void setup() {
+        givenFl("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼***☼\n" +
+                "☼♥**☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    private void givenFl(String map) {
         settings = new GameSettings()
-                .integer(GameSettings.Keys.BOARD_SIZE, BOARD_SIZE)
                 .integer(GameSettings.Keys.COUNT_CONTAGIONS, CONTAGIONS_COUNT)
                 .integer(GameSettings.Keys.POTIONS_COUNT, POTIONS_COUNT);
 
-        board = new Verland(NO_CONTAGIONS, settings);
-        board.newGame(new Player(listener, settings));
+        Level level = new Level(map);
+        Hero hero = level.heroes().get(0);
+        field = new Verland(dice, level, settings);
         listener = mock(EventListener.class);
+        dice(hero.getX(), hero.getY());
+        field.newGame(new Player(listener, settings));
     }
 
-    static class MockGenerator implements Generator {
-
-        @Override
-        public List<Contagion> get(int count, Field field) {
-            return new ArrayList<>();
+    protected void dice(int... ints) {
+        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
+        for (int i : ints) {
+            when = when.thenReturn(i);
         }
     }
 
     @Test
     public void shouldBoardConsistOfCells() {
-        assertNotNull(board.cells());
+        assertNotNull(field.cells());
     }
 
     @Test
     public void shouldFreeCellsNumberBeMoreThanZero() {
-        assertEquals(true, board.freeCells().size() > 0);
-    }
-
-    @Test
-    public void shouldBoardSizeMoreThanOne_whenGameStart() {
-        // given
-        settings.integer(GameSettings.Keys.BOARD_SIZE, 0);
-
-        // when
-        new Verland(NO_CONTAGIONS, settings)
-                .newGame(new Player(listener, settings));
-
-        // then
-        assertEquals(5, (int)settings.integer(GameSettings.Keys.BOARD_SIZE));
+        assertEquals(true, field.cells().size() > 0);
     }
 
     @Test
     public void shouldContagionsCountLessThenAllCells_whenGameStart() {
         // given
-        settings.integer(GameSettings.Keys.BOARD_SIZE, 2)
-                .integer(GameSettings.Keys.COUNT_CONTAGIONS, 100);
+        settings.integer(GameSettings.Keys.COUNT_CONTAGIONS, 100);
 
         // when
-        new Verland(NO_CONTAGIONS, settings)
-                .newGame(new Player(listener, settings));
+        setup();
 
         // then
-        assertEquals(12, (int)settings.integer(GameSettings.Keys.COUNT_CONTAGIONS));
+        assertEquals(4, (int)settings.integer(GameSettings.Keys.COUNT_CONTAGIONS));
     }
 
     @Test
     public void shouldPotionsChargeMoreThanContagions_whenGameStart() {
         // given
-        settings.integer(GameSettings.Keys.BOARD_SIZE, 100)
-                .integer(GameSettings.Keys.COUNT_CONTAGIONS, 20)
+        settings.integer(GameSettings.Keys.COUNT_CONTAGIONS, 20)
                 .integer(GameSettings.Keys.POTIONS_COUNT, 10);
 
         // when
-        new Verland(NO_CONTAGIONS, settings)
-                .newGame(new Player(listener, settings));
+        setup();
 
         // then
-        assertEquals(20, (int)settings.integer(GameSettings.Keys.COUNT_CONTAGIONS));
-        assertEquals(20, (int)settings.integer(GameSettings.Keys.POTIONS_COUNT));
+        assertEquals(4, (int)settings.integer(GameSettings.Keys.COUNT_CONTAGIONS));
+        assertEquals(8, (int)settings.integer(GameSettings.Keys.POTIONS_COUNT));
     }
 
     @Test
     public void shouldBoardSizeSpecify_whenGameStart() {
         // given
-        settings.integer(GameSettings.Keys.BOARD_SIZE, 10);
-
         // when
-        new Verland(NO_CONTAGIONS, settings)
-                .newGame(new Player(listener, settings));
+        givenFl("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼********☼\n" +
+                "☼********☼\n" +
+                "☼********☼\n" +
+                "☼********☼\n" +
+                "☼********☼\n" +
+                "☼********☼\n" +
+                "☼********☼\n" +
+                "☼♥*******☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
 
         // then
-        assertEquals(10, (int)settings.integer(GameSettings.Keys.BOARD_SIZE));
-        assertEquals(10, board.size());
+        assertEquals(10, field.size());
     }
 
     @Test
     public void shouldBoardBeSquare() {
-        assertEquals(board.cells().size() % (board.size() - 2), 0);
+        assertEquals(5*5, field.cells().size());
     }
 
     @Test
     public void shouldBoardCellsNumberBeMoreThanOne() {
-        assertEquals(true, board.cells().size() > 1);
+        assertEquals(true, field.cells().size() > 1);
     }
 
     @Test
@@ -161,52 +163,57 @@ public class HeroTest {
 
     @Test
     public void shouldContagionsOnBoard() {
-        assertNotNull(board.contagions());
+        assertNotNull(field.contagions());
     }
 
     @Test
     public void shouldContagionsCountSpecify_whenGameStart() {
-        assertNotNull(board.contagions().size());
+        assertNotNull(field.contagions().size());
     }
 
     @Test
     public void shouldFreeCellsDecrease_whenCreatesHeroAndContagions() {
-        int borders = 0;
-        int freeCells = board.freeCells().size();
-        int hero = 1;
-        int contagions = board.contagions().size();
+        // given
+        Set<Point> all = new HashSet<>();
 
-        assertEquals(board.cells().size(),
-                freeCells + contagions + hero + borders);
+        // when
+        all.addAll(field.walls().all());
+        all.addAll(field.cells().filter(Predicate.not(Cell::isClean)));
+        all.addAll(field.heroes().all());
+        all.addAll(field.contagions().all());
+
+        // then
+        assertEquals(field.cells().size(),
+                all.size());
     }
 
     @Test
     public void shouldHeroMoveToUp() {
         int oldYPosition = hero().getY();
 
-        board.moveTo(Direction.UP);
+        hero().moveTo(Direction.UP);
 
         assertEquals(hero().getY(), oldYPosition + 1);
     }
 
     @Test
     public void shouldHeroMoveToDown() {
-        board.moveTo(Direction.UP);
+        hero().moveTo(Direction.UP);
 
         int oldYPosition = hero().getY();
 
-        board.moveTo(Direction.DOWN);
+        hero().moveTo(Direction.DOWN);
 
         assertEquals(hero().getY(), oldYPosition - 1);
     }
 
     @Test
     public void shouldHeroMoveToLeft() {
-        board.moveTo(Direction.RIGHT);
+        hero().moveTo(Direction.RIGHT);
 
         int oldXPosition = hero().getX();
 
-        board.moveTo(Direction.LEFT);
+        hero().moveTo(Direction.LEFT);
 
         assertEquals(hero().getX(), oldXPosition - 1);
     }
@@ -215,20 +222,20 @@ public class HeroTest {
     public void shouldHeroMoveToRight() {
         int oldXPosition = hero().getX();
 
-        board.moveTo(Direction.RIGHT);
+        hero().moveTo(Direction.RIGHT);
 
         assertEquals(hero().getX(), oldXPosition + 1);
     }
 
     private void givenHeroMovedToContagion() {
         placeContagionUpFromHero();
-        board.moveTo(Direction.UP);
+        hero().moveTo(Direction.UP);
     }
 
     private void placeContagionUpFromHero() {
         Point upstairs = Direction.UP.change(hero());
-        if (!board.contagions().contains(upstairs)) {
-            board.tryCreateContagion(upstairs);
+        if (!field.contagions().contains(upstairs)) {
+            field.tryCreateContagion(upstairs);
         }
     }
 
@@ -236,16 +243,16 @@ public class HeroTest {
     public void shouldGameIsOver_whenHeroIsDead() {
         givenHeroMovedToContagion();
 
-        assertEquals(true, board.isGameOver());
+        assertEquals(true, hero().isGameOver());
         assertEquals(true, hero().isDead());
     }
 
     @Test
     public void shouldNextTurn_whenHeroMove() {
-        int turnBeforeHeroMotion = board.getTurn();
+        int turnBeforeHeroMotion = hero().getTurn();
 
-        board.moveTo(Direction.UP);
-        int turnAfterHeroMotion = board.getTurn();
+        hero().moveTo(Direction.UP);
+        int turnAfterHeroMotion = hero().getTurn();
 
         assertEquals(turnBeforeHeroMotion, turnAfterHeroMotion - 1);
     }
@@ -254,7 +261,7 @@ public class HeroTest {
     public void shouldHeroKnowsHowMuchContagionsNearHim_whenAtLeastOneIsDownFromHero() {
         placeContagionUpFromHero();
 
-        assertEquals(true, board.contagionsNear() > 0);
+        assertEquals(true, field.contagionsNear(hero()) > 0);
     }
 
     @Test
@@ -264,18 +271,15 @@ public class HeroTest {
 
     @Test
     public void shouldPotionsChargeMoreThanContagionsOnBoard() {
-        assertEquals(true, potions().charge() > board.contagions().size());
+        assertEquals(true, potions().charge() > field.contagions().size());
     }
 
     @Test
     public void shouldHeroDestroyMine_whenMineExistInGivenDirection() {
         for (Direction direction : Direction.values()) {
-
-            board.cure(direction);
-            boolean isMineInDirection = board.contagions().contains(
-                    board.positionAfterMove(direction));
-
-            assertEquals(true, !isMineInDirection);
+            field.cure(hero(), direction);
+            assertEquals(false, field.contagions().contains(
+                    direction.change(hero())));
         }
     }
 
@@ -283,7 +287,7 @@ public class HeroTest {
     public void shouldPotionsChargeDecreaseByOne_whenUse() {
         int potionsCharge = potions().charge();
 
-        board.cure(Direction.UP);
+        field.cure(hero(), Direction.UP);
 
         assertEquals(potionsCharge, potions().charge() + 1);
     }
@@ -295,74 +299,74 @@ public class HeroTest {
     @Test
     public void shouldContagionsCountDecreaseByOne_whenContagionsIsCured() {
         placeContagionUpFromHero();
-        int count = board.contagions().size();
+        int count = field.contagions().size();
 
-        board.cure(Direction.UP);
+        field.cure(hero(), Direction.UP);
 
-        assertEquals(count, board.contagions().size() + 1);
+        assertEquals(count, field.contagions().size() + 1);
     }
 
     @Test
     public void shouldWin_whenNoMoreContagions() {
         placeContagionUpFromHero();
 
-        board.cure(Direction.UP);
+        field.cure(hero(), Direction.UP);
 
-        assertEquals(true, board.isWin());
+        assertEquals(true, hero().isWin());
     }
 
     @Test
     public void shouldGameOver_whenNoMoreCharge() {
-        board.moveTo(Direction.UP);
+        hero().moveTo(Direction.UP);
         placeContagionUpFromHero();
         assertEquals(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼♥**☼\n" +
                 "☼ **☼\n" +
-                "☼☼☼☼☼\n", getBoardAsString(board));
+                "☼☼☼☼☼\n", getBoardAsString(field));
 
-        board.cure(Direction.DOWN);
+        field.cure(hero(), Direction.DOWN);
 //        board.usePotionsToGivenDirection(Direction.UP);  // there is contagion
-        board.cure(Direction.LEFT);
-        board.cure(Direction.RIGHT);
-        board.moveTo(Direction.RIGHT);
+        field.cure(hero(), Direction.LEFT);
+        field.cure(hero(), Direction.RIGHT);
+        hero().moveTo(Direction.RIGHT);
         assertEquals(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼1♥*☼\n" +
                 "☼!**☼\n" +
-                "☼☼☼☼☼\n", getBoardAsString(board));
+                "☼☼☼☼☼\n", getBoardAsString(field));
 
-        board.cure(Direction.DOWN);
-        board.cure(Direction.UP);
-        board.cure(Direction.LEFT);
-        board.cure(Direction.RIGHT);
-        board.moveTo(Direction.RIGHT);
+        field.cure(hero(), Direction.DOWN);
+        field.cure(hero(), Direction.UP);
+        field.cure(hero(), Direction.LEFT);
+        field.cure(hero(), Direction.RIGHT);
+        hero().moveTo(Direction.RIGHT);
         assertEquals(
                 "☼☼☼☼☼\n" +
                 "☼*!*☼\n" +
                 "☼!!♥☼\n" +
                 "☼!!*☼\n" +
-                "☼☼☼☼☼\n", getBoardAsString(board));
+                "☼☼☼☼☼\n", getBoardAsString(field));
 
-        board.cure(Direction.DOWN);
-        board.cure(Direction.UP);
-        board.cure(Direction.LEFT);
-        board.cure(Direction.RIGHT);
+        field.cure(hero(), Direction.DOWN);
+        field.cure(hero(), Direction.UP);
+        field.cure(hero(), Direction.LEFT);
+        field.cure(hero(), Direction.RIGHT);
         assertEquals(
                 "☼☼☼☼☼\n" +
                 "☼o!!☼\n" +
                 "☼!!♥☼\n" +
                 "☼!!!☼\n" +
-                "☼☼☼☼☼\n", getBoardAsString(board));
+                "☼☼☼☼☼\n", getBoardAsString(field));
 
         assertEquals(false, hero().isDead());
-        assertEquals(true, board.isGameOver());
+        assertEquals(true, hero().isGameOver());
     }
 
     private Hero hero() {
-        return board.hero();
+        return field.hero();
     }
 
     private String getBoardAsString(Field board) {

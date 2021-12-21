@@ -24,31 +24,59 @@ package com.codenjoy.dojo.verland.model.items;
 
 
 import com.codenjoy.dojo.games.verland.Element;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.field.Fieldable;
 import com.codenjoy.dojo.verland.model.Field;
+import com.codenjoy.dojo.verland.model.Player;
 
-public class Cell extends PointImpl implements State<Element, Object> {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Cell extends PointImpl implements Fieldable<Field>, State<Element, Player> {
+
+    public static final boolean HIDDEN = false;
+    public static final boolean CLEAN = !HIDDEN;
 
     private Field field;
+    private boolean clean;
 
-    public Cell(int x, int y) {
-        super(x, y);
+    public static Cell hidden(Point pt) {
+        return new Cell(pt, Cell.HIDDEN);
     }
 
+    public static Cell clean(Point pt) {
+        return new Cell(pt, Cell.CLEAN);
+    }
+
+    private Cell(Point pt, boolean clean) {
+        super(pt);
+        this.clean = clean;
+    }
+
+    @Override
     public void init(Field field) {
         this.field = field;
     }
 
     @Override
-    public Element state(Object player, Object... alsoAtPoint) {
-        if (field.isClean(this) || field.isGameOver()) {
-            int count = field.visibleContagionsNear(this);
+    public Element state(Player player, Object... alsoAtPoint) {
+        if (clean || (player.getHero() != null && player.getHero().isGameOver())) {
+            int count = field.contagionsNear(this);
             return count == 0
                     ? Element.CLEAR
                     : Element.valueOf(count);
         }
 
         return Element.HIDDEN;
+    }
+
+    public boolean isClean() {
+        return clean;
+    }
+
+    public void open() {
+        clean = CLEAN;
     }
 }
