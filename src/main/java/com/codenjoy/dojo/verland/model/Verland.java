@@ -209,8 +209,8 @@ public class Verland implements Field {
     public int contagionsNear(Point pt) {
         return (int)Arrays.stream(QDirection.values())
                 .map(direction -> direction.change(pt))
-                .filter(to -> cells().contains(to))
-                .filter(to -> contagions().contains(to))
+                .filter(around -> !around.isOutOf(size()))
+                .filter(around -> contagions().contains(around))
                 .count();
     }
 
