@@ -802,36 +802,22 @@ public class GameTest {
                 game.reader(), null).print());
     }
 
-    private void shouldBoardWith(Hero sapper, Contagion... mines) {
+    private void shouldBoardWith(Hero hero, Contagion... mines) {
         listener = mock(EventListener.class);
-        game = new MockBoard(sapper, mines);
+        game = new MockBoard(hero, mines);
     }
 
     private class MockBoard extends Verland {
         private Player player;
 
         public MockBoard(Hero hero, Contagion... contagions) {
-            super((count, board) -> new ArrayList<>(),
+            super((count, board) -> new LinkedList<>(Arrays.asList(contagions)),
                     settings.integer(COUNT_CONTAGIONS, contagions.length));
 
             player = new Player(listener, settings);
             player.setHero(hero);
             hero.setPlayer(player);
-
-            GameTest.this.contagions = new LinkedList<>();
-            GameTest.this.contagions.addAll(Arrays.asList(contagions));
-
             newGame(player);
-        }
-
-        @Override
-        public List<Contagion> contagions() {
-            return GameTest.this.contagions;
-        }
-
-        @Override
-        public int contagionsCount() {
-            return contagions().size();
         }
     }
 
