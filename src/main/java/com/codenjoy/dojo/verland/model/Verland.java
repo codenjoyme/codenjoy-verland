@@ -43,8 +43,6 @@ import static com.codenjoy.dojo.verland.services.GameSettings.Keys.*;
 
 public class Verland implements Field {
 
-    private Parameter<Integer> potionsCount;
-    private Parameter<Integer> countContagions;
     private List<Point> cells;
     private List<Contagion> contagions;
     private List<Contagion> cured;
@@ -63,8 +61,6 @@ public class Verland implements Field {
     public Verland(ContagionsGenerator generator, GameSettings settings) {
         this.settings = settings;
         this.generator = generator;
-        countContagions = settings.integerValue(COUNT_CONTAGIONS);
-        potionsCount = settings.integerValue(POTIONS_COUNT);
         buildWalls();
     }
 
@@ -84,12 +80,14 @@ public class Verland implements Field {
             settings.integer(BOARD_SIZE, 5);
         }
 
-        while (countContagions.getValue() > ((size() - 1) * (size() - 1) - 1)) {
-            countContagions.update(countContagions.getValue() / 2);
+        Parameter<Integer> contagions = settings.integerValue(COUNT_CONTAGIONS);
+        Parameter<Integer> potions = settings.integerValue(POTIONS_COUNT);
+        while (contagions.getValue() > ((size() - 1) * (size() - 1) - 1)) {
+            contagions.update(contagions.getValue() / 2);
         }
 
-        if (potionsCount.getValue() < countContagions.getValue()) {
-            potionsCount.update(countContagions.getValue());
+        if (potions.getValue() < contagions.getValue()) {
+            potions.update(contagions.getValue());
         }
     }
     
@@ -248,8 +246,8 @@ public class Verland implements Field {
         score = 0;
         cells = initializeBoardCells();
         player.newHero(this);
-        hero().charge(potionsCount.getValue());
-        contagions = generator.get(countContagions.getValue(), this);
+        hero().charge(settings.integer(POTIONS_COUNT));
+        contagions = generator.get(settings.integer(COUNT_CONTAGIONS), this);
         cured = new LinkedList<>();
         tick();
     }
@@ -298,7 +296,7 @@ public class Verland implements Field {
 
     @Override
     public void cure(Direction direction) {
-        final Point result = positionAfterMove(direction);
+        Point result = positionAfterMove(direction);
         if (cells.contains(result)) {
             if (hero().noMorePotions()) {
                 return;
@@ -311,7 +309,7 @@ public class Verland implements Field {
             hero().tryToCure(() -> {
                 cures.add(new Flag(result));
                 if (contagions().contains(result)) {
-                    removeMine(result);
+                    removeContagion(result);
                 } else {
                     player.event(Events.FORGOT_POTION);
                 }
@@ -324,11 +322,11 @@ public class Verland implements Field {
         }
     }
 
-    private void removeMine(Point result) {
-        Contagion contagion = new Contagion(result);
+    private void removeContagion(Point pt) {
+        Contagion contagion = new Contagion(pt);
         contagion.init(this);
         cured.add(contagion);
-        contagions().remove(result);
+        contagions().remove(pt);
         increaseScore();
         recalculateWalkMap();
         player.event(Events.CURE);
