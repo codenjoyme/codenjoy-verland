@@ -225,9 +225,9 @@ public class HeroTest {
     }
 
     private void placeContagionUpFromHero() {
-        Point result = pt(hero().getX(), hero().getY() + 1);
-        if (!board.contagions().contains(result)) {
-            board.tryCreateContagion(result);
+        Point upstairs = Direction.UP.change(hero());
+        if (!board.contagions().contains(upstairs)) {
+            board.tryCreateContagion(upstairs);
         }
     }
 
@@ -235,7 +235,8 @@ public class HeroTest {
     public void shouldGameIsOver_whenHeroIsDead() {
         givenHeroMovedToContagion();
 
-        assertEquals(board.isGameOver(), hero().isDead());
+        assertEquals(true, board.isGameOver());
+        assertEquals(true, hero().isDead());
     }
 
     @Test
