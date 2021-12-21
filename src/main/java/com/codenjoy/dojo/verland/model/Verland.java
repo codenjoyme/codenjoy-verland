@@ -138,8 +138,8 @@ public class Verland implements Field {
         }
 
         boolean cleaned = move(direction);
-        if (isContagion(hero())) {
-            hero().die();
+        if (isOnContagion()) {
+            player.getHero().die();
             openAllBoard();
             player.event(Events.GOT_INFECTED);
         } else {
@@ -154,8 +154,8 @@ public class Verland implements Field {
         clean.put(hero().copy(), contagionsNear());
         hero().move(direction);
 
-        boolean cleaned = clean.containsKey(hero());
-        return !cleaned;
+        boolean wasHere = clean.containsKey(hero());
+        return !wasHere;
     }
 
     private boolean canMove(Direction direction) {
@@ -165,6 +165,11 @@ public class Verland implements Field {
 
     private void nextTurn() {
         turnCount++;
+    }
+
+    @Override
+    public boolean isOnContagion() {
+        return contagions().contains(hero());
     }
 
     @Override
