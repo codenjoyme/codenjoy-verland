@@ -120,7 +120,7 @@ public class Verland implements Field {
     @Override
     public List<Point> freeCells() {
         return cells().stream()
-                .filter(cell -> !hero().itsMe(cell))
+                .filter(cell -> !isHero(cell))
                 .filter(cell -> !isWall(cell)) // TODO test me
                 .filter(cell -> !isContagion(cell))
                 .collect(toList());
@@ -204,7 +204,7 @@ public class Verland implements Field {
 
     @Override
     public boolean isHero(Point pt) {
-        return pt.equals(hero());
+        return hero().itsMe(pt);
     }
 
     @Override
