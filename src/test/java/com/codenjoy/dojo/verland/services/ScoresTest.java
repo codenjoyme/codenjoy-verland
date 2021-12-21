@@ -40,23 +40,23 @@ public class ScoresTest {
     }
 
     public void destroyMine() {
-        scores.event(Events.DESTROY_MINE);
+        scores.event(Events.CURE);
     }
 
     public void forgetCharge() {
-        scores.event(Events.FORGET_CHARGE);
+        scores.event(Events.FORGOT_POTION);
     }
 
     public void killOnMine() {
-        scores.event(Events.KILL_ON_MINE);
+        scores.event(Events.GOT_INFECTED);
     }
 
     public void noMoreCharge() {
-        scores.event(Events.NO_MORE_CHARGE);
+        scores.event(Events.NO_MORE_POTIONS);
     }
 
     public void clearBoard() {
-        scores.event(Events.CLEAN_BOARD);
+        scores.event(Events.CLEAN_AREA);
     }
 
     public void gameWin() {
@@ -91,8 +91,8 @@ public class ScoresTest {
         assertEquals(140
                         + 1 + 2 + 3 + 4
                         - settings.integer(DESTROYED_FORGOT_PENALTY)
-                        - 2 * settings.integer(GAME_OVER_PENALTY)
-                        + 2 * settings.integer(CLEAR_BOARD_SCORE)
+                        - 2 * settings.integer(GOT_INFECTED_PENALTY)
+                        + 2 * settings.integer(CLEAN_AREA_SCORE)
                         + settings.integer(WIN_SCORE),
                 scores.getScore());
     }
@@ -211,7 +211,7 @@ public class ScoresTest {
 
         clearBoard();
 
-        assertEquals(settings.integer(CLEAR_BOARD_SCORE),
+        assertEquals(settings.integer(CLEAN_AREA_SCORE),
                 scores.getScore());
 
     }

@@ -42,7 +42,7 @@ public interface Field extends GameField<Player> {
 
     int getMinesCount();
 
-    void sapperMoveTo(Direction direction);
+    void heroMoveTo(Direction direction);
 
     boolean isSapperOnMine();
 

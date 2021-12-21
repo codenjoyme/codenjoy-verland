@@ -54,7 +54,7 @@ public class GameTest {
         printerFactory = new PrinterFactoryImpl();
         settings = new GameSettings()
                 .integer(BOARD_SIZE, 5)
-                .integer(DETECTOR_CHARGE, 3);
+                .integer(POTIONS_COUNT, 3);
     }
 
     @Test
@@ -662,7 +662,7 @@ public class GameTest {
 
     @Test
     public void shouldWin_whenDestroyAllBombs() {
-        settings.integer(DETECTOR_CHARGE, 8);
+        settings.integer(POTIONS_COUNT, 8);
 
         shouldBoardWith(new Hero(2, 2),
                 new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
@@ -812,7 +812,7 @@ public class GameTest {
 
         public MockBoard(Hero hero, Mine... mines) {
             super((count, board) -> new ArrayList<>(),
-                    settings.integer(MINES_ON_BOARD, mines.length));
+                    settings.integer(COUNT_CONTAGIONS, mines.length));
 
             player = new Player(listener, settings);
             player.setHero(hero);
@@ -851,7 +851,7 @@ public class GameTest {
                 "☼ 11☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(Events.KILL_ON_MINE);
+        verifyEvents(Events.GOT_INFECTED);
     }
 
     @Test
@@ -903,7 +903,7 @@ public class GameTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(Events.CLEAN_BOARD);
+        verifyEvents(Events.CLEAN_AREA);
     }
 
     @Test
@@ -919,7 +919,7 @@ public class GameTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(Events.CLEAN_BOARD);
+        verifyEvents(Events.CLEAN_AREA);
 
         moveLeft();
 
@@ -935,7 +935,7 @@ public class GameTest {
 
     @Test
     public void shouldFireEvent_whenNoMoreCharge() {
-        settings.integer(DETECTOR_CHARGE, 3);
+        settings.integer(POTIONS_COUNT, 3);
 
         shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
 
@@ -966,8 +966,8 @@ public class GameTest {
                 "☼o! ☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(3, Events.FORGET_CHARGE);
-        verifyEvents(Events.NO_MORE_CHARGE);
+        verifyEvents(3, Events.FORGOT_POTION);
+        verifyEvents(Events.NO_MORE_POTIONS);
 
         unbombUp();
 
@@ -976,7 +976,7 @@ public class GameTest {
 
     @Test
     public void shouldPrintAllBoardBombs_whenNoMoreCharge_case1() {
-        settings.integer(DETECTOR_CHARGE, 4);
+        settings.integer(POTIONS_COUNT, 4);
 
         shouldBoardWith(new Hero(2, 2),
                 new Mine(2, 1),
@@ -999,7 +999,7 @@ public class GameTest {
 
     @Test
     public void shouldPrintAllBoardBombs_whenNoMoreCharge_case2() {
-        settings.integer(DETECTOR_CHARGE, 4);
+        settings.integer(POTIONS_COUNT, 4);
 
         shouldBoardWith(new Hero(2, 2),
                 new Mine(1, 1),
@@ -1022,7 +1022,7 @@ public class GameTest {
 
     @Test
     public void shouldPrintAllBoardBombs_whenNoMoreCharge_case3() {
-        settings.integer(DETECTOR_CHARGE, 2);
+        settings.integer(POTIONS_COUNT, 2);
 
         shouldBoardWith(new Hero(2, 2),
                 new Mine(3, 3),
@@ -1041,7 +1041,7 @@ public class GameTest {
 
     @Test
     public void shouldPrintAllBoardBombs_whenNoMoreCharge_case4() {
-        settings.integer(DETECTOR_CHARGE, 2);
+        settings.integer(POTIONS_COUNT, 2);
 
         shouldBoardWith(new Hero(2, 2),
                 new Mine(3, 3),
@@ -1075,7 +1075,7 @@ public class GameTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(Events.DESTROY_MINE);
+        verifyEvents(Events.CURE);
     }
 
     @Test
@@ -1092,7 +1092,7 @@ public class GameTest {
                 "☼☼☼☼☼\n");
 
         verifyEvents(
-                Events.DESTROY_MINE,
+                Events.CURE,
                 Events.WIN);
     }
 
@@ -1109,7 +1109,7 @@ public class GameTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(Events.FORGET_CHARGE);
+        verifyEvents(Events.FORGOT_POTION);
 
         unbombRight();
 

@@ -35,15 +35,15 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
 
     public enum Keys implements Key {
 
-        WIN_SCORE("Win score"),
-        BOARD_SIZE("Board size"),
-        SUICIDE_PENALTY("Suicide penalty"),
-        GAME_OVER_PENALTY("Game over penalty"),
-        DESTROYED_PENALTY("Forgot penalty"),
-        DESTROYED_FORGOT_PENALTY("Destroyed forgot penalty"),
-        CLEAR_BOARD_SCORE("Clear board score"),
-        MINES_ON_BOARD("Mines on board"),
-        DETECTOR_CHARGE("Detector charge");
+        WIN_SCORE("[Score] Win score"),
+        BOARD_SIZE("[Map] Board size"),
+        SUICIDE_PENALTY("[Game] Suicide penalty"),
+        GOT_INFECTED_PENALTY("[Game] Got infected penalty"),
+        DESTROYED_PENALTY("[Score] Forgot penalty"),
+        DESTROYED_FORGOT_PENALTY("[Score] Destroyed forgot penalty"),
+        CLEAN_AREA_SCORE("[Score] Clear area score"),
+        COUNT_CONTAGIONS("[Score] Count contagions"),
+        POTIONS_COUNT("[Score] Potions count");
 
         private String key;
 
@@ -64,15 +64,15 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
 
     public GameSettings() {
         integer(WIN_SCORE, 300);
-        integer(GAME_OVER_PENALTY, 15);
+        integer(GOT_INFECTED_PENALTY, 15);
         integer(SUICIDE_PENALTY, 100);
         integer(DESTROYED_PENALTY, 5);
         integer(DESTROYED_FORGOT_PENALTY, 2);
-        integer(CLEAR_BOARD_SCORE, 1);
+        integer(CLEAN_AREA_SCORE, 1);
 
         integer(BOARD_SIZE, 15);
-        integer(MINES_ON_BOARD, 30);
-        integer(DETECTOR_CHARGE, 100);
+        integer(COUNT_CONTAGIONS, 30);
+        integer(POTIONS_COUNT, 100);
     }
 
 }

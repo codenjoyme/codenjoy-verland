@@ -41,7 +41,7 @@ import java.util.List;
 import static com.codenjoy.dojo.games.verland.Element.*;
 import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static com.codenjoy.dojo.verland.services.ai.logic.Action.MARK;
+import static com.codenjoy.dojo.verland.services.ai.logic.Action.CURE;
 
 public class AISolver implements Solver<Board> {
 
@@ -90,7 +90,7 @@ public class AISolver implements Solver<Board> {
                     return STOP.toString();
                 }
             }
-            if (oneStep && to.action() == MARK) {
+            if (oneStep && to.action() == CURE) {
                 return ACT.toString() + ',' + where.toString();
             }
         }
@@ -143,7 +143,7 @@ public class AISolver implements Solver<Board> {
                             .filter(pt -> !pt.isOutOf(board.size()))
                             .anyMatch(pt -> board.isAt(pt, CLEAR)
                                     // а тут мы не собираемся идти, а просто там флажок поставим
-                                    || (point.equals(to) && to.action() == MARK)
+                                    || (point.equals(to) && to.action() == CURE)
                                     // так же мы помним с прошлого хода, что под нами было
                                     || (underMe != null
                                         && pt.equals(board.getHero())

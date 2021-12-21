@@ -98,9 +98,9 @@ public class Field {
                 .filter(cell -> cell.action() != Action.NOTHING)
                 // активные действия MARK совершаются в направлении '*' а значит туда мы не зайдем
                 // а вот GO надо бы проверить на доступность клеточки
-                .filter(cell -> cell.action() == Action.MARK || isReachable(cell))
+                .filter(cell -> cell.action() == Action.CURE || isReachable(cell))
                 // сперва нас интересуют активные действия в устранении мин
-                .sorted((cell1, cell2) -> Boolean.compare(cell1.action() != Action.MARK, cell2.action() != Action.MARK))
+                .sorted((cell1, cell2) -> Boolean.compare(cell1.action() != Action.CURE, cell2.action() != Action.CURE))
                 // мы исключаем все дубликаты
                 .collect(toCollection(LinkedHashSet::new));
     }

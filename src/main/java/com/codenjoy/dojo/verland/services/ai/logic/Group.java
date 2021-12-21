@@ -58,7 +58,7 @@ public class Group {
         if (element == CLEAR || element == HERO) {
             return Action.GO;
         } else if (size() == element.value()) {
-            return Action.MARK;
+            return Action.CURE;
         } else {
             return Action.NOTHING;
         }

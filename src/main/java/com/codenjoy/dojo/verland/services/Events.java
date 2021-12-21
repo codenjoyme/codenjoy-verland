@@ -24,11 +24,11 @@ package com.codenjoy.dojo.verland.services;
 
 
 public enum Events {
-    KILL_ON_MINE,
-    DESTROY_MINE,
-    FORGET_CHARGE,
-    NO_MORE_CHARGE,
-    CLEAN_BOARD,
+    GOT_INFECTED,
+    CURE,
+    FORGOT_POTION,
+    NO_MORE_POTIONS,
+    CLEAN_AREA,
     WIN,
     SUICIDE
 }

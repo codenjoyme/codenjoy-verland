@@ -23,5 +23,5 @@ package com.codenjoy.dojo.verland.services.ai.logic;
  */
 
 public enum Action {
-    MARK, GO, NOTHING
+    CURE, GO, NOTHING
 }

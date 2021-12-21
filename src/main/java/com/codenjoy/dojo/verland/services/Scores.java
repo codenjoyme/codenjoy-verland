@@ -51,26 +51,26 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(Events.DESTROY_MINE)) {
-            onDestroyMine();
-        } else if (event.equals(Events.FORGET_CHARGE)) {
-            onForgotCharge();
-        } else if (event.equals(Events.KILL_ON_MINE)) {
-            onKillOnMine();
-        } else if (event.equals(Events.NO_MORE_CHARGE)) {
-            onNoMoreCharge();
+        if (event.equals(Events.CURE)) {
+            onCure();
+        } else if (event.equals(Events.FORGOT_POTION)) {
+            onForgotPotion();
+        } else if (event.equals(Events.GOT_INFECTED)) {
+            onGotInfected();
+        } else if (event.equals(Events.NO_MORE_POTIONS)) {
+            onNoMorePotions();
         } else if (event.equals(Events.WIN)) {
             onWin();
         } else if (event.equals(Events.SUICIDE)) {
             onSuicide();
-        } else if (event.equals(Events.CLEAN_BOARD)) {
-            onClearBoard();
+        } else if (event.equals(Events.CLEAN_AREA)) {
+            onCleanArea();
         }
         score = Math.max(0, score);
     }
 
-    private void onClearBoard() {
-        score += settings.integer(CLEAR_BOARD_SCORE);
+    private void onCleanArea() {
+        score += settings.integer(CLEAN_AREA_SCORE);
     }
 
     private void onWin() {
@@ -81,23 +81,23 @@ public class Scores implements PlayerScores {
         score -= settings.integer(SUICIDE_PENALTY);
     }
 
-    private void onNoMoreCharge() {
-        onKillOnMine();
+    private void onNoMorePotions() {
+        onGotInfected();
     }
 
-    private void onDestroyMine() {
+    private void onCure() {
         destroyed++;
         score += destroyed;
     }
 
-    private void onForgotCharge() {
+    private void onForgotPotion() {
         score -= settings.integer(DESTROYED_FORGOT_PENALTY);
         destroyed -= settings.integer(DESTROYED_PENALTY);
         destroyed = Math.max(0, destroyed);
     }
 
-    private void onKillOnMine() {
-        score -= settings.integer(GAME_OVER_PENALTY);
+    private void onGotInfected() {
+        score -= settings.integer(GOT_INFECTED_PENALTY);
         destroyed = 0;
     }
 

@@ -141,7 +141,7 @@ public class Hero extends PlayerHero<Field> implements State<Element, Object> {
             field.useMineDetectorToGivenDirection(nextStep);
             useDetector = false;
         } else {
-            field.sapperMoveTo(nextStep);
+            field.heroMoveTo(nextStep);
         }
 
         nextStep = null;

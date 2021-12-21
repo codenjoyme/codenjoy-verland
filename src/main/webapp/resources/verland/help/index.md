@@ -139,10 +139,10 @@ C помощью этого regexp можно выкусить строку до
 | Размер поля | BOARD_SIZE | 15[*](index.md#ask) |
 | Очки за победу на карте | WIN_SCORE | 300[*](index.md#ask) |
 | Пенальти по очкам за суицид | SUICIDE_PENALTY | 100[*](index.md#ask) |
-| Пенальти по очкам за смерть | GAME_OVER_PENALTY | 15[*](index.md#ask) |
+| Пенальти по очкам за смерть | GOT_INFECTED_PENALTY | 15[*](index.md#ask) |
 | Пенальти за неудачную попытку исцеления | DESTROYED_PENALTY | 5[*](index.md#ask) |
 | Пенальти по очкам за неудачную попытку исцеления | DESTROYED_FORGOT_PENALTY | 2[*](index.md#ask) |
-| Очки за успешное исцеление | CLEAR_BOARD_SCORE | 1[*](index.md#ask) |
+| Очки за успешное исцеление | CLEAN_AREA_SCORE | 1[*](index.md#ask) |
 | Количество заражений на поле | MINES_ON_BOARD | 30[*](index.md#ask) |
 | Количество попыток исцеления | DETECTOR_CHARGE | 100[*](index.md#ask) |
 

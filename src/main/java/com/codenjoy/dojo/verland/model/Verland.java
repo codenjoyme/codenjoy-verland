@@ -63,8 +63,8 @@ public class Verland implements Field {
     public Verland(MinesGenerator minesGenerator, GameSettings settings) {
         this.settings = settings;
         this.minesGenerator = minesGenerator;
-        minesOnBoard = settings.integerValue(MINES_ON_BOARD);
-        detectorCharge = settings.integerValue(DETECTOR_CHARGE);
+        minesOnBoard = settings.integerValue(COUNT_CONTAGIONS);
+        detectorCharge = settings.integerValue(POTIONS_COUNT);
         buildWalls();
     }
 
@@ -140,16 +140,16 @@ public class Verland implements Field {
     }
 
     @Override
-    public void sapperMoveTo(Direction direction) {
+    public void heroMoveTo(Direction direction) {
         if (isSapperCanMoveToDirection(direction)) {
             boolean cleaned = moveSapperAndFillFreeCell(direction);
             if (isSapperOnMine()) {
                 player.getHero().die();
                 openAllBoard();
-                player.event(Events.KILL_ON_MINE);
+                player.event(Events.GOT_INFECTED);
             } else {
                 if (cleaned) {
-                    player.event(Events.CLEAN_BOARD);
+                    player.event(Events.CLEAN_AREA);
                 }
             }
             nextTurn();
@@ -314,13 +314,13 @@ public class Verland implements Field {
                 if (getMines().contains(result)) {
                     removeMine(result);
                 } else {
-                    player.event(Events.FORGET_CHARGE);
+                    player.event(Events.FORGOT_POTION);
                 }
             });
 
             if (isEmptyDetectorButPresentMines()) {
                 openAllBoard();
-                player.event(Events.NO_MORE_CHARGE);
+                player.event(Events.NO_MORE_POTIONS);
             }
         }
     }
@@ -332,7 +332,7 @@ public class Verland implements Field {
         getMines().remove(result);
         increaseScore();
         recalculateWalkMap();
-        player.event(Events.DESTROY_MINE);
+        player.event(Events.CURE);
         if (getMines().isEmpty()) {
             openAllBoard();
             player.event(Events.WIN);

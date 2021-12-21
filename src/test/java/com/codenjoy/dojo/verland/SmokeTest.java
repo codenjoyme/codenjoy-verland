@@ -37,9 +37,8 @@ import org.junit.Test;
 import java.util.Arrays;
 
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.BOARD_SIZE;
-import static com.codenjoy.dojo.verland.services.GameSettings.Keys.MINES_ON_BOARD;
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertFalse;
+import static com.codenjoy.dojo.verland.services.GameSettings.Keys.COUNT_CONTAGIONS;
+import static junit.framework.TestCase.assertEquals;
 
 public class SmokeTest {
 
@@ -59,8 +58,8 @@ public class SmokeTest {
 
         SmokeUtils.recheck = actual -> {
             // мы ни разу не проиграли и всегда правильно отгадывали где мины
-            assertFalse(actual.contains(Events.KILL_ON_MINE.name()));
-            assertFalse(actual.contains(Events.FORGET_CHARGE.name()));
+            assertEquals(false, actual.contains(Events.GOT_INFECTED.name()));
+            assertEquals(false, actual.contains(Events.FORGOT_POTION.name()));
         };
 
         smoke.play(ticks, "SmokeTest.data",
@@ -74,7 +73,7 @@ public class SmokeTest {
                     public GameSettings getSettings() {
                         return super.getSettings()
                                 .integer(BOARD_SIZE, 15)
-                                .integer(MINES_ON_BOARD, 10);
+                                .integer(COUNT_CONTAGIONS, 10);
                     }
                 },
                 Arrays.asList(new AISolver(dice)),
@@ -88,9 +87,9 @@ public class SmokeTest {
 
         SmokeUtils.recheck = actual -> {
             // мы все же проиграли
-            assertFalse(actual.contains(Events.KILL_ON_MINE.name()));
-            assertTrue(actual.contains(Events.FORGET_CHARGE.name()));
-            assertTrue(actual.contains(Events.SUICIDE.name()));
+            assertEquals(false, actual.contains(Events.GOT_INFECTED.name()));
+            assertEquals(true, actual.contains(Events.FORGOT_POTION.name()));
+            assertEquals(true, actual.contains(Events.SUICIDE.name()));
         };
 
         smoke.play(ticks, "SmokeTest2.data",
@@ -104,7 +103,7 @@ public class SmokeTest {
                     public GameSettings getSettings() {
                         return super.getSettings()
                                 .integer(BOARD_SIZE, 20)
-                                .integer(MINES_ON_BOARD, 50);
+                                .integer(COUNT_CONTAGIONS, 50);
                     }
                 },
                 Arrays.asList(new AISolver(dice)),

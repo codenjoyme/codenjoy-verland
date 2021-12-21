@@ -46,8 +46,8 @@ public class RandomMinesGeneratorTest {
     public void setup() {
         settings = new GameSettings()
                 .integer(GameSettings.Keys.BOARD_SIZE, 16)
-                .integer(GameSettings.Keys.MINES_ON_BOARD, 0)
-                .integer(GameSettings.Keys.DETECTOR_CHARGE, 1);
+                .integer(GameSettings.Keys.COUNT_CONTAGIONS, 0)
+                .integer(GameSettings.Keys.POTIONS_COUNT, 1);
     }
 
     @Test

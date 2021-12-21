@@ -58,8 +58,8 @@ public class HeroTest {
     public void gameStart() {
         settings = new GameSettings()
                 .integer(GameSettings.Keys.BOARD_SIZE, BOARD_SIZE)
-                .integer(GameSettings.Keys.MINES_ON_BOARD, MINES_COUNT)
-                .integer(GameSettings.Keys.DETECTOR_CHARGE, CHARGE_COUNT);
+                .integer(GameSettings.Keys.COUNT_CONTAGIONS, MINES_COUNT)
+                .integer(GameSettings.Keys.POTIONS_COUNT, CHARGE_COUNT);
 
         board = new Verland(NO_MINES, settings);
         board.newGame(new Player(listener, settings));
@@ -104,30 +104,30 @@ public class HeroTest {
     public void shouldMinesCountLessThenAllCells_whenGameStart() {
         // given
         settings.integer(GameSettings.Keys.BOARD_SIZE, 2)
-                .integer(GameSettings.Keys.MINES_ON_BOARD, 100);
+                .integer(GameSettings.Keys.COUNT_CONTAGIONS, 100);
 
         // when
         new Verland(NO_MINES, settings)
                 .newGame(new Player(listener, settings));
 
         // then
-        assertEquals(12, (int)settings.integer(GameSettings.Keys.MINES_ON_BOARD));
+        assertEquals(12, (int)settings.integer(GameSettings.Keys.COUNT_CONTAGIONS));
     }
 
     @Test
     public void shouldMineDetectorChargeMoreThanMines_whenGameStart() {
         // given
         settings.integer(GameSettings.Keys.BOARD_SIZE, 100)
-                .integer(GameSettings.Keys.MINES_ON_BOARD, 20)
-                .integer(GameSettings.Keys.DETECTOR_CHARGE, 10);
+                .integer(GameSettings.Keys.COUNT_CONTAGIONS, 20)
+                .integer(GameSettings.Keys.POTIONS_COUNT, 10);
 
         // when
         new Verland(NO_MINES, settings)
                 .newGame(new Player(listener, settings));
 
         // then
-        assertEquals(20, (int)settings.integer(GameSettings.Keys.MINES_ON_BOARD));
-        assertEquals(20, (int)settings.integer(GameSettings.Keys.DETECTOR_CHARGE));
+        assertEquals(20, (int)settings.integer(GameSettings.Keys.COUNT_CONTAGIONS));
+        assertEquals(20, (int)settings.integer(GameSettings.Keys.POTIONS_COUNT));
     }
 
     @Test
@@ -189,29 +189,29 @@ public class HeroTest {
     public void shouldSapperMoveToUp() {
         int oldYPosition = sapper.getY();
 
-        board.sapperMoveTo(Direction.UP);
+        board.heroMoveTo(Direction.UP);
 
         assertEquals(sapper.getY(), oldYPosition + 1);
     }
 
     @Test
     public void shouldSapperMoveToDown() {
-        board.sapperMoveTo(Direction.UP);
+        board.heroMoveTo(Direction.UP);
 
         int oldYPosition = sapper.getY();
 
-        board.sapperMoveTo(Direction.DOWN);
+        board.heroMoveTo(Direction.DOWN);
 
         assertEquals(sapper.getY(), oldYPosition - 1);
     }
 
     @Test
     public void shouldSapperMoveToLeft() {
-        board.sapperMoveTo(Direction.RIGHT);
+        board.heroMoveTo(Direction.RIGHT);
 
         int oldXPosition = sapper.getX();
 
-        board.sapperMoveTo(Direction.LEFT);
+        board.heroMoveTo(Direction.LEFT);
 
         assertEquals(sapper.getX(), oldXPosition - 1);
     }
@@ -220,14 +220,14 @@ public class HeroTest {
     public void shouldSapperMoveToRight() {
         int oldXPosition = sapper.getX();
 
-        board.sapperMoveTo(Direction.RIGHT);
+        board.heroMoveTo(Direction.RIGHT);
 
         assertEquals(sapper.getX(), oldXPosition + 1);
     }
 
     private void givenSapperMovedToMine() {
         placeMineUpFromSapper();
-        board.sapperMoveTo(Direction.UP);
+        board.heroMoveTo(Direction.UP);
     }
 
     private void placeMineUpFromSapper() {
@@ -248,7 +248,7 @@ public class HeroTest {
     public void shouldNextTurn_whenSapperMove() {
         int turnBeforeSapperMotion = board.getTurn();
 
-        board.sapperMoveTo(Direction.UP);
+        board.heroMoveTo(Direction.UP);
         int turnAfterSapperMotion = board.getTurn();
 
         assertEquals(turnBeforeSapperMotion, turnAfterSapperMotion - 1);
@@ -315,7 +315,7 @@ public class HeroTest {
 
     @Test
     public void shouldGameOver_whenNoMoreCharge() {
-        board.sapperMoveTo(Direction.UP);
+        board.heroMoveTo(Direction.UP);
         placeMineUpFromSapper();
         assertEquals(
                 "☼☼☼☼☼\n" +
@@ -328,7 +328,7 @@ public class HeroTest {
 //        board.useMineDetectorToGivenDirection(Direction.UP);  // there is bomb
         board.useMineDetectorToGivenDirection(Direction.LEFT);
         board.useMineDetectorToGivenDirection(Direction.RIGHT);
-        board.sapperMoveTo(Direction.RIGHT);
+        board.heroMoveTo(Direction.RIGHT);
         assertEquals(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
@@ -340,7 +340,7 @@ public class HeroTest {
         board.useMineDetectorToGivenDirection(Direction.UP);
         board.useMineDetectorToGivenDirection(Direction.LEFT);
         board.useMineDetectorToGivenDirection(Direction.RIGHT);
-        board.sapperMoveTo(Direction.RIGHT);
+        board.heroMoveTo(Direction.RIGHT);
         assertEquals(
                 "☼☼☼☼☼\n" +
                 "☼*!*☼\n" +
