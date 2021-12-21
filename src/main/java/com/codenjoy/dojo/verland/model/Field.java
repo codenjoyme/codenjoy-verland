@@ -23,6 +23,7 @@ package com.codenjoy.dojo.verland.model;
  */
 
 
+import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.verland.model.items.Contagion;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -37,10 +38,6 @@ public interface Field extends GameField<Player> {
     List<Point> cells();
 
     int size();
-
-    List<Contagion> contagions();
-
-    int contagionsCount();
 
     void moveTo(Direction direction);
 
@@ -73,4 +70,6 @@ public interface Field extends GameField<Player> {
     int visibleContagionsNear(Point pt);
 
     Hero hero();
+
+    List<Contagion> contagions();
 }

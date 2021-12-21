@@ -51,7 +51,6 @@ public class HeroTest {
     private List<Contagion> contagions;
     private final ContagionsGenerator NO_CONTAGIONS = new MockGenerator();
     private EventListener listener;
-    private PrinterFactory printer;
     private GameSettings settings;
 
     @Before
@@ -66,7 +65,6 @@ public class HeroTest {
         hero = board.hero();
         contagions = board.contagions();
         listener = mock(EventListener.class);
-        printer = new PrinterFactoryImpl();
     }
 
     class MockGenerator implements ContagionsGenerator {
@@ -84,7 +82,7 @@ public class HeroTest {
 
     @Test
     public void shouldFreeCellsNumberBeMoreThanZero() {
-        assertTrue(board.freeCells().size() > 0);
+        assertEquals(true, board.freeCells().size() > 0);
     }
 
     @Test
@@ -151,7 +149,7 @@ public class HeroTest {
 
     @Test
     public void shouldBoardCellsNumberBeMoreThanOne() {
-        assertTrue(board.cells().size() > 1);
+        assertEquals(true, board.cells().size() > 1);
     }
 
     @Test
@@ -171,12 +169,12 @@ public class HeroTest {
 
     @Test
     public void shouldContagionsCountSpecify_whenGameStart() {
-        assertNotNull(board.contagionsCount());
+        assertNotNull(board.contagions().size());
     }
 
     @Test
     public void shouldFreeCellsDecrease_whenCreatesHeroAndContagions() {
-        int borders = 0; // (board.getSize() - 1) * 4;
+        int borders = 0;
         int freeCells = board.freeCells().size();
         int hero = 1;
         int contagions = this.contagions.size();
@@ -258,7 +256,7 @@ public class HeroTest {
     public void shouldHeroKnowsHowMuchContagionsNearHim_whenAtLeastOneIsDownFromHero() {
         placeContagionUpFromHero();
 
-        assertTrue(board.contagionsNear() > 0);
+        assertEquals(true, board.contagionsNear() > 0);
     }
 
     @Test
@@ -268,7 +266,7 @@ public class HeroTest {
 
     @Test
     public void shouldPotionsChargeMoreThanContagionsOnBoard() {
-        assertTrue(hero.potions().charge() > board.contagionsCount());
+        assertEquals(true, hero.potions().charge() > board.contagions().size());
     }
 
     @Test
@@ -279,7 +277,7 @@ public class HeroTest {
             boolean isMineInDirection = board.contagions().contains(
                     board.positionAfterMove(direction));
 
-            assertTrue(!isMineInDirection);
+            assertEquals(true, !isMineInDirection);
         }
     }
 
@@ -295,11 +293,11 @@ public class HeroTest {
     @Test
     public void shouldContagionsCountDecreaseByOne_whenContagionsIsCured() {
         placeContagionUpFromHero();
-        int count = board.contagionsCount();
+        int count = board.contagions().size();
 
         board.cure(Direction.UP);
 
-        assertEquals(count, board.contagionsCount() + 1);
+        assertEquals(count, board.contagions().size() + 1);
     }
 
     @Test
@@ -308,7 +306,7 @@ public class HeroTest {
 
         board.cure(Direction.UP);
 
-        assertTrue(board.isWin());
+        assertEquals(true, board.isWin());
     }
 
     @Test
@@ -357,8 +355,8 @@ public class HeroTest {
                 "☼!!!☼\n" +
                 "☼☼☼☼☼\n", getBoardAsString(board));
 
-        assertFalse(hero.isDead());
-        assertTrue(board.isGameOver());
+        assertEquals(false, hero.isDead());
+        assertEquals(true, board.isGameOver());
     }
 
     private String getBoardAsString(Field board) {

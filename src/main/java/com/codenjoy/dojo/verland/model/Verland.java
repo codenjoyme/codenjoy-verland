@@ -137,16 +137,6 @@ public class Verland implements Field {
     }
 
     @Override
-    public List<Contagion> contagions() {
-        return contagions;
-    }
-
-    @Override
-    public int contagionsCount() {
-        return contagions().size();
-    }
-
-    @Override
     public void moveTo(Direction direction) {
         if (!canMove(direction)) {
             return;
@@ -188,6 +178,11 @@ public class Verland implements Field {
     }
 
     @Override
+    public List<Contagion> contagions() {
+        return contagions;
+    }
+
+    @Override
     public boolean isContagion(Point pt) {
         return contagions().contains(pt);
     }
@@ -226,7 +221,7 @@ public class Verland implements Field {
             public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
                 processor.accept(Arrays.asList(hero()));
                 if (isGameOver()) {
-                    processor.accept(contagions()); // TODO to use contagions field
+                    processor.accept(contagions());
                     processor.accept(cured);
                 }
                 processor.accept(cures);
@@ -309,7 +304,7 @@ public class Verland implements Field {
 
             hero().tryToCure(() -> {
                 cures.add(new Cure(result));
-                if (contagions().contains(result)) {
+                if (contagions.contains(result)) {
                     removeContagion(result);
                 } else {
                     player.event(Events.FORGOT_POTION);
@@ -325,11 +320,11 @@ public class Verland implements Field {
 
     private void removeContagion(Point pt) {
         cured.add(new Cured(pt));
-        contagions().remove(pt);
+        contagions.remove(pt);
         increaseScore();
         recalculateWalkMap();
         player.event(Events.CURE);
-        if (contagions().isEmpty()) {
+        if (contagions.isEmpty()) {
             openAllBoard();
             player.event(Events.WIN);
         }
@@ -356,13 +351,13 @@ public class Verland implements Field {
 
     @Override
     public boolean isNoPotionsButPresentContagions() {
-        return contagions().size() != 0
+        return contagions.size() != 0
                 && hero().noMorePotions();
     }
 
     @Override
     public boolean isWin() {
-        return contagions().size() == 0 && !hero().isDead();
+        return contagions.size() == 0 && !hero().isDead();
     }
 
     @Override
