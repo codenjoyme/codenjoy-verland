@@ -71,6 +71,9 @@ public class Verland implements Field {
         maxScore = 0;
         score = 0;
         cells = initializeBoardCells();
+        // TODO uncomment this line and magic will happen
+        // contagions = new LinkedList<>();
+        // cured = new LinkedList<>();
         buildWalls();
         hero().charge(settings.integer(POTIONS_COUNT));
         contagions = generator.get(settings.integer(COUNT_CONTAGIONS), this);
