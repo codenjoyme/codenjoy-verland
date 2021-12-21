@@ -28,9 +28,9 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Flag extends PointImpl implements State<Element, Object> {
+public class Cure extends PointImpl implements State<Element, Object> {
 
-    public Flag(Point pt) {
+    public Cure(Point pt) {
         super(pt);
     }
 

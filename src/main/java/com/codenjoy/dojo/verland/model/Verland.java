@@ -30,7 +30,7 @@ import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.verland.model.items.Cell;
-import com.codenjoy.dojo.verland.model.items.Flag;
+import com.codenjoy.dojo.verland.model.items.Cure;
 import com.codenjoy.dojo.verland.model.items.Contagion;
 import com.codenjoy.dojo.verland.model.items.Wall;
 import com.codenjoy.dojo.verland.services.Events;
@@ -51,7 +51,7 @@ public class Verland implements Field {
     private int maxScore;
     private int score;
     private List<Wall> walls;
-    private List<Flag> cures;
+    private List<Cure> cures;
     private Map<Point, Integer> clean;
     private int currentSize;
     private Player player;
@@ -307,7 +307,7 @@ public class Verland implements Field {
             }
 
             hero().tryToCure(() -> {
-                cures.add(new Flag(result));
+                cures.add(new Cure(result));
                 if (contagions().contains(result)) {
                     removeContagion(result);
                 } else {
@@ -381,7 +381,7 @@ public class Verland implements Field {
         return walls;
     }
 
-    public List<Flag> cures() {
+    public List<Cure> cures() {
         return cures;
     }
 
