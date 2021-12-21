@@ -35,8 +35,10 @@ import com.codenjoy.dojo.verland.services.GameSettings;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.*;
+import static java.util.stream.Collectors.toList;
 
 public class Verland implements Field {
 
@@ -103,16 +105,11 @@ public class Verland implements Field {
 
     @Override
     public List<Point> freeCells() {
-        List<Point> result = new LinkedList<>();
-        for (Point cell : cells()) {
-            boolean isHero = hero().itsMe(cell);
-            boolean isBoard = walls().contains(cell);  // TODO test me
-            boolean isContagion = isContagion(cell);
-            if (!isHero && !isContagion && !isBoard) {
-                result.add(cell);
-            }
-        }
-        return result;
+        return cells().stream()
+                .filter(cell -> !hero().itsMe(cell))
+                .filter(cell -> !walls().contains(cell)) // TODO test me
+                .filter(cell -> !isContagion(cell))
+                .collect(toList());
     }
 
     @Override
