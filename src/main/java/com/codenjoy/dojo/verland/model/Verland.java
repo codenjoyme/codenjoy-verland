@@ -289,14 +289,11 @@ public class Verland implements Field {
 
     // TODO какая разница в contagionsNear и contagionsNear2
     private int contagionsNear2(Point pt) {
-        int result = 0;
-        for (QDirection direction : QDirection.values()) {
-            Point to = direction.change(pt.copy());
-            if (cells.contains(to) && contagions().contains(to)) {
-                result++;
-            }
-        }
-        return result;
+        return (int)Arrays.stream(QDirection.values())
+                .map(direction -> direction.change(pt))
+                .filter(to -> cells.contains(to))
+                .filter(to -> contagions().contains(to))
+                .count();
     }
 
     @Override
