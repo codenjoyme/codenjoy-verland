@@ -184,7 +184,7 @@ public class Verland implements Field {
 
     @Override
     public boolean isContagion(Point pt) {
-        return contagions().contains(pt);
+        return contagions.contains(pt);
     }
 
     @Override
@@ -221,7 +221,7 @@ public class Verland implements Field {
             public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
                 processor.accept(Arrays.asList(hero()));
                 if (isGameOver()) {
-                    processor.accept(contagions());
+                    processor.accept(contagions);
                     processor.accept(cured);
                 }
                 processor.accept(cures);
@@ -253,7 +253,7 @@ public class Verland implements Field {
     @Override
     public Contagion tryCreateContagion(Point cell) {
         Contagion result = new Contagion(cell);
-        contagions().add(result);
+        contagions.add(result);
         return result;
     }
 
@@ -276,7 +276,7 @@ public class Verland implements Field {
         return (int)Arrays.stream(QDirection.values())
                 .map(direction -> direction.change(pt))
                 .filter(to -> cells.contains(to))
-                .filter(to -> contagions().contains(to))
+                .filter(to -> contagions.contains(to))
                 .count();
     }
 
