@@ -44,8 +44,6 @@ public interface Field extends GameField<Player> {
 
     void moveTo(Direction direction);
 
-    boolean isOnContagion();
-
     Point positionAfterMove(Direction direction);
 
     int contagionsNear();
