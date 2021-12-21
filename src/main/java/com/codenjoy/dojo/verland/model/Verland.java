@@ -134,19 +134,21 @@ public class Verland implements Field {
 
     @Override
     public void moveTo(Direction direction) {
-        if (canMove(direction)) {
-            boolean cleaned = move(direction);
-            if (isOnContagion()) {
-                player.getHero().die();
-                openAllBoard();
-                player.event(Events.GOT_INFECTED);
-            } else {
-                if (cleaned) {
-                    player.event(Events.CLEAN_AREA);
-                }
-            }
-            nextTurn();
+        if (!canMove(direction)) {
+            return;
         }
+
+        boolean cleaned = move(direction);
+        if (isOnContagion()) {
+            player.getHero().die();
+            openAllBoard();
+            player.event(Events.GOT_INFECTED);
+        } else {
+            if (cleaned) {
+                player.event(Events.CLEAN_AREA);
+            }
+        }
+        nextTurn();
     }
 
     private boolean move(Direction direction) {
