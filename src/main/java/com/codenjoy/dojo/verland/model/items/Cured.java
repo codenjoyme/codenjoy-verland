@@ -31,24 +31,12 @@ import com.codenjoy.dojo.verland.model.Field;
 
 public class Cured extends PointImpl implements State<Element, Object> {
 
-    private Field field;
-
     public Cured(Point pt) {
         super(pt);
     }
 
-    public Cured(int x, int y) {
-        super(x, y);
-    }
-
-    public void init(Field field) {
-        this.field = field;
-    }
-
     @Override
     public Element state(Object player, Object... alsoAtPoint) {
-        if (!field.isGameOver()) return null;
-
         return Element.HERO_HEALING;
     }
 }

@@ -222,16 +222,16 @@ public class Verland implements Field {
             @Override
             public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
                 processor.accept(Arrays.asList(hero()));
-                processor.accept(contagions());
-                processor.accept(cured());
+                if (isGameOver()) {
+                    processor.accept(contagions());
+                    processor.accept(cured());
+                }
                 processor.accept(cures());
                 processor.accept(cells());
                 processor.accept(walls());
             }
         };
     }
-
-
 
     @Override
     public void newGame(Player player) {
@@ -262,7 +262,6 @@ public class Verland implements Field {
     @Override
     public Contagion tryCreateContagion(Point cell) {
         Contagion result = new Contagion(cell);
-        result.init(this);
         contagions().add(result);
         return result;
     }
@@ -320,9 +319,7 @@ public class Verland implements Field {
     }
 
     private void removeContagion(Point pt) {
-        Cured it = new Cured(pt);
-        it.init(this);
-        cured.add(it);
+        cured.add(new Cured(pt));
         contagions().remove(pt);
         increaseScore();
         recalculateWalkMap();

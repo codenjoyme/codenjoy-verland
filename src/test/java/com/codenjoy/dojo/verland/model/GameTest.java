@@ -810,19 +810,16 @@ public class GameTest {
     private class MockBoard extends Verland {
         private Player player;
 
-        public MockBoard(Hero hero, Contagion... mines) {
+        public MockBoard(Hero hero, Contagion... contagions) {
             super((count, board) -> new ArrayList<>(),
-                    settings.integer(COUNT_CONTAGIONS, mines.length));
+                    settings.integer(COUNT_CONTAGIONS, contagions.length));
 
             player = new Player(listener, settings);
             player.setHero(hero);
             hero.setPlayer(player);
 
             GameTest.this.contagions = new LinkedList<>();
-            GameTest.this.contagions.addAll(Arrays.asList(mines));
-            for (Contagion mine : mines) {
-                mine.init(this);
-            }
+            GameTest.this.contagions.addAll(Arrays.asList(contagions));
 
             newGame(player);
         }

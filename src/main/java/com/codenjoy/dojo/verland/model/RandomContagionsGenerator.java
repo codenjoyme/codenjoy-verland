@@ -49,10 +49,9 @@ public class RandomContagionsGenerator implements ContagionsGenerator {
         removeSafeAreaFromFreeCells();
         List<Contagion> result = new ArrayList<>();
         for (int index = 0; index < count; index++) {
-            Contagion mine = new Contagion(freeCell());
-            mine.init(field);
-            result.add(mine);
-            free.remove(mine);
+            Contagion it = new Contagion(freeCell());
+            result.add(it);
+            free.remove(it);
         }
         return result;
     }

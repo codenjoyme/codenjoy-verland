@@ -31,8 +31,6 @@ import com.codenjoy.dojo.services.State;
 
 public class Contagion extends PointImpl implements State<Element, Object> {
 
-    private Field field;
-
     public Contagion(Point pt) {
         super(pt);
     }
@@ -41,14 +39,8 @@ public class Contagion extends PointImpl implements State<Element, Object> {
         super(x, y);
     }
 
-    public void init(Field field) {
-        this.field = field;
-    }
-
     @Override
     public Element state(Object player, Object... alsoAtPoint) {
-        if (!field.isGameOver()) return null;
-
         return Element.INFECTION;
     }
 }
