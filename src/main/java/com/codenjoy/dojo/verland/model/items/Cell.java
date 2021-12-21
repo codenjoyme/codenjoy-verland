@@ -42,7 +42,7 @@ public class Cell extends PointImpl implements State<Element, Object> {
 
     @Override
     public Element state(Object player, Object... alsoAtPoint) {
-        if (field.walkAt(this) || field.isGameOver()) {
+        if (field.isClean(this) || field.isGameOver()) {
             int count = field.contagionsNear(this);
             return count == 0
                     ? Element.CLEAR

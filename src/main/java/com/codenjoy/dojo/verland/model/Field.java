@@ -64,7 +64,7 @@ public interface Field extends GameField<Player> {
 
     boolean isContagion(Point pt);
 
-    boolean walkAt(Point pt);
+    boolean isClean(Point pt);
 
     boolean isCure(Point pt);
 
