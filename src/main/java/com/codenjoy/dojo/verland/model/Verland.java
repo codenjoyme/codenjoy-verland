@@ -67,17 +67,15 @@ public class Verland implements Field {
     @Override
     public void clearScore() {
         cures = new LinkedList<>();
+        contagions = new LinkedList<>();
+        cured = new LinkedList<>();
         clean = new HashMap<>();
         maxScore = 0;
         score = 0;
         cells = initializeBoardCells();
-        // TODO uncomment this line and magic will happen
-        // contagions = new LinkedList<>();
-        // cured = new LinkedList<>();
         buildWalls();
         hero().charge(settings.integer(POTIONS_COUNT));
         contagions = generator.get(settings.integer(COUNT_CONTAGIONS), this);
-        cured = new LinkedList<>();
     }
 
     private void buildWalls() {
@@ -196,9 +194,7 @@ public class Verland implements Field {
 
     @Override
     public boolean isContagion(Point pt) {
-        if (contagions() == null) return false;
-        return contagions().contains(pt)
-                || (isGameOver() && cured.contains(pt));
+        return contagions().contains(pt);
     }
 
     @Override

@@ -82,7 +82,7 @@ public class SmokeTest {
 
     @Test
     public void test2() {
-        // about 5 sec
+        // about 50 sec
         int ticks = 1000;
 
         SmokeUtils.recheck = actual -> {
@@ -103,7 +103,7 @@ public class SmokeTest {
                     public GameSettings getSettings() {
                         return super.getSettings()
                                 .integer(BOARD_SIZE, 20)
-                                .integer(COUNT_CONTAGIONS, 50);
+                                .integer(COUNT_CONTAGIONS, 40);
                     }
                 },
                 Arrays.asList(new AISolver(dice)),
