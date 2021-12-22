@@ -23,7 +23,7 @@ package com.codenjoy.dojo.verland.services;
  */
 
 
-public enum Events {
+public enum Event {
     GOT_INFECTED,
     CURE,
     FORGOT_POTION,

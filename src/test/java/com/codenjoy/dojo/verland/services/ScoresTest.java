@@ -36,31 +36,31 @@ public class ScoresTest {
     private GameSettings settings;
 
     public void suicide() {
-        scores.event(Events.SUICIDE);
+        scores.event(Event.SUICIDE);
     }
 
     public void cure() {
-        scores.event(Events.CURE);
+        scores.event(Event.CURE);
     }
 
     public void forgotPotion() {
-        scores.event(Events.FORGOT_POTION);
+        scores.event(Event.FORGOT_POTION);
     }
 
     public void gotInfected() {
-        scores.event(Events.GOT_INFECTED);
+        scores.event(Event.GOT_INFECTED);
     }
 
     public void noMorePotions() {
-        scores.event(Events.NO_MORE_POTIONS);
+        scores.event(Event.NO_MORE_POTIONS);
     }
 
     public void cleanArea() {
-        scores.event(Events.CLEAN_AREA);
+        scores.event(Event.CLEAN_AREA);
     }
 
     public void win() {
-        scores.event(Events.WIN);
+        scores.event(Event.WIN);
     }
 
     @Before
@@ -93,8 +93,9 @@ public class ScoresTest {
         // then
         assertEquals(140
                         + 4 * settings.integer(CURE_SCORE)
-                        - settings.integer(NO_MORE_POTIONS_PENALTY)
-                        - 2 * settings.integer(GOT_INFECTED_PENALTY)
+                        + settings.integer(FORGOT_POTION_PENALTY)
+                        + settings.integer(NO_MORE_POTIONS_PENALTY)
+                        + settings.integer(GOT_INFECTED_PENALTY)
                         + 2 * settings.integer(CLEAN_AREA_SCORE)
                         + settings.integer(WIN_SCORE),
                 scores.getScore());
@@ -134,7 +135,7 @@ public class ScoresTest {
 
         // then
         assertEquals(100
-                - settings.integer(SUICIDE_PENALTY),
+                + settings.integer(SUICIDE_PENALTY),
                 scores.getScore());
     }
 
@@ -148,7 +149,7 @@ public class ScoresTest {
 
         // then
         assertEquals(100
-                - settings.integer(FORGOT_POTION_PENALTY),
+                + settings.integer(FORGOT_POTION_PENALTY),
                 scores.getScore());
     }
 
@@ -179,7 +180,7 @@ public class ScoresTest {
         // then
         assertEquals(100
                 + 2 * settings.integer(CURE_SCORE)
-                - settings.integer(GOT_INFECTED_PENALTY),
+                + settings.integer(GOT_INFECTED_PENALTY),
                 scores.getScore());
     }
 
@@ -204,7 +205,7 @@ public class ScoresTest {
         // then
         assertEquals(100
                 + 5 * settings.integer(CURE_SCORE)
-                - settings.integer(NO_MORE_POTIONS_PENALTY)
+                + settings.integer(NO_MORE_POTIONS_PENALTY)
                 + 3 * settings.integer(CURE_SCORE),
                 scores.getScore());
     }
@@ -227,7 +228,7 @@ public class ScoresTest {
         // then
         assertEquals(100
                 + 2 * settings.integer(CURE_SCORE)
-                - 3 * settings.integer(FORGOT_POTION_PENALTY)
+                + 3 * settings.integer(FORGOT_POTION_PENALTY)
                 + settings.integer(CURE_SCORE),
                 scores.getScore());
     }

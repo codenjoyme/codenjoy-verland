@@ -30,7 +30,7 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.verland.model.items.*;
-import com.codenjoy.dojo.verland.services.Events;
+import com.codenjoy.dojo.verland.services.Event;
 import com.codenjoy.dojo.verland.services.GameSettings;
 
 import java.util.Arrays;
@@ -224,13 +224,13 @@ public class Verland implements Field {
             if (contagions().contains(to)) {
                 removeContagion(to);
             } else {
-                player.event(Events.FORGOT_POTION);
+                player.event(Event.FORGOT_POTION);
             }
         });
 
         if (hero.isNoPotionsButPresentContagions()) {
             openAllBoard();
-            player.event(Events.NO_MORE_POTIONS);
+            player.event(Event.NO_MORE_POTIONS);
         }
     }
 
@@ -238,10 +238,10 @@ public class Verland implements Field {
         cured().add(new Cured(pt));
         contagions().removeAt(pt);
         increaseScore();
-        player.event(Events.CURE);
+        player.event(Event.CURE);
         if (contagions().size() == 0) {
             openAllBoard();
-            player.event(Events.WIN);
+            player.event(Event.WIN);
         }
     }
 

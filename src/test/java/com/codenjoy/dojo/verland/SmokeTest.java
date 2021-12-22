@@ -28,7 +28,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.utils.Smoke;
 import com.codenjoy.dojo.utils.SmokeUtils;
-import com.codenjoy.dojo.verland.services.Events;
+import com.codenjoy.dojo.verland.services.Event;
 import com.codenjoy.dojo.verland.services.GameRunner;
 import com.codenjoy.dojo.verland.services.GameSettings;
 import com.codenjoy.dojo.verland.services.ai.AISolver;
@@ -58,8 +58,8 @@ public class SmokeTest {
 
         SmokeUtils.recheck = actual -> {
             // мы ни разу не проиграли и всегда правильно отгадывали, где мины
-            assertEquals(false, actual.contains(Events.GOT_INFECTED.name()));
-            assertEquals(false, actual.contains(Events.FORGOT_POTION.name()));
+            assertEquals(false, actual.contains(Event.GOT_INFECTED.name()));
+            assertEquals(false, actual.contains(Event.FORGOT_POTION.name()));
         };
 
         smoke.settings().removeWhenGameOver(true);
@@ -188,9 +188,9 @@ public class SmokeTest {
 
         SmokeUtils.recheck = actual -> {
             // мы все же проиграли
-            assertEquals(false, actual.contains(Events.GOT_INFECTED.name()));
-            assertEquals(false, actual.contains(Events.FORGOT_POTION.name()));
-            assertEquals(true, actual.contains(Events.SUICIDE.name()));
+            assertEquals(false, actual.contains(Event.GOT_INFECTED.name()));
+            assertEquals(false, actual.contains(Event.FORGOT_POTION.name()));
+            assertEquals(true, actual.contains(Event.SUICIDE.name()));
         };
 
         smoke.settings().removeWhenGameOver(true);

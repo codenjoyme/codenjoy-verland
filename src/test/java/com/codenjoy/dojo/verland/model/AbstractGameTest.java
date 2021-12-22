@@ -25,7 +25,7 @@ package com.codenjoy.dojo.verland.model;
 
 import com.codenjoy.dojo.games.sample.Element;
 import com.codenjoy.dojo.verland.TestGameSettings;
-import com.codenjoy.dojo.verland.services.Events;
+import com.codenjoy.dojo.verland.services.Event;
 import com.codenjoy.dojo.verland.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -70,7 +70,7 @@ public abstract class AbstractGameTest {
         settings = new TestGameSettings();
         setupSettings();
         printer = new PrinterFactoryImpl<>();
-        events = new EventsListenersAssert(() -> listeners, Events.class);
+        events = new EventsListenersAssert(() -> listeners, Event.class);
     }
 
     @After

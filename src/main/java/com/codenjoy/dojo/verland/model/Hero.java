@@ -29,11 +29,11 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.verland.model.items.Cell;
-import com.codenjoy.dojo.verland.services.Events;
+import com.codenjoy.dojo.verland.services.Event;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.verland.services.Events.SUICIDE;
+import static com.codenjoy.dojo.verland.services.Event.SUICIDE;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
 
 public class Hero extends PlayerHero<Field> implements State<Element, Object> {
@@ -175,10 +175,10 @@ public class Hero extends PlayerHero<Field> implements State<Element, Object> {
         if (field.isContagion(this)) {
             die();
             field.openAllBoard();
-            player.event(Events.GOT_INFECTED);
+            player.event(Event.GOT_INFECTED);
         } else {
             if (cleaned) {
-                player.event(Events.CLEAN_AREA);
+                player.event(Event.CLEAN_AREA);
             }
         }
         nextTurn();

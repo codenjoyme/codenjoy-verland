@@ -79,10 +79,10 @@ public class GameSettings extends SettingsImpl
         integer(CLEAN_AREA_SCORE, 1);
         integer(WIN_SCORE, 300);
 
-        integer(GOT_INFECTED_PENALTY, 15);
-        integer(SUICIDE_PENALTY, 100);
-        integer(NO_MORE_POTIONS_PENALTY, 2);
-        integer(FORGOT_POTION_PENALTY, 2);
+        integer(GOT_INFECTED_PENALTY, -15);
+        integer(SUICIDE_PENALTY, -100);
+        integer(NO_MORE_POTIONS_PENALTY, -2);
+        integer(FORGOT_POTION_PENALTY, -2);
 
         Levels.setup(this);
     }
