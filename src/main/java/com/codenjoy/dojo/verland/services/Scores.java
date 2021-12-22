@@ -23,12 +23,15 @@ package com.codenjoy.dojo.verland.services;
  */
 
 import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.*;
 
 public class Scores extends ScoresMap<Integer> {
 
-    public Scores(GameSettings settings) {
+    public Scores(SettingsReader settings) {
+        super(settings);
+
         put(Event.CURE,
                 value -> settings.integer(CURE_SCORE));
 

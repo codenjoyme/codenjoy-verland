@@ -24,6 +24,7 @@ package com.codenjoy.dojo.verland.services;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.services.level.LevelsSettings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
