@@ -40,14 +40,17 @@ public class GameSettings extends SettingsImpl
 
     public enum Keys implements Key {
 
-        WIN_SCORE("[Score] Win score"),
-        SUICIDE_PENALTY("[Game] Suicide penalty"),
-        GOT_INFECTED_PENALTY("[Game] Got infected penalty"),
-        DESTROYED_PENALTY("[Score] Forgot penalty"),
-        DESTROYED_FORGOT_PENALTY("[Score] Destroyed forgot penalty"),
-        CLEAN_AREA_SCORE("[Score] Clear area score"),
         COUNT_CONTAGIONS("[Score] Count contagions"),
-        POTIONS_COUNT("[Score] Potions count");
+        POTIONS_COUNT("[Score] Potions count"),
+
+        CURE_SCORE("[Score] Cure score"),
+        CLEAN_AREA_SCORE("[Score] Clear area score"),
+        WIN_SCORE("[Score] Win score"),
+
+        GOT_INFECTED_PENALTY("[Game] Got infected penalty"),
+        SUICIDE_PENALTY("[Game] Suicide penalty"),
+        NO_MORE_POTIONS_PENALTY("[Score] No more potions penalty"),
+        FORGOT_POTION_PENALTY("[Score] Forgot potion penalty");
 
         private String key;
 
@@ -69,15 +72,17 @@ public class GameSettings extends SettingsImpl
     public GameSettings() {
         initLevels();
 
-        integer(WIN_SCORE, 300);
-        integer(GOT_INFECTED_PENALTY, 15);
-        integer(SUICIDE_PENALTY, 100);
-        integer(DESTROYED_PENALTY, 5);
-        integer(DESTROYED_FORGOT_PENALTY, 2);
-        integer(CLEAN_AREA_SCORE, 1);
-
         integer(COUNT_CONTAGIONS, 30);
         integer(POTIONS_COUNT, 100);
+
+        integer(CURE_SCORE, 10);
+        integer(CLEAN_AREA_SCORE, 1);
+        integer(WIN_SCORE, 300);
+
+        integer(GOT_INFECTED_PENALTY, 15);
+        integer(SUICIDE_PENALTY, 100);
+        integer(NO_MORE_POTIONS_PENALTY, 2);
+        integer(FORGOT_POTION_PENALTY, 2);
 
         Levels.setup(this);
     }

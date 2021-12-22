@@ -31,17 +31,10 @@ public class Scores implements PlayerScores {
 
     private volatile int score;
     private GameSettings settings;
-    private volatile int destroyed;
 
     public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
         this.settings = settings;
-        destroyed = 0;
-    }
-
-    @Override
-    public Integer getScore() {
-        return score;
     }
 
     @Override
@@ -50,55 +43,52 @@ public class Scores implements PlayerScores {
     }
 
     @Override
+    public Integer getScore() {
+        return score;
+    }
+
+    @Override
     public void event(Object event) {
-        if (event.equals(Events.CURE)) {
-            onCure();
-        } else if (event.equals(Events.FORGOT_POTION)) {
-            onForgotPotion();
-        } else if (event.equals(Events.GOT_INFECTED)) {
-            onGotInfected();
-        } else if (event.equals(Events.NO_MORE_POTIONS)) {
-            onNoMorePotions();
-        } else if (event.equals(Events.WIN)) {
-            onWin();
-        } else if (event.equals(Events.SUICIDE)) {
-            onSuicide();
-        } else if (event.equals(Events.CLEAN_AREA)) {
-            onCleanArea();
-        }
+        score += scoreFor(settings, event);
         score = Math.max(0, score);
     }
 
-    private void onCleanArea() {
-        score += settings.integer(CLEAN_AREA_SCORE);
-    }
+    public static int scoreFor(GameSettings settings, Object input) {
+        if (!(input instanceof Events)) {
+            return 0;
+        }
 
-    private void onWin() {
-        score += settings.integer(WIN_SCORE);
-    }
+        Events event = (Events) input;
 
-    private void onSuicide() {
-        score -= settings.integer(SUICIDE_PENALTY);
-    }
+        if (event.equals(Events.CURE)) {
+            return + settings.integer(CURE_SCORE);
+        }
 
-    private void onNoMorePotions() {
-        onGotInfected();
-    }
+        if (event.equals(Events.FORGOT_POTION)) {
+            return - settings.integer(FORGOT_POTION_PENALTY);
+        }
 
-    private void onCure() {
-        destroyed++;
-        score += destroyed;
-    }
+        if (event.equals(Events.GOT_INFECTED)) {
+            return - settings.integer(GOT_INFECTED_PENALTY);
+        }
 
-    private void onForgotPotion() {
-        score -= settings.integer(DESTROYED_FORGOT_PENALTY);
-        destroyed -= settings.integer(DESTROYED_PENALTY);
-        destroyed = Math.max(0, destroyed);
-    }
+        if (event.equals(Events.NO_MORE_POTIONS)) {
+            return - settings.integer(GOT_INFECTED_PENALTY);
+        }
 
-    private void onGotInfected() {
-        score -= settings.integer(GOT_INFECTED_PENALTY);
-        destroyed = 0;
+        if (event.equals(Events.WIN)) {
+            return + settings.integer(WIN_SCORE);
+        }
+
+        if (event.equals(Events.SUICIDE)) {
+            return - settings.integer(SUICIDE_PENALTY);
+        }
+
+        if (event.equals(Events.CLEAN_AREA)) {
+            return + settings.integer(CLEAN_AREA_SCORE);
+        }
+
+        return 0;
     }
 
     @Override

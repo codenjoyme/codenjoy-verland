@@ -136,15 +136,15 @@ C помощью этого regexp можно выкусить строку до
 
 | Событие | Название | Очки |
 |---------|----------|------|
-| Размер поля | BOARD_SIZE | 15[*](index.md#ask) |
+| Количество заражений на поле | COUNT_CONTAGIONS | 30[*](index.md#ask) |
+| Количество зелий для исцеления | POTIONS_COUNT | 100[*](index.md#ask) |
+| Очки за исцеление | CURE_SCORE | 10[*](index.md#ask) |
+| Очки за исследование поля | CLEAN_AREA_SCORE | 1[*](index.md#ask) |
 | Очки за победу на карте | WIN_SCORE | 300[*](index.md#ask) |
-| Пенальти по очкам за суицид | SUICIDE_PENALTY | 100[*](index.md#ask) |
 | Пенальти по очкам за смерть | GOT_INFECTED_PENALTY | 15[*](index.md#ask) |
-| Пенальти за неудачную попытку исцеления | DESTROYED_PENALTY | 5[*](index.md#ask) |
-| Пенальти по очкам за неудачную попытку исцеления | DESTROYED_FORGOT_PENALTY | 2[*](index.md#ask) |
-| Очки за успешное исцеление | CLEAN_AREA_SCORE | 1[*](index.md#ask) |
-| Количество заражений на поле | MINES_ON_BOARD | 30[*](index.md#ask) |
-| Количество попыток исцеления | DETECTOR_CHARGE | 100[*](index.md#ask) |
+| Пенальти по очкам за суицид | SUICIDE_PENALTY | 100[*](index.md#ask) |
+| Пенальти по очкам за неудачную попытку исцеления | NO_MORE_POTIONS_PENALTY | 2[*](index.md#ask) |
+| Пенальти за неудачную попытку исцеления | FORGOT_POTION_PENALTY | 2[*](index.md#ask) |
 
 ## Кейзы
 

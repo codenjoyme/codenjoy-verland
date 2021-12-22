@@ -70,8 +70,10 @@ public class ScoresTest {
 
     @Test
     public void shouldCollectScores() {
+        // given
         scores = new Scores(140, settings);
 
+        // when
         cure();
         cure();
         cure();
@@ -88,9 +90,10 @@ public class ScoresTest {
 
         win();
 
+        // then
         assertEquals(140
-                        + 1 + 2 + 3 + 4
-                        - settings.integer(DESTROYED_FORGOT_PENALTY)
+                        + 4 * settings.integer(CURE_SCORE)
+                        - settings.integer(NO_MORE_POTIONS_PENALTY)
                         - 2 * settings.integer(GOT_INFECTED_PENALTY)
                         + 2 * settings.integer(CLEAN_AREA_SCORE)
                         + settings.integer(WIN_SCORE),
@@ -99,69 +102,93 @@ public class ScoresTest {
 
     @Test
     public void shouldStillZero_whenDead() {
+        // given
         scores = new Scores(0, settings);
 
+        // when
         gotInfected();
 
+        // then
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldStillZero_whenSuicide() {
+        // given
         scores = new Scores(0, settings);
 
+        // when
         suicide();
 
+        // then
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldPenalty_whenSuicide() {
-        scores = new Scores(110, settings);
+        // given
+        scores = new Scores(100, settings);
 
+        // when
         suicide();
 
-        assertEquals(110
-                        - settings.integer(SUICIDE_PENALTY),
+        // then
+        assertEquals(100
+                - settings.integer(SUICIDE_PENALTY),
                 scores.getScore());
     }
 
     @Test
     public void shouldStillZero_whenForgotPotion() {
-        scores = new Scores(0, settings);
+        // given
+        scores = new Scores(100, settings);
 
+        // when
         forgotPotion();
 
-        assertEquals(0, scores.getScore());
+        // then
+        assertEquals(100
+                - settings.integer(FORGOT_POTION_PENALTY),
+                scores.getScore());
     }
 
     @Test
     public void shouldStillZero_whenNoMorePotions() {
+        // given
         scores = new Scores(0, settings);
 
+        // when
         noMorePotions();
 
-        assertEquals(0, scores.getScore());
+        // then
+        assertEquals(0,
+                scores.getScore());
     }
 
     @Test
     public void shouldDestroyMinesCountStartsFromZero_whenDead() {
-        scores = new Scores(0, settings);
+        // given
+        scores = new Scores(100, settings);
 
+        // when
         cure();
         gotInfected();
 
         cure();
 
-        assertEquals(1, scores.getScore());
+        // then
+        assertEquals(100
+                + 2 * settings.integer(CURE_SCORE)
+                - settings.integer(GOT_INFECTED_PENALTY),
+                scores.getScore());
     }
 
     @Test
     public void shouldDecreaseMinesCount_whenForgotPotions() {
-        settings.integer(DESTROYED_PENALTY, 2);
+        // given
+        scores = new Scores(100, settings);
 
-        scores = new Scores(0, settings);
-
+        // when
         cure();
         cure();
         cure();
@@ -174,15 +201,20 @@ public class ScoresTest {
         cure();
         cure();
 
-        assertEquals(1 + 2 + 3 + 4 + 5
-                - settings.integer(DESTROYED_FORGOT_PENALTY)
-                + 4 + 5 + 6, scores.getScore());
+        // then
+        assertEquals(100
+                + 5 * settings.integer(CURE_SCORE)
+                - settings.integer(NO_MORE_POTIONS_PENALTY)
+                + 3 * settings.integer(CURE_SCORE),
+                scores.getScore());
     }
 
     @Test
     public void shouldMinesCountIsZero_whenManyTimesForgotPotions() {
-        scores = new Scores(0, settings);
+        // given
+        scores = new Scores(100, settings);
 
+        // when
         cure();
         cure();
 
@@ -192,37 +224,58 @@ public class ScoresTest {
 
         cure();
 
-        assertEquals(1, scores.getScore());
+        // then
+        assertEquals(100
+                + 2 * settings.integer(CURE_SCORE)
+                - 3 * settings.integer(FORGOT_POTION_PENALTY)
+                + settings.integer(CURE_SCORE),
+                scores.getScore());
     }
 
     @Test
     public void shouldScore_whenWin() {
-        scores = new Scores(0, settings);
+        // given
+        scores = new Scores(100, settings);
 
+        // when
         win();
 
-        assertEquals(settings.integer(WIN_SCORE),
+        // then
+        assertEquals(100
+                + settings.integer(WIN_SCORE),
                 scores.getScore());
     }
 
     @Test
     public void shouldScore_whenCleanArea() {
-        scores = new Scores(0, settings);
+        // given
+        scores = new Scores(100, settings);
 
+        // when
         cleanArea();
 
-        assertEquals(settings.integer(CLEAN_AREA_SCORE),
+        // then
+        assertEquals(100
+                + settings.integer(CLEAN_AREA_SCORE),
                 scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
-        scores = new Scores(0, settings);
+        // given
+        scores = new Scores(100, settings);
 
         cleanArea();
 
+        // then
+        assertEquals(100
+                + settings.integer(CLEAN_AREA_SCORE),
+                scores.getScore());
+
+        // when
         scores.clear();
 
+        // then
         assertEquals(0, scores.getScore());
     }
 }
