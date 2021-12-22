@@ -22,44 +22,32 @@ package com.codenjoy.dojo.verland.services;
  * #L%
  */
 
-import com.codenjoy.dojo.services.event.AbstractScores;
-import com.codenjoy.dojo.services.settings.SettingsReader;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
+import com.codenjoy.dojo.services.event.ScoresMap;
 
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.*;
 
-public class Scores extends AbstractScores<Void> {
+public class Scores extends ScoresMap<Integer> {
 
-    public Scores(int score, SettingsReader settings) {
-        super(score, settings);
-    }
+    public Scores(GameSettings settings) {
+        put(Event.CURE,
+                value -> settings.integer(CURE_SCORE));
 
-    @Override
-    protected Map<Object, Function<Void, Integer>> eventToScore() {
-        return new HashMap<>(){{
-            put(Event.CURE,
-                    value -> settings.integer(CURE_SCORE));
+        put(Event.FORGOT_POTION,
+                value -> settings.integer(FORGOT_POTION_PENALTY));
 
-            put(Event.FORGOT_POTION,
-                    value -> settings.integer(FORGOT_POTION_PENALTY));
+        put(Event.GOT_INFECTED,
+                value -> settings.integer(GOT_INFECTED_PENALTY));
 
-            put(Event.GOT_INFECTED,
-                    value -> settings.integer(GOT_INFECTED_PENALTY));
+        put(Event.NO_MORE_POTIONS,
+                value -> settings.integer(NO_MORE_POTIONS_PENALTY));
 
-            put(Event.NO_MORE_POTIONS,
-                    value -> settings.integer(NO_MORE_POTIONS_PENALTY));
+        put(Event.WIN,
+                value -> settings.integer(WIN_SCORE));
 
-            put(Event.WIN,
-                    value -> settings.integer(WIN_SCORE));
+        put(Event.SUICIDE,
+                value -> settings.integer(SUICIDE_PENALTY));
 
-            put(Event.SUICIDE,
-                    value -> settings.integer(SUICIDE_PENALTY));
-
-            put(Event.CLEAN_AREA,
-                    value -> settings.integer(CLEAN_AREA_SCORE));
-        }};
+        put(Event.CLEAN_AREA,
+                value -> settings.integer(CLEAN_AREA_SCORE));
     }
 }
