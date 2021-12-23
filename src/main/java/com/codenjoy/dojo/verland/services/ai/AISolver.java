@@ -129,6 +129,7 @@ public class AISolver implements Solver<Board> {
 
     private DeikstraFindWay.Possible possible(Board board, Cell to) {
         Point hero = board.getHero();
+        List<QDirection> directions = QDirection.getValues();
 
         return new DeikstraFindWay.Possible() {
             @Override
@@ -139,7 +140,7 @@ public class AISolver implements Solver<Board> {
                 if (!board.isAt(point, HIDDEN)) return true;
 
                 // мы смотрим соседей, если там нет ни одной пустой клетки - идти опасно
-                return QDirection.getValues().stream()
+                return directions.stream()
                         .map(direction -> direction.change(point))
                         .filter(pt -> !pt.isOutOf(board.size()))
                         .anyMatch(pt -> board.isAt(pt, CLEAR)
@@ -149,7 +150,6 @@ public class AISolver implements Solver<Board> {
                                 || (underMe != null
                                     && pt.equals(hero)
                                     && underMe == CLEAR));
-
             }
         };
     }

@@ -53,7 +53,7 @@ public class SmokeTest {
 
     @Test
     public void test() {
-        // about 5 sec -> 7 sec
+        // about 5 sec -> 7 sec -> 3 sec
         int ticks = 1000;
 
         SmokeUtils.recheck = actual -> {
@@ -183,7 +183,7 @@ public class SmokeTest {
 
     @Test
     public void test2() {
-        // about 50 sec -> 23 sec
+        // about 50 sec -> 23 sec -> 3.8 sec
         int ticks = 1000;
 
         SmokeUtils.recheck = actual -> {
