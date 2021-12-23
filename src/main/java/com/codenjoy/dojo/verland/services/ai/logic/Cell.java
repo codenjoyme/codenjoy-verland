@@ -27,8 +27,10 @@ import com.codenjoy.dojo.services.PointImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.games.verland.Element.HIDDEN;
+import static com.codenjoy.dojo.games.verland.Element.PATHLESS;
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 
@@ -56,13 +58,13 @@ public class Cell extends PointImpl {
     }
 
     public List<Cell> unknownCells() {
-        return neighbours.stream()
+        return neighbours()
                 .filter(not(Cell::isValued))
                 .collect(toList());
     }
 
     public boolean hasUnknownAround() {
-        return neighbours.stream()
+        return neighbours()
                 .anyMatch(not(Cell::isValued));
     }
 
@@ -92,8 +94,9 @@ public class Cell extends PointImpl {
         return element;
     }
 
-    public List<Cell> neighbours() {
-        return neighbours;
+    public Stream<Cell> neighbours() {
+        return neighbours.stream()
+                .filter(neighbour -> neighbour.element() != PATHLESS);
     }
 
     public void action(Action action) {

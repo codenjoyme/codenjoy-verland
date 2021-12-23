@@ -49,21 +49,27 @@ public class Field {
     }
 
     private void createCells() {
-        for (int x = 0; x < size; ++x) {
-            for (int y = 0; y < size; ++y) {
-                cells.add(new Cell(x, y));
+        Cell[][] matrix = new Cell[size][size];
+        for (int x = 0; x < size; x++) {
+            matrix[x] = new Cell[size];
+            for (int y = 0; y < size; y++) {
+                Cell cell = new Cell(x, y);
+                cells.add(cell);
+                matrix[x][y] = cell;
             }
         }
-    }
 
-    private void setCellsNeighbours() {
-        for (Cell cell : cells()) {
-            QDirection.getValues().stream()
-                    .map(direction -> direction.change(cell))
-                    .filter(pt -> !pt.isOutOf(size))
-                    .map(this::cell)
-                    .filter(neighbour -> neighbour.element() != PATHLESS)
-                    .forEach(cell::add);
+        List<QDirection> directions = QDirection.getValues();
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                Cell cell = matrix[x][y];
+                for (QDirection direction : directions) {
+                    Point to = direction.change(cell);
+                    if (to.isOutOf(size)) continue;
+
+                    cell.add(matrix[to.getX()][to.getY()]);
+                }
+            }
         }
     }
 
@@ -75,7 +81,6 @@ public class Field {
         for (Cell cell : cells()) {
             cell.set(get.apply(cell));
         }
-        setCellsNeighbours();
         setGroups();
     }
 
@@ -92,7 +97,7 @@ public class Field {
     }
 
     private boolean isReachable(Cell cell) {
-        return cell.neighbours().stream()
+        return cell.neighbours()
                 .anyMatch(it -> it.isValued() && (it.element() == CLEAR));
     }
 

@@ -139,17 +139,19 @@ public class AISolver implements Solver<Board> {
                 // если на пути неизвестность
                 if (!board.isAt(point, HIDDEN)) return true;
 
-                // мы смотрим соседей, если там нет ни одной пустой клетки - идти опасно
+                // а тут мы не собираемся идти, а просто там флажок поставим
+                if (to.action() == CURE && point.equals(to)) return true;
+
+                // мы смотрим соседей
                 return directions.stream()
                         .map(direction -> direction.change(point))
                         .filter(pt -> !pt.isOutOf(board.size()))
-                        .anyMatch(pt -> board.isAt(pt, CLEAR)
-                                // а тут мы не собираемся идти, а просто там флажок поставим
-                                || (point.equals(to) && to.action() == CURE)
+                        .anyMatch(pt ->
+                                // если хоть одна соседская клеточка пустая,
+                                // значит нет опасности в этом направлении
+                                board.isAt(pt, CLEAR)
                                 // так же мы помним с прошлого хода, что под нами было
-                                || (underMe != null
-                                    && pt.equals(hero)
-                                    && underMe == CLEAR));
+                                || (underMe == CLEAR && pt.equals(hero)));
             }
         };
     }
