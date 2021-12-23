@@ -128,29 +128,28 @@ public class AISolver implements Solver<Board> {
     }
 
     private DeikstraFindWay.Possible possible(Board board, Cell to) {
+        Point hero = board.getHero();
+
         return new DeikstraFindWay.Possible() {
             @Override
             public boolean possible(Point point) {
                 if (board.isAt(point, PATHLESS)) return false;
 
                 // если на пути неизвестность
-                if (board.isAt(point, HIDDEN)) {
-                    // мы смотрим соседей, если там нет ни одной пустой клетки - идти опасно
-                    // а тут мы не собираемся идти, а просто там флажок поставим
-                    // так же мы помним с прошлого хода, что под нами было
-                    return QDirection.getValues().stream()
-                            .map(direction -> direction.change(point))
-                            .filter(pt -> !pt.isOutOf(board.size()))
-                            .anyMatch(pt -> board.isAt(pt, CLEAR)
-                                    // а тут мы не собираемся идти, а просто там флажок поставим
-                                    || (point.equals(to) && to.action() == CURE)
-                                    // так же мы помним с прошлого хода, что под нами было
-                                    || (underMe != null
-                                        && pt.equals(board.getHero())
-                                        && underMe == CLEAR));
-                }
+                if (!board.isAt(point, HIDDEN)) return true;
 
-                return true;
+                // мы смотрим соседей, если там нет ни одной пустой клетки - идти опасно
+                return QDirection.getValues().stream()
+                        .map(direction -> direction.change(point))
+                        .filter(pt -> !pt.isOutOf(board.size()))
+                        .anyMatch(pt -> board.isAt(pt, CLEAR)
+                                // а тут мы не собираемся идти, а просто там флажок поставим
+                                || (point.equals(to) && to.action() == CURE)
+                                // так же мы помним с прошлого хода, что под нами было
+                                || (underMe != null
+                                    && pt.equals(hero)
+                                    && underMe == CLEAR));
+
             }
         };
     }
