@@ -25,6 +25,8 @@ package com.codenjoy.dojo.verland.services.ai.logic;
 import com.codenjoy.dojo.games.verland.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.QDirection;
+import com.codenjoy.dojo.services.field.Accessor;
+import com.codenjoy.dojo.services.field.PointField;
 
 import java.util.*;
 import java.util.function.Function;
@@ -36,13 +38,13 @@ import static java.util.stream.Collectors.toCollection;
 public class Field {
 
     private int size;
-    private List<Cell> cells;
+    private PointField cells;
     private List<Group> groups;
 
     public Field(int size) {
         this.size = size;
-        groups = new ArrayList();
-        cells = new LinkedList();
+        groups = new ArrayList<>();
+        cells = new PointField().size(size);
         createCells();
     }
 
@@ -55,22 +57,22 @@ public class Field {
     }
 
     private void setCellsNeighbours() {
-        for (Cell cell : cells) {
+        for (Cell cell : cells()) {
             QDirection.getValues().stream()
                     .map(direction -> direction.change(cell))
                     .filter(pt -> !pt.isOutOf(size))
-                    .map(pt -> cell(pt))
+                    .map(this::cell)
                     .filter(neighbour -> neighbour.element() != PATHLESS)
-                    .forEach(neighbour -> cell.add(neighbour));
+                    .forEach(cell::add);
         }
     }
 
     private Cell cell(Point point) {
-        return cells.get(cells.indexOf(point));
+        return cells().getAt(point).get(0);
     }
 
     public void scan(Function<Point, Element> get) {
-        for (Cell cell : cells) {
+        for (Cell cell : cells()) {
             cell.set(get.apply(cell));
         }
         setCellsNeighbours();
@@ -78,11 +80,15 @@ public class Field {
     }
 
     private void setGroups() {
-        for (Cell cell : cells) {
+        for (Cell cell : cells()) {
             if (cell.isValued() && cell.hasUnknownAround()) {
                 groups.add(new Group(cell.unknownCells(), cell.element()));
             }
         }
+    }
+
+    private Accessor<Cell> cells() {
+        return cells.of(Cell.class);
     }
 
     private boolean isReachable(Cell cell) {
