@@ -142,13 +142,15 @@ public class AISolver implements Solver<Board> {
                 if (to.action() == CURE && point.equals(to)) return true;
 
                 // мы смотрим соседей
-                return field.cell(point).neighbours().stream()
-                        .anyMatch(pt ->
-                                // если хоть одна соседская клеточка пустая,
-                                // значит нет опасности в этом направлении
-                                board.isAt(pt, CLEAR)
-                                // так же мы помним с прошлого хода, что под нами было
-                                || (underMe == CLEAR && pt.equals(hero)));
+                for (Point pt : field.cell(point).neighbours()) {
+                    // если хоть одна соседская клеточка пустая,
+                    // значит нет опасности в этом направлении
+                    if (board.isAt(pt, CLEAR)) return true;
+
+                    // так же мы помним с прошлого хода, что под нами было
+                    if (underMe == CLEAR && pt.equals(hero)) return true;
+                }
+                return false;
             }
         };
     }

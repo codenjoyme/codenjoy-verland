@@ -40,8 +40,8 @@ public class Group {
         this.element = element;
 
         list = new ArrayList<>(cells.size());
-        for (int index = 0; index < cells.size(); index++) {
-            list.add(cells.get(index).copy());
+        for (Cell cell : cells) {
+            list.add(cell.copy());
         }
 
         Action action = action();

@@ -60,9 +60,13 @@ public class Cell extends PointImpl {
     }
 
     public List<Cell> unknownCells() {
-        return neighbours().stream()
-                .filter(cell -> !cell.isValued())
-                .collect(toList());
+        return new ArrayList<>(neighbours.size()){{
+            for (Cell cell : neighbours) {
+                if (!cell.isValued()) {
+                    add(cell);
+                }
+            }
+        }};
     }
 
     @Override
