@@ -67,8 +67,8 @@ public class Field {
         }
     }
 
-    private Cell cell(Point point) {
-        return cells().getAt(point).get(0);
+    private Cell cell(Point pt) {
+        return cells().getFirstAt(pt);
     }
 
     public void scan(Function<Point, Element> get) {
