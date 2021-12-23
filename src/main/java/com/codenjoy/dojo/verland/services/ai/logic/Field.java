@@ -40,6 +40,7 @@ public class Field {
     private int size;
     private PointField cells;
     private List<Group> groups;
+    private Cell[][] matrix;
 
     public Field(int size) {
         this.size = size;
@@ -49,7 +50,7 @@ public class Field {
     }
 
     private void createCells() {
-        Cell[][] matrix = new Cell[size][size];
+        matrix = new Cell[size][size];
         for (int x = 0; x < size; x++) {
             matrix[x] = new Cell[size];
             for (int y = 0; y < size; y++) {
@@ -71,10 +72,6 @@ public class Field {
                 }
             }
         }
-    }
-
-    private Cell cell(Point pt) {
-        return cells().getFirstAt(pt);
     }
 
     public void scan(Function<Point, Element> get) {
@@ -114,5 +111,9 @@ public class Field {
                 .sorted((cell1, cell2) -> Boolean.compare(cell1.action() != Action.CURE, cell2.action() != Action.CURE))
                 // мы исключаем все дубликаты
                 .collect(toCollection(LinkedHashSet::new));
+    }
+
+    public Cell cell(Point pt) {
+        return matrix[pt.getX()][pt.getY()];
     }
 }

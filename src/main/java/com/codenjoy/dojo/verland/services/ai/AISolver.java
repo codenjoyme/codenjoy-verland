@@ -85,7 +85,7 @@ public class AISolver implements Solver<Board> {
             if (oneStep) {
                 where = me.direction(to);
             } else {
-                where = safePathTo(board, me, to);
+                where = safePathTo(field, board, me, to);
                 if (where == null) {
                     return STOP.toString();
                 }
@@ -108,9 +108,9 @@ public class AISolver implements Solver<Board> {
                 && board.getAt(UP.change(me)) == HIDDEN;
     }
 
-    private Direction safePathTo(Board board, Point from, Cell to) {
+    private Direction safePathTo(Field field, Board board, Point from, Cell to) {
         DeikstraFindWay way = new DeikstraFindWay();
-        way.getPossibleWays(board.size(), possible(board, to));
+        way.getPossibleWays(board.size(), possible(field, board, to));
 
         // для отладки возможных путей
         // System.out.println(TestUtils.drawPossibleWays(3,
@@ -127,9 +127,8 @@ public class AISolver implements Solver<Board> {
         return path.get(0);
     }
 
-    private DeikstraFindWay.Possible possible(Board board, Cell to) {
+    private DeikstraFindWay.Possible possible(Field field, Board board, Cell to) {
         Point hero = board.getHero();
-        List<QDirection> directions = QDirection.getValues();
 
         return new DeikstraFindWay.Possible() {
             @Override
@@ -143,9 +142,7 @@ public class AISolver implements Solver<Board> {
                 if (to.action() == CURE && point.equals(to)) return true;
 
                 // мы смотрим соседей
-                return directions.stream()
-                        .map(direction -> direction.change(point))
-                        .filter(pt -> !pt.isOutOf(board.size()))
+                return field.cell(point).neighbours()
                         .anyMatch(pt ->
                                 // если хоть одна соседская клеточка пустая,
                                 // значит нет опасности в этом направлении
@@ -174,14 +171,10 @@ public class AISolver implements Solver<Board> {
     }
 
     private Element convert(Element element) {
-        if (element == HERO) {
-            if (underMe == null || underMe == HIDDEN) {
-                return element;
-            } else {
-                return convert(underMe);
-            }
+        if (element != HERO || underMe == null || underMe == HIDDEN) {
+            return element;
         }
 
-        return element;
+        return convert(underMe);
     }
 }
