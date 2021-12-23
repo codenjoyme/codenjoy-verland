@@ -43,10 +43,12 @@ public class Cell extends PointImpl {
 
     public Cell(int x, int y) {
         super(x, y);
-        neighbours = new ArrayList();
+        neighbours = new ArrayList<>();
     }
 
     public void add(Cell cell) {
+        if (cell.element() == PATHLESS) return;
+
         neighbours.add(cell);
     }
 
@@ -58,8 +60,8 @@ public class Cell extends PointImpl {
     }
 
     public List<Cell> unknownCells() {
-        return neighbours()
-                .filter(not(Cell::isValued))
+        return neighbours().stream()
+                .filter(cell -> !cell.isValued())
                 .collect(toList());
     }
 
@@ -89,9 +91,8 @@ public class Cell extends PointImpl {
         return element;
     }
 
-    public Stream<Cell> neighbours() {
-        return neighbours.stream()
-                .filter(neighbour -> neighbour.element() != PATHLESS);
+    public List<Cell> neighbours() {
+        return neighbours;
     }
 
     public void action(Action action) {

@@ -95,7 +95,7 @@ public class Field {
     }
 
     private boolean isReachable(Cell cell) {
-        return cell.neighbours()
+        return cell.neighbours().stream()
                 .anyMatch(it -> it.isValued() && (it.element() == CLEAR));
     }
 

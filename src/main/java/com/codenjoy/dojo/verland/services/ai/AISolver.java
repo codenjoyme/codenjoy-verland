@@ -142,7 +142,7 @@ public class AISolver implements Solver<Board> {
                 if (to.action() == CURE && point.equals(to)) return true;
 
                 // мы смотрим соседей
-                return field.cell(point).neighbours()
+                return field.cell(point).neighbours().stream()
                         .anyMatch(pt ->
                                 // если хоть одна соседская клеточка пустая,
                                 // значит нет опасности в этом направлении
