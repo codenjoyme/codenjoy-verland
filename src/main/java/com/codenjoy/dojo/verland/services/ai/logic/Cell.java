@@ -63,11 +63,6 @@ public class Cell extends PointImpl {
                 .collect(toList());
     }
 
-    public boolean hasUnknownAround() {
-        return neighbours()
-                .anyMatch(not(Cell::isValued));
-    }
-
     @Override
     public Cell copy() {
         Cell cell = new Cell(x, y);

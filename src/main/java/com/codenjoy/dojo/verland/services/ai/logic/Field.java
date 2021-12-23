@@ -83,8 +83,9 @@ public class Field {
 
     private void setGroups() {
         for (Cell cell : cells()) {
-            if (cell.isValued() && cell.hasUnknownAround()) {
-                groups.add(new Group(cell.unknownCells(), cell.element()));
+            List<Cell> unknown = cell.unknownCells();
+            if (cell.isValued() && !unknown.isEmpty()) {
+                groups.add(new Group(unknown, cell.element()));
             }
         }
     }
