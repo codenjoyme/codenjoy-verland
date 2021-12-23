@@ -24,6 +24,7 @@ package com.codenjoy.dojo.verland.services.ai.logic;
 
 import com.codenjoy.dojo.games.verland.Element;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.codenjoy.dojo.games.verland.Element.CLEAR;
@@ -38,9 +39,10 @@ public class Group {
     public Group(List<Cell> cells, Element element) {
         this.element = element;
 
-        list = cells.stream()
-                    .map(Cell::copy)
-                    .collect(toList());
+        list = new ArrayList<>(cells.size());
+        for (int index = 0; index < cells.size(); index++) {
+            list.add(cells.get(index).copy());
+        }
 
         Action action = action();
         list.forEach(cell -> cell.action(action));
@@ -57,10 +59,12 @@ public class Group {
     private Action action() {
         if (element == CLEAR || element == HERO) {
             return Action.GO;
-        } else if (size() == element.value()) {
-            return Action.CURE;
-        } else {
-            return Action.NOTHING;
         }
+
+        if (size() == element.value()) {
+            return Action.CURE;
+        }
+
+        return Action.NOTHING;
     }
 }
