@@ -28,11 +28,12 @@ import static com.codenjoy.dojo.verland.services.GameSettings.Keys.*;
 
 public class TestGameSettings extends GameSettings {
 
+    /**
+     * Here you can override the settings for all tests.
+     */
     public TestGameSettings() {
         integer(WIN_SCORE, 30);
         integer(GOT_INFECTED_PENALTY, 100);
         integer(POTIONS_COUNT, 3);
-
-        // тут можно переопределить настройки для всех тестов
     }
 }
