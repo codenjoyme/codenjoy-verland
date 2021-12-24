@@ -72,7 +72,7 @@ public class ScoresTest {
     @Test
     public void shouldCollectScores() {
         // given
-        scores = new ScoresImpl<>(140, new Scores(settings));
+        givenScores(140);
 
         // when
         cure();
@@ -105,7 +105,7 @@ public class ScoresTest {
     @Test
     public void shouldStillZero_whenDead() {
         // given
-        scores = new ScoresImpl<>(0, new Scores(settings));
+        givenScores(0);
 
         // when
         gotInfected();
@@ -117,7 +117,7 @@ public class ScoresTest {
     @Test
     public void shouldStillZero_whenSuicide() {
         // given
-        scores = new ScoresImpl<>(0, new Scores(settings));
+        givenScores(0);
 
         // when
         suicide();
@@ -129,7 +129,7 @@ public class ScoresTest {
     @Test
     public void shouldPenalty_whenSuicide() {
         // given
-        scores = new ScoresImpl<>(100, new Scores(settings));
+        givenScores(100);
 
         // when
         suicide();
@@ -143,7 +143,7 @@ public class ScoresTest {
     @Test
     public void shouldStillZero_whenForgotPotion() {
         // given
-        scores = new ScoresImpl<>(100, new Scores(settings));
+        givenScores(100);
 
         // when
         forgotPotion();
@@ -157,7 +157,7 @@ public class ScoresTest {
     @Test
     public void shouldStillZero_whenNoMorePotions() {
         // given
-        scores = new ScoresImpl<>(0, new Scores(settings));
+        givenScores(0);
 
         // when
         noMorePotions();
@@ -170,7 +170,7 @@ public class ScoresTest {
     @Test
     public void shouldDestroyMinesCountStartsFromZero_whenDead() {
         // given
-        scores = new ScoresImpl<>(100, new Scores(settings));
+        givenScores(100);
 
         // when
         cure();
@@ -188,7 +188,7 @@ public class ScoresTest {
     @Test
     public void shouldDecreaseMinesCount_whenForgotPotions() {
         // given
-        scores = new ScoresImpl<>(100, new Scores(settings));
+        givenScores(100);
 
         // when
         cure();
@@ -214,7 +214,7 @@ public class ScoresTest {
     @Test
     public void shouldMinesCountIsZero_whenManyTimesForgotPotions() {
         // given
-        scores = new ScoresImpl<>(100, new Scores(settings));
+        givenScores(100);
 
         // when
         cure();
@@ -234,10 +234,14 @@ public class ScoresTest {
                 scores.getScore());
     }
 
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Scores(settings));
+    }
+
     @Test
     public void shouldScore_whenWin() {
         // given
-        scores = new ScoresImpl<>(100, new Scores(settings));
+        givenScores(100);
 
         // when
         win();
@@ -251,7 +255,7 @@ public class ScoresTest {
     @Test
     public void shouldScore_whenCleanArea() {
         // given
-        scores = new ScoresImpl<>(100, new Scores(settings));
+        givenScores(100);
 
         // when
         cleanArea();
@@ -265,7 +269,7 @@ public class ScoresTest {
     @Test
     public void shouldClearScore() {
         // given
-        scores = new ScoresImpl<>(100, new Scores(settings));
+        givenScores(100);
 
         cleanArea();
 
