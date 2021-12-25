@@ -33,7 +33,8 @@ public class TestGameSettings extends GameSettings {
      */
     public TestGameSettings() {
         integer(WIN_SCORE, 30);
-        integer(GOT_INFECTED_PENALTY, 100);
+        integer(GOT_INFECTED_PENALTY, -10);
+        integer(SUICIDE_PENALTY, -11);
         integer(POTIONS_COUNT, 3);
     }
 }

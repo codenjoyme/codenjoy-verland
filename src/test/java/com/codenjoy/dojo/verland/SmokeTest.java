@@ -77,7 +77,7 @@ public class SmokeTest {
                     @Override
                     public GameSettings getSettings() {
                         int level = LevelProgress.levelsStartsFrom1;
-                        return super.getSettings()
+                        return new TestGameSettings()
                                 .clearLevelMaps(level)
                                 .setLevelMaps(level,
                                         "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -148,7 +148,7 @@ public class SmokeTest {
                                 "☼******************☼\n" +
                                 "☼♥*****************☼\n" +
                                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n";
-                        return super.getSettings()
+                        return new TestGameSettings()
                                 .clearLevelMaps(level)
                                 .setLevelMaps(level, map)
                                 .setLevelMaps(level + 1, map)

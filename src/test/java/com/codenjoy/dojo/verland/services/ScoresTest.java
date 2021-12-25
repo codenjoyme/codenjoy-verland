@@ -26,6 +26,7 @@ package com.codenjoy.dojo.verland.services;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.event.ScoresImpl;
+import com.codenjoy.dojo.verland.TestGameSettings;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -67,7 +68,7 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
 
     @Test
