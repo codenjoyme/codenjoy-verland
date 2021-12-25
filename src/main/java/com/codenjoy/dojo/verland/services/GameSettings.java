@@ -24,7 +24,7 @@ package com.codenjoy.dojo.verland.services;
 
 
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.event.ScoresImpl;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.level.LevelsSettings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
@@ -90,5 +90,9 @@ public class GameSettings extends SettingsImpl
 
     public Level level(int level, Dice dice) {
         return new Level(getRandomLevelMap(level, dice));
+    }
+
+    public Calculator<Integer> calculator() {
+        return new Calculator<>(new Scores(this));
     }
 }
