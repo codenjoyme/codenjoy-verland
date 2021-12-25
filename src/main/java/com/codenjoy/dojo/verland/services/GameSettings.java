@@ -92,7 +92,7 @@ public class GameSettings extends SettingsImpl
         return new Level(getRandomLevelMap(level, dice));
     }
 
-    public Calculator<Integer> calculator() {
+    public Calculator<Void> calculator() {
         return new Calculator<>(new Scores(this));
     }
 }
