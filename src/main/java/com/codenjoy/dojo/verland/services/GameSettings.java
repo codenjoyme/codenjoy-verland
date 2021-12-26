@@ -26,7 +26,11 @@ package com.codenjoy.dojo.verland.services;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.event.ScoresImpl;
+import com.codenjoy.dojo.services.incativity.InactivitySettings;
 import com.codenjoy.dojo.services.level.LevelsSettings;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerSettings;
+import com.codenjoy.dojo.services.round.RoundSettings;
+import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.verland.model.Level;
@@ -39,7 +43,11 @@ import static com.codenjoy.dojo.verland.services.GameSettings.Keys.*;
 
 public class GameSettings extends SettingsImpl
         implements SettingsReader<GameSettings>,
-                   LevelsSettings<GameSettings> {
+                   InactivitySettings<GameSettings>,
+                   RoundSettings<GameSettings>,
+                   LevelsSettings<GameSettings>,
+                   SemifinalSettings<GameSettings>,
+                   MultiplayerSettings<GameSettings> {
 
     public enum Keys implements Key {
 
@@ -74,8 +82,12 @@ public class GameSettings extends SettingsImpl
     }
 
     public GameSettings() {
+        initInactivity();
+        initRound();
+        initSemifinal();
         initLevels();
         initScore(CUMULATIVELY);
+        initMultiplayer();
 
         integer(COUNT_CONTAGIONS, 30);
         integer(POTIONS_COUNT, 100);
