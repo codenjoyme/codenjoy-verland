@@ -25,6 +25,7 @@ package com.codenjoy.dojo.verland.services;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.services.level.LevelsSettings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
@@ -33,6 +34,7 @@ import com.codenjoy.dojo.verland.model.Level;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.event.Mode.CUMULATIVELY;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.*;
 
 public class GameSettings extends SettingsImpl
@@ -51,7 +53,8 @@ public class GameSettings extends SettingsImpl
         GOT_INFECTED_PENALTY("[Game] Got infected penalty"),
         SUICIDE_PENALTY("[Game] Suicide penalty"),
         NO_MORE_POTIONS_PENALTY("[Score] No more potions penalty"),
-        FORGOT_POTION_PENALTY("[Score] Forgot potion penalty");
+        FORGOT_POTION_PENALTY("[Score] Forgot potion penalty"),
+        SCORE_COUNTING_TYPE(ScoresImpl.SCORE_COUNTING_TYPE.key());
 
         private String key;
 
@@ -72,6 +75,7 @@ public class GameSettings extends SettingsImpl
 
     public GameSettings() {
         initLevels();
+        initScore(CUMULATIVELY);
 
         integer(COUNT_CONTAGIONS, 30);
         integer(POTIONS_COUNT, 100);

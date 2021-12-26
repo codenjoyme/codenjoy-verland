@@ -39,7 +39,8 @@ public class GameSettingsTest {
                         "GOT_INFECTED_PENALTY, \n" +
                         "SUICIDE_PENALTY, \n" +
                         "NO_MORE_POTIONS_PENALTY, \n" +
-                        "FORGOT_POTION_PENALTY]",
+                        "FORGOT_POTION_PENALTY, \n" +
+                        "SCORE_COUNTING_TYPE]",
                 Utils.split(new GameSettings().allKeys(), ", \n"));
     }
 }

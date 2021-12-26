@@ -36,10 +36,10 @@ public class Scores extends ScoresMap<Void> {
                 value -> settings.integer(CURE_SCORE));
 
         put(Event.FORGOT_POTION,
-                value -> settings.integer(FORGOT_POTION_PENALTY));
+                value -> heroDie(FORGOT_POTION_PENALTY));
 
         put(Event.GOT_INFECTED,
-                value -> settings.integer(GOT_INFECTED_PENALTY));
+                value -> heroDie(GOT_INFECTED_PENALTY));
 
         put(Event.NO_MORE_POTIONS,
                 value -> settings.integer(NO_MORE_POTIONS_PENALTY));
@@ -48,7 +48,7 @@ public class Scores extends ScoresMap<Void> {
                 value -> settings.integer(WIN_SCORE));
 
         put(Event.SUICIDE,
-                value -> settings.integer(SUICIDE_PENALTY));
+                value -> heroDie(SUICIDE_PENALTY));
 
         put(Event.CLEAN_AREA,
                 value -> settings.integer(CLEAN_AREA_SCORE));
