@@ -24,6 +24,7 @@ package com.codenjoy.dojo.verland.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.annotations.PerformanceOptimized;
 import com.codenjoy.dojo.services.field.Accessor;
 import com.codenjoy.dojo.services.field.PointField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -99,16 +100,16 @@ public class Verland implements Field {
     }
 
     @Override
+    @PerformanceOptimized
     public boolean isFree(Point pt) {
         return clean().contains(pt)
                 && !walls().contains(pt);
     }
 
+    @PerformanceOptimized
     public boolean isFreeForContagion(Point pt) {
         return !pt.isOutOf(size())
-                && !contagions().contains(pt)
-                && !level.heroes().contains(pt)
-                && !walls().contains(pt);
+                && field.at(pt).noneOf(Wall.class, HeroSpot.class, Contagion.class);
     }
 
     @Override
@@ -116,7 +117,7 @@ public class Verland implements Field {
         // метод отдает только те координаты, которые в изначальной
         // карте отмечены как стартовые для героев, когда точек больше
         // не останется, будет возвращать -1 на что isFree скажет false
-        List<Integer> numbers = level.heroes().stream()
+        List<Integer> numbers = level.heroesSpots().stream()
                 .flatMap(pt -> Arrays.stream(new Integer[]{pt.getX(), pt.getY()}))
                 .collect(toList());
 
@@ -298,6 +299,11 @@ public class Verland implements Field {
     @Override
     public Accessor<Hero> heroes() {
         return field.of(Hero.class);
+    }
+
+    @Override
+    public Accessor<HeroSpot> heroSpots() {
+        return field.of(HeroSpot.class);
     }
 
     @Override

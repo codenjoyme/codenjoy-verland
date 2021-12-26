@@ -25,6 +25,7 @@ package com.codenjoy.dojo.verland.model;
 
 import com.codenjoy.dojo.games.sample.Element;
 import com.codenjoy.dojo.verland.TestGameSettings;
+import com.codenjoy.dojo.verland.model.items.HeroSpot;
 import com.codenjoy.dojo.verland.services.Event;
 import com.codenjoy.dojo.verland.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -103,7 +104,7 @@ public abstract class AbstractGameTest {
         }
 
         field = new Verland(dice, level, settings);
-        level.heroes().forEach(this::givenPlayer);
+        level.heroesSpots().forEach(this::givenPlayer);
 
         // other field preparation stuff
     }
@@ -112,7 +113,7 @@ public abstract class AbstractGameTest {
         return number / Math.abs(number) == DESPITE_LEVEL;
     }
 
-    protected void givenPlayer(Hero hero) {
+    protected void givenPlayer(HeroSpot spot) {
         EventListener listener = mock(EventListener.class);
         listeners.add(listener);
 
@@ -122,7 +123,7 @@ public abstract class AbstractGameTest {
         Game game = new Single(player, printer);
         games.add(game);
 
-        dice(hero.getX(), hero.getY());
+        dice(spot.getX(), spot.getY());
         game.on(field);
         game.newGame();
     }

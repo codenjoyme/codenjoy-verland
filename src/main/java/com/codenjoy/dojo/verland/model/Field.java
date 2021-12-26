@@ -61,5 +61,8 @@ public interface Field extends GameField<Player> {
     Accessor<Cure> cures();
 
     Accessor<Hero> heroes();
+
+    Accessor<HeroSpot> heroSpots();
+
     List<Cell> clean();
 }

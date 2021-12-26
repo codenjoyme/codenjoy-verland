@@ -42,8 +42,8 @@ public class Level extends AbstractLevel {
         super(map);
     }
 
-    public List<Hero> heroes() {
-        return find(Hero::new, HERO);
+    public List<HeroSpot> heroesSpots() {
+        return find(HeroSpot::new, HERO);
     }
 
     public List<Contagion> contagions() {
@@ -74,6 +74,8 @@ public class Level extends AbstractLevel {
 
     @Override
     protected void fill(PointField field) {
+        // места появления героев
+        field.addAll(heroesSpots());
         // туман войны
         field.addAll(hidden());
         // чистое поле

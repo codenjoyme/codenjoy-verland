@@ -25,6 +25,7 @@ package com.codenjoy.dojo.verland.model;
 
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.COUNT_CONTAGIONS;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
 
@@ -1373,4 +1374,36 @@ public class GameTest extends AbstractGameTest {
                 "☼♥  ☼\n" +
                 "☼☼☼☼☼\n");
     }
+    
+    @Test 
+    public void performanceTest_isFreeForContagion() {
+        // about (1_000_000 / 9s)
+
+        givenFl("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼     ****oooo☼\n" +
+                "☼     ****oooo☼\n" +
+                "☼     ****oooo☼\n" +
+                "☼     ****oooo☼\n" +
+                "☼     ********☼\n" +
+                "☼     ********☼\n" +
+                "☼     ********☼\n" +
+                "☼     ********☼\n" +
+                "☼             ☼\n" +
+                "☼             ☼\n" +
+                "☼             ☼\n" +
+                "☼             ☼\n" +
+                "☼♥            ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        int ticks = 100_000;
+
+        int outOf = 5;
+        for (int count = 0; count < ticks; count++) {
+            for (int x = -outOf; x < field().size() + outOf; x++) {
+                for (int y = -outOf; y < field().size() + outOf; y++) {
+                    boolean free = field().isFreeForContagion(pt(x, y));
+                }
+            }
+        }
+    } 
 }

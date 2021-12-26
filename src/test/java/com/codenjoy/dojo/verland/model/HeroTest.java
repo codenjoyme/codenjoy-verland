@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.verland.model.items.Cell;
+import com.codenjoy.dojo.verland.model.items.HeroSpot;
 import com.codenjoy.dojo.verland.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
@@ -71,10 +72,10 @@ public class HeroTest {
                 .integer(GameSettings.Keys.POTIONS_COUNT, POTIONS_COUNT);
 
         Level level = new Level(map);
-        Hero hero = level.heroes().get(0);
+        HeroSpot spot = level.heroesSpots().get(0);
         field = new Verland(dice, level, settings);
         listener = mock(EventListener.class);
-        dice(hero.getX(), hero.getY());
+        dice(spot.getX(), spot.getY());
         field.newGame(new Player(listener, settings));
     }
 
