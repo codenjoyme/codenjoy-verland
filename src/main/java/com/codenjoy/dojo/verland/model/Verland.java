@@ -105,7 +105,8 @@ public class Verland implements Field {
     }
 
     public boolean isFreeForContagion(Point pt) {
-        return !contagions().contains(pt)
+        return !pt.isOutOf(size())
+                && !contagions().contains(pt)
                 && !level.heroes().contains(pt)
                 && !walls().contains(pt);
     }

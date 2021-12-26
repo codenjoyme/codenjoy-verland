@@ -1236,9 +1236,37 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
+    public void shouldIncreaseNumberOfPotions_whenItLessThanNumberOfContagions() {
+        // given
+        settings().integer(POTIONS_COUNT, 2);
+        settings().integer(COUNT_CONTAGIONS, despiteLevel(100));
+
+        // when
+        // всю заразу за пределы поля,
+        // а значит ни одной не будет
+        dice(-1, -1);
+        givenFl("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼♥  ☼\n" +
+                "☼☼☼☼☼\n");
+
+        // then
+        assertEquals(8, settings().integer(POTIONS_COUNT));
+        assertEquals(8, settings().integer(COUNT_CONTAGIONS));
+        assertEquals(0, field().contagions().size());
+
+        assertF("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼♥  ☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    @Test
     public void shouldGenerateContagions_onlyInHiddenOrCleanCells_noPlaceForContagions() {
         // given
-        settings().integer(COUNT_CONTAGIONS, -100);
+        settings().integer(COUNT_CONTAGIONS, despiteLevel(100));
 
         // when
         givenFl("☼☼☼☼☼\n" +
@@ -1261,7 +1289,7 @@ public class GameTest extends AbstractGameTest {
     @Test
     public void shouldGenerateContagions_onlyInHiddenOrCleanCells_onlyOneCellForContagion_generatedUnderFog() {
         // given
-        settings().integer(COUNT_CONTAGIONS, -100);
+        settings().integer(COUNT_CONTAGIONS, despiteLevel(100));
 
         // when
         // все будет генерироваться в одной клетке,
@@ -1288,7 +1316,7 @@ public class GameTest extends AbstractGameTest {
     @Test
     public void shouldGenerateContagions_onlyInHiddenOrCleanCells_fillEverywhere() {
         // given
-        settings().integer(COUNT_CONTAGIONS, -100);
+        settings().integer(COUNT_CONTAGIONS, despiteLevel(100));
 
         // when
         // генерим по-всюду
@@ -1325,7 +1353,7 @@ public class GameTest extends AbstractGameTest {
     @Test
     public void shouldGenerateContagions_onlyInHiddenCells_onlyOneCellForContagion_generatedOnFreeCell() {
         // given
-        settings().integer(COUNT_CONTAGIONS, -1);
+        settings().integer(COUNT_CONTAGIONS, despiteLevel(1));
 
         // when
         dice(3, 3);

@@ -50,6 +50,8 @@ import static org.mockito.Mockito.when;
 
 public abstract class AbstractGameTest {
 
+    private static final int DESPITE_LEVEL = -1;
+
     private List<EventListener> listeners;
     private List<Game> games;
     private List<Player> players;
@@ -91,10 +93,11 @@ public abstract class AbstractGameTest {
         settings.setLevelMaps(levelNumber, maps);
         Level level = settings.level(levelNumber, dice);
 
-        if (settings.integer(COUNT_CONTAGIONS) < 0) {
-            // таким хитрым костыльным способом мы сообщаем, что будем игнорировать
-            // количество заражений на поле, и попробуем сгенерировать их генератором
-            settings.integer(COUNT_CONTAGIONS, - settings.integer(COUNT_CONTAGIONS));
+        if (isNegative(settings.integer(COUNT_CONTAGIONS))) {
+            // таким хитрым костыльным способом мы сообщаем, что будем
+            // игнорировать количество заражений на поле,
+            // и попробуем до-генерировать их генератором
+            settings.integer(COUNT_CONTAGIONS, Math.abs(settings.integer(COUNT_CONTAGIONS)));
         } else {
             settings.integer(COUNT_CONTAGIONS, level.contagions().size());
         }
@@ -103,6 +106,10 @@ public abstract class AbstractGameTest {
         level.heroes().forEach(this::givenPlayer);
 
         // other field preparation stuff
+    }
+
+    private boolean isNegative(int number) {
+        return number / Math.abs(number) == DESPITE_LEVEL;
     }
 
     protected void givenPlayer(Hero hero) {
@@ -118,6 +125,10 @@ public abstract class AbstractGameTest {
         dice(hero.getX(), hero.getY());
         game.on(field);
         game.newGame();
+    }
+
+    protected int despiteLevel(int countContagions) {
+        return DESPITE_LEVEL * countContagions;
     }
 
     public void assertEquals(Object expected, Object actual) {
