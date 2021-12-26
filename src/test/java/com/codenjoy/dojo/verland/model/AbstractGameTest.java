@@ -91,7 +91,13 @@ public abstract class AbstractGameTest {
         settings.setLevelMaps(levelNumber, maps);
         Level level = settings.level(levelNumber, dice);
 
-        settings.integer(COUNT_CONTAGIONS, level.contagions().size());
+        if (settings.integer(COUNT_CONTAGIONS) < 0) {
+            // таким хитрым костыльным способом мы сообщаем, что будем игнорировать
+            // количество заражений на поле, и попробуем сгенерировать их генератором
+            settings.integer(COUNT_CONTAGIONS, - settings.integer(COUNT_CONTAGIONS));
+        } else {
+            settings.integer(COUNT_CONTAGIONS, level.contagions().size());
+        }
 
         field = new Verland(dice, level, settings);
         level.heroes().forEach(this::givenPlayer);

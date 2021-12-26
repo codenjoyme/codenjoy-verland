@@ -25,6 +25,7 @@ package com.codenjoy.dojo.verland.model;
 
 import org.junit.Test;
 
+import static com.codenjoy.dojo.verland.services.GameSettings.Keys.COUNT_CONTAGIONS;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
 
 public class GameTest extends AbstractGameTest {
@@ -1231,6 +1232,117 @@ public class GameTest extends AbstractGameTest {
                 "☼  ♥☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldGenerateContagions_onlyInHiddenOrCleanCells_noPlaceForContagions() {
+        // given
+        settings().integer(COUNT_CONTAGIONS, -100);
+
+        // when
+        givenFl("☼☼☼☼☼\n" +
+                "☼☼☼☼☼\n" +
+                "☼☼☼☼☼\n" +
+                "☼♥☼☼☼\n" +
+                "☼☼☼☼☼\n");
+
+        // then
+        assertEquals(0, settings().integer(COUNT_CONTAGIONS));
+        assertEquals(0, field().contagions().size());
+
+        assertF("☼☼☼☼☼\n" +
+                "☼☼☼☼☼\n" +
+                "☼☼☼☼☼\n" +
+                "☼♥☼☼☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldGenerateContagions_onlyInHiddenOrCleanCells_onlyOneCellForContagion_generatedUnderFog() {
+        // given
+        settings().integer(COUNT_CONTAGIONS, -100);
+
+        // when
+        // все будет генерироваться в одной клетке,
+        // но реально только 1 инфекция там будет, остальные пропустим
+        dice(3, 3);
+
+        givenFl("☼☼☼☼☼\n" +
+                "☼  *☼\n" +
+                "☼   ☼\n" +
+                "☼♥  ☼\n" +
+                "☼☼☼☼☼\n");
+
+        // then
+        assertEquals(8, settings().integer(COUNT_CONTAGIONS));
+        assertEquals(1, field().contagions().size());
+
+        assertF("☼☼☼☼☼\n" +
+                "☼ 1*☼\n" +
+                "☼ 11☼\n" +
+                "☼♥  ☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldGenerateContagions_onlyInHiddenOrCleanCells_fillEverywhere() {
+        // given
+        settings().integer(COUNT_CONTAGIONS, -100);
+
+        // when
+        // генерим по-всюду
+        dice(
+            0, 0, // пробуем под стенкой
+            1, 1, // пробуем под героем
+            1, 2,
+            1, 3,
+            2, 1,
+            2, 2,
+            2, 3,
+            3, 1,
+            3, 3, // и под уже установленной в level инфекцией
+            3, 2
+        );
+
+        givenFl("☼☼☼☼☼\n" +
+                "☼ *o☼\n" +
+                "☼ **☼\n" +
+                "☼♥  ☼\n" +
+                "☼☼☼☼☼\n");
+
+        // then
+        assertEquals(8, settings().integer(COUNT_CONTAGIONS));
+        assertEquals(8, field().contagions().size());
+
+        assertF("☼☼☼☼☼\n" +
+                "☼4**☼\n" +
+                "☼5**☼\n" +
+                "☼♥54☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldGenerateContagions_onlyInHiddenCells_onlyOneCellForContagion_generatedOnFreeCell() {
+        // given
+        settings().integer(COUNT_CONTAGIONS, -1);
+
+        // when
+        dice(3, 3);
+        givenFl("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼♥  ☼\n" +
+                "☼☼☼☼☼\n");
+
+        // then
+        assertEquals(1, settings().integer(COUNT_CONTAGIONS));
+        assertEquals(1, field().contagions().size());
+
+        assertF("☼☼☼☼☼\n" +
+                "☼ 11☼\n" +
+                "☼ 11☼\n" +
+                "☼♥  ☼\n" +
                 "☼☼☼☼☼\n");
     }
 }

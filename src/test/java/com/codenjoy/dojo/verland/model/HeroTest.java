@@ -49,7 +49,6 @@ import static org.mockito.Mockito.when;
 public class HeroTest {
 
     private static final int CONTAGIONS_COUNT = 4;
-    private static final int BOARD_SIZE = 5;
     private static final int POTIONS_COUNT = 8;
 
     private Field field;

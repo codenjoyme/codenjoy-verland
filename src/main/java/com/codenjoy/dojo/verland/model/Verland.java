@@ -86,13 +86,16 @@ public class Verland implements Field {
     private void validateContagions() {
         Parameter<Integer> contagions = settings.integerValue(COUNT_CONTAGIONS);
         Parameter<Integer> potions = settings.integerValue(POTIONS_COUNT);
-        while (contagions.getValue() > ((size() - 1) * (size() - 1) - 1)) {
-            contagions.update(contagions.getValue() / 2);
-        }
 
-        if (potions.getValue() < contagions.getValue()) {
-            potions.update(contagions.getValue());
-        }
+        // размещать инфекции можно и под туманом и в чистых ячейках,
+        // кроме тех мест, где уже есть инфекции указанные в level
+        contagions.update(Math.min(contagions.getValue(),
+                level.hidden().size() + level.clear().size() + level.contagions().size()));
+
+        // зелья должно быть достаточно в любом случае на все инфекции,
+        // но может быть и больше
+        potions.update(Math.max(potions.getValue(),
+                contagions.getValue()));
     }
 
     @Override
@@ -103,6 +106,7 @@ public class Verland implements Field {
 
     public boolean isFreeForContagion(Point pt) {
         return !contagions().contains(pt)
+                && !level.heroes().contains(pt)
                 && !walls().contains(pt);
     }
 
