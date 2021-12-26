@@ -279,7 +279,13 @@ public class GameTest extends AbstractGameTest {
                 "☼ 11☼\n" +
                 "☼☼☼☼☼\n");
 
+        assertDie();
+    }
+
+    private void assertDie() {
         assertEquals(true, hero().isGameOver());
+        assertEquals(true, player().shouldLeave());
+        assertEquals(false, hero().isAlive());
     }
 
     @Test
@@ -306,7 +312,7 @@ public class GameTest extends AbstractGameTest {
                 "☼ 11☼\n" +
                 "☼☼☼☼☼\n");
 
-        assertEquals(true, game().isGameOver());
+        assertDie();
     }
 
     @Test
@@ -328,7 +334,7 @@ public class GameTest extends AbstractGameTest {
                 "☼ xo☼\n" +
                 "☼☼☼☼☼\n");
 
-        assertEquals(true, game().isGameOver());
+        assertDie();
     }
 
     @Test
@@ -876,8 +882,7 @@ public class GameTest extends AbstractGameTest {
 
         verifyAllEvents("[SUICIDE]");
 
-        assertEquals(true, game().isGameOver());
-        assertEquals(false, hero().isAlive());
+        assertDie();
 
         field().newGame(player());
         tick();

@@ -41,4 +41,9 @@ public class Player extends GamePlayer<Hero, Field> {
         hero.setPlayer(this); // TODO refactor like clifford/molly
         return hero;
     }
+
+    @Override
+    public boolean shouldLeave() {
+        return !hero.isAlive();
+    }
 }
