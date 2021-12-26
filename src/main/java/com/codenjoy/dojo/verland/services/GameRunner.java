@@ -58,14 +58,14 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public GameField createGame(int levelNumber, GameSettings settings) {
-        Level level = settings.level(levelNumber, getDice());
+        Level level = settings.level(levelNumber, getDice(), Level::new);
         return new Verland(getDice(), level, settings);
     }
 
     @Override
     public Parameter<Integer> getBoardSize(GameSettings settings) {
         // TODO точно так норм, левел вернется рендомный, а что если они будут разного размера?
-        return v(settings.level(LevelProgress.levelsStartsFrom1, getDice()).size());
+        return v(settings.level(LevelProgress.levelsStartsFrom1, getDice(), Level::new).size());
     }
 
     @Override

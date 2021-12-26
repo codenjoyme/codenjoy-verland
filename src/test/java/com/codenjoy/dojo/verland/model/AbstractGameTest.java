@@ -92,7 +92,7 @@ public abstract class AbstractGameTest {
     public void givenFl(String... maps) {
         int levelNumber = LevelProgress.levelsStartsFrom1;
         settings.setLevelMaps(levelNumber, maps);
-        Level level = settings.level(levelNumber, dice);
+        Level level = settings.level(levelNumber, dice, Level::new);
 
         if (isNegative(settings.integer(COUNT_CONTAGIONS))) {
             // таким хитрым костыльным способом мы сообщаем, что будем

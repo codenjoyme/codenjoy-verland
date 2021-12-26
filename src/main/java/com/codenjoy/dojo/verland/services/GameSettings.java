@@ -23,12 +23,10 @@ package com.codenjoy.dojo.verland.services;
  */
 
 
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.services.settings.AllSettings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
-import com.codenjoy.dojo.verland.model.Level;
 
 import java.util.Arrays;
 import java.util.List;
@@ -85,10 +83,6 @@ public class GameSettings extends SettingsImpl implements AllSettings<GameSettin
         integer(FORGOT_POTION_PENALTY, -2);
 
         Levels.setup(this);
-    }
-
-    public Level level(int level, Dice dice) {
-        return new Level(getRandomLevelMap(level, dice));
     }
 
     public Calculator<Void> calculator() {
