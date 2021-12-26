@@ -1254,7 +1254,8 @@ public class GameTest extends AbstractGameTest {
 
         // then
         assertEquals(8, settings().integer(POTIONS_COUNT));
-        assertEquals(8, settings().integer(COUNT_CONTAGIONS));
+        // в тесте ни одной инфекции не получилось поставить на поле
+        assertEquals(0, settings().integer(COUNT_CONTAGIONS));
         assertEquals(0, field().contagions().size());
 
         assertF("☼☼☼☼☼\n" +
@@ -1304,7 +1305,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼\n");
 
         // then
-        assertEquals(8, settings().integer(COUNT_CONTAGIONS));
+        assertEquals(1, settings().integer(COUNT_CONTAGIONS));
         assertEquals(1, field().contagions().size());
 
         assertF("☼☼☼☼☼\n" +

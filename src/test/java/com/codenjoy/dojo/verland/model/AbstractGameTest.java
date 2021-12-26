@@ -62,6 +62,7 @@ public abstract class AbstractGameTest {
     private Verland field;
     private GameSettings settings;
     private EventsListenersAssert events;
+    private Level level;
 
     @Before
     public void setup() {
@@ -92,8 +93,21 @@ public abstract class AbstractGameTest {
     public void givenFl(String... maps) {
         int levelNumber = LevelProgress.levelsStartsFrom1;
         settings.setLevelMaps(levelNumber, maps);
-        Level level = settings.level(levelNumber, dice, Level::new);
+        level = settings.level(levelNumber, dice, Level::new);
 
+        beforeCreateField();
+
+        field = new Verland(dice, level, settings);
+        level.heroesSpots().forEach(this::givenPlayer);
+
+        afterCreateField();
+    }
+
+    private void afterCreateField() {
+        settings.integer(COUNT_CONTAGIONS, field.contagions().size());
+    }
+
+    private void beforeCreateField() {
         if (isNegative(settings.integer(COUNT_CONTAGIONS))) {
             // таким хитрым костыльным способом мы сообщаем, что будем
             // игнорировать количество заражений на поле,
@@ -102,11 +116,6 @@ public abstract class AbstractGameTest {
         } else {
             settings.integer(COUNT_CONTAGIONS, level.contagions().size());
         }
-
-        field = new Verland(dice, level, settings);
-        level.heroesSpots().forEach(this::givenPlayer);
-
-        // other field preparation stuff
     }
 
     private boolean isNegative(int number) {
