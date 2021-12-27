@@ -27,15 +27,16 @@ import com.codenjoy.dojo.games.verland.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.verland.model.Player;
 
-public class Wall extends PointImpl implements State<Element, Object> {
+public class Wall extends PointImpl implements State<Element, Player> {
 
     public Wall(Point pt) {
         super(pt);
     }
 
     @Override
-    public Element state(Object player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         return Element.PATHLESS;
     }
 }

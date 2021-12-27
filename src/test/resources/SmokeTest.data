@@ -3892,7 +3892,7 @@
 196: 1:
 196: 1:Scores: 290
 196: 1:Answer: STOP
-196: 1:PLAYER_GAME_OVER -> REMOVE_FROM_GAME
+196: 1:PLAYER_WIN -> REMOVE_FROM_GAME
 ------------------------------------------
 197: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 197: 1:☼*************☼
@@ -7516,7 +7516,7 @@
 378: 1:
 378: 1:Scores: 574
 378: 1:Answer: STOP
-378: 1:PLAYER_GAME_OVER -> REMOVE_FROM_GAME
+378: 1:PLAYER_WIN -> REMOVE_FROM_GAME
 ------------------------------------------
 379: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 379: 1:☼*************☼
@@ -11375,7 +11375,7 @@
 572: 1:
 572: 1:Scores: 865
 572: 1:Answer: STOP
-572: 1:PLAYER_GAME_OVER -> REMOVE_FROM_GAME
+572: 1:PLAYER_WIN -> REMOVE_FROM_GAME
 ------------------------------------------
 573: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 573: 1:☼*************☼
@@ -14942,7 +14942,7 @@
 751: 1:
 751: 1:Scores: 1149
 751: 1:Answer: STOP
-751: 1:PLAYER_GAME_OVER -> REMOVE_FROM_GAME
+751: 1:PLAYER_WIN -> REMOVE_FROM_GAME
 ------------------------------------------
 752: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 752: 1:☼*************☼
@@ -19205,7 +19205,7 @@
 966: 1:
 966: 1:Scores: 1432
 966: 1:Answer: STOP
-966: 1:PLAYER_GAME_OVER -> REMOVE_FROM_GAME
+966: 1:PLAYER_WIN -> REMOVE_FROM_GAME
 ------------------------------------------
 967: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 967: 1:☼*************☼

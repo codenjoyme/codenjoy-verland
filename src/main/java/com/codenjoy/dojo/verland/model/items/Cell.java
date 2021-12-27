@@ -62,14 +62,14 @@ public class Cell extends PointImpl implements Fieldable<Field>, State<Element, 
 
     @Override
     public Element state(Player player, Object... alsoAtPoint) {
-        if (clean || (player.getHero() != null && player.getHero().isGameOver())) {
-            int count = field.contagionsNear(this);
-            return count == 0
-                    ? Element.CLEAR
-                    : Element.valueOf(count);
+        if (!clean && !player.getHero().isGameOver()) {
+            return Element.HIDDEN;
         }
 
-        return Element.HIDDEN;
+        int count = field.contagionsNear(this);
+        return count == 0
+                ? Element.CLEAR
+                : Element.valueOf(count);
     }
 
     public boolean isClean() {

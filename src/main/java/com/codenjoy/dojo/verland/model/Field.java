@@ -24,6 +24,7 @@ package com.codenjoy.dojo.verland.model;
 
 
 import com.codenjoy.dojo.services.field.Accessor;
+import com.codenjoy.dojo.services.round.RoundGameField;
 import com.codenjoy.dojo.verland.model.items.*;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -31,26 +32,21 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 
 import java.util.List;
 
-public interface Field extends GameField<Player> {
+public interface Field extends RoundGameField<Player> {
 
     boolean isFree(Point pt);
+
+    boolean isContagionsExists();
 
     int size();
 
     void cure(Hero hero, Direction direction);
 
-    // TODO тут не точно
-    Hero hero();
-
     Contagion tryCreateContagion(Point cell);
-
-    boolean isContagion(Point pt);
 
     int contagionsNear(Point pt);
 
     Accessor<Contagion> contagions();
-
-    void openAllBoard();
 
     Accessor<Cell> cells();
 

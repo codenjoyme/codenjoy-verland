@@ -28,15 +28,21 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.verland.model.Field;
+import com.codenjoy.dojo.verland.model.Player;
 
-public class Cured extends PointImpl implements State<Element, Object> {
+public class Cured extends PointImpl implements State<Element, Player> {
 
     public Cured(Point pt) {
         super(pt);
     }
 
     @Override
-    public Element state(Object player, Object... alsoAtPoint) {
-        return Element.HERO_HEALING;
+    public Element state(Player player, Object... alsoAtPoint) {
+        if (player.getHero().isGameOver()) {
+            return Element.HERO_HEALING;
+        }
+
+        // ничего не рисуем, даем возможность другим отрисоваться
+        return null;
     }
 }

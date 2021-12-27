@@ -24,11 +24,12 @@ package com.codenjoy.dojo.verland.services;
 
 
 public enum Event {
+    START_ROUND,
+    WIN,
     GOT_INFECTED,
     CURE,
     FORGOT_POTION,
     NO_MORE_POTIONS,
     CLEAN_AREA,
-    WIN,
     SUICIDE
 }

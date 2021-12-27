@@ -63,6 +63,7 @@ public class SmokeTest {
             assertEquals(false, actual.contains(Event.FORGOT_POTION.name()));
         };
 
+        smoke.settings().removeWhenWin(true);
         smoke.settings().removeWhenGameOver(true);
         smoke.settings().reloadPlayersWhenGameOverAll(true);
         smoke.settings().increaseLevelAfterReload(false);
@@ -114,6 +115,7 @@ public class SmokeTest {
             assertEquals(true, actual.contains(Event.SUICIDE.name()));
         };
 
+        smoke.settings().removeWhenWin(true);
         smoke.settings().removeWhenGameOver(true);
         smoke.settings().reloadPlayersWhenGameOverAll(true);
         smoke.settings().increaseLevelAfterReload(true);

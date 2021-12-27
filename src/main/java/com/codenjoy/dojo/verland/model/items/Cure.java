@@ -27,15 +27,16 @@ import com.codenjoy.dojo.games.verland.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.verland.model.Player;
 
-public class Cure extends PointImpl implements State<Element, Object> {
+public class Cure extends PointImpl implements State<Element, Player> {
 
     public Cure(Point pt) {
         super(pt);
     }
 
     @Override
-    public Element state(Object player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         return Element.HERO_CURE;
     }
 }

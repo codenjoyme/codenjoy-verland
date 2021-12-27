@@ -23,6 +23,7 @@ package com.codenjoy.dojo.verland.model;
  */
 
 
+import com.codenjoy.dojo.verland.model.items.Contagion;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -282,12 +283,6 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼\n");
 
         assertDie();
-    }
-
-    private void assertDie() {
-        assertEquals(true, hero().isGameOver());
-        assertEquals(true, player().shouldLeave());
-        assertEquals(false, hero().isAlive());
     }
 
     @Test
@@ -594,7 +589,7 @@ public class GameTest extends AbstractGameTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        assertStillNotWin();
+        assertNotWin();
     }
 
     @Test
@@ -632,7 +627,7 @@ public class GameTest extends AbstractGameTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        assertStillNotWin();
+        assertNotWin();
     }
 
     @Test
@@ -662,6 +657,8 @@ public class GameTest extends AbstractGameTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
+        assertPotions(3);
+
         cureDown();
 
         assertF("☼☼☼☼☼\n" +
@@ -670,7 +667,11 @@ public class GameTest extends AbstractGameTest {
                 "☼*!*☼\n" +
                 "☼☼☼☼☼\n");
 
-        assertStillNotWin();
+        assertNotWin();
+    }
+
+    private void assertPotions(int expected) {
+        assertEquals(expected, hero().potions().charge());
     }
 
     @Test
@@ -680,6 +681,8 @@ public class GameTest extends AbstractGameTest {
                 "☼o♥*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
+
+        assertPotions(3);
 
         cureLeft();
 
@@ -692,10 +695,6 @@ public class GameTest extends AbstractGameTest {
         assertWin();
     }
 
-    private void assertWin() {
-        assertEquals(true, hero().isWin());
-    }
-
     @Test
     public void shouldCureOnEmptySpace_whenContagionAtLeft() {
         givenFl("☼☼☼☼☼\n" +
@@ -703,6 +702,8 @@ public class GameTest extends AbstractGameTest {
                 "☼*♥o☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
+
+        assertPotions(3);
 
         cureLeft();
 
@@ -712,7 +713,7 @@ public class GameTest extends AbstractGameTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        assertStillNotWin();
+        assertNotWin();
     }
 
     @Test
@@ -725,6 +726,8 @@ public class GameTest extends AbstractGameTest {
                 "☼ooo☼\n" +
                 "☼☼☼☼☼\n");
 
+        assertPotions(8);
+
         cureLeft();
         cureDown();
         cureRight();
@@ -736,7 +739,7 @@ public class GameTest extends AbstractGameTest {
                 "☼*!*☼\n" +
                 "☼☼☼☼☼\n");
 
-        assertStillNotWin();
+        assertNotWin();
 
         moveUp();
         cureLeft();
@@ -748,7 +751,7 @@ public class GameTest extends AbstractGameTest {
                 "☼*!*☼\n" +
                 "☼☼☼☼☼\n");
 
-        assertStillNotWin();
+        assertNotWin();
 
         moveDown();
         moveDown();
@@ -778,6 +781,8 @@ public class GameTest extends AbstractGameTest {
                 "☼*o*☼\n" +
                 "☼♥**☼\n" +
                 "☼☼☼☼☼\n");
+
+        assertPotions(3);
 
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
@@ -821,10 +826,6 @@ public class GameTest extends AbstractGameTest {
     private void moveUp() {
         hero().up();
         tick();
-    }
-
-    private void assertStillNotWin() {
-        assertEquals(false, hero().isWin());
     }
 
     private void cureUp() {
@@ -878,7 +879,7 @@ public class GameTest extends AbstractGameTest {
 
         assertF("☼☼☼☼☼\n" +
                 "☼ 11☼\n" +
-                "☼ ♥o☼\n" +
+                "☼ Xo☼\n" +
                 "☼ 11☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -946,13 +947,13 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldFireEvent_whenNoMoreCharge() {
-        settings().integer(POTIONS_COUNT, 3);
-
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼o**☼\n" +
                 "☼☼☼☼☼\n");
+
+        assertPotions(3);
 
         cureDown();
 
@@ -974,7 +975,7 @@ public class GameTest extends AbstractGameTest {
 
         assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
-                "☼!♥!☼\n" +
+                "☼!X!☼\n" +
                 "☼o! ☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -994,6 +995,8 @@ public class GameTest extends AbstractGameTest {
                 "☼o♥o☼\n" +
                 "☼*o*☼\n" +
                 "☼☼☼☼☼\n");
+
+        assertPotions(4);
 
         cureRight();
         cureLeft();
@@ -1017,6 +1020,8 @@ public class GameTest extends AbstractGameTest {
                 "☼o*o☼\n" +
                 "☼☼☼☼☼\n");
 
+        assertPotions(4);
+
         cureRight();
         cureLeft();
         cureDown();
@@ -1024,7 +1029,7 @@ public class GameTest extends AbstractGameTest {
 
         assertF("☼☼☼☼☼\n" +
                 "☼o!o☼\n" +
-                "☼!♥!☼\n" +
+                "☼!X!☼\n" +
                 "☼o!o☼\n" +
                 "☼☼☼☼☼\n");
     }
@@ -1039,12 +1044,14 @@ public class GameTest extends AbstractGameTest {
                 "☼**o☼\n" +
                 "☼☼☼☼☼\n");
 
+        assertPotions(2);
+
         cureRight();
         cureLeft();
 
         assertF("☼☼☼☼☼\n" +
                 "☼ 1o☼\n" +
-                "☼!♥!☼\n" +
+                "☼!X!☼\n" +
                 "☼ 1o☼\n" +
                 "☼☼☼☼☼\n");
     }
@@ -1059,12 +1066,14 @@ public class GameTest extends AbstractGameTest {
                 "☼**o☼\n" +
                 "☼☼☼☼☼\n");
 
+        assertPotions(2);
+
         cureLeft();
         cureDown();
 
         assertF("☼☼☼☼☼\n" +
                 "☼ 1o☼\n" +
-                "☼!♥2☼\n" +
+                "☼!X2☼\n" +
                 "☼ !o☼\n" +
                 "☼☼☼☼☼\n");
     }
@@ -1076,6 +1085,8 @@ public class GameTest extends AbstractGameTest {
                 "☼o♥o☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
+
+        assertPotions(3);
 
         cureRight();
 
@@ -1095,6 +1106,8 @@ public class GameTest extends AbstractGameTest {
                 "☼o♥*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
+
+        assertPotions(3);
 
         cureLeft();
 
@@ -1129,7 +1142,7 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldCantGoOnBoard() {
+    public void shouldCantGo_whenGoToBorder() {
         givenFl("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
@@ -1180,35 +1193,35 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldCantCureOnBoard() {
+    public void shouldCantCure_whenCureBorder() {
         givenFl("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
-                "☼   ☼\n" +
+                "☼ o ☼\n" +
                 "☼♥  ☼\n" +
                 "☼☼☼☼☼\n");
 
         assertF("☼☼☼☼☼\n" +
-                "☼   ☼\n" +
-                "☼   ☼\n" +
-                "☼♥  ☼\n" +
+                "☼111☼\n" +
+                "☼1*1☼\n" +
+                "☼♥11☼\n" +
                 "☼☼☼☼☼\n");
 
         cureLeft();
         verifyAllEvents("");
 
         assertF("☼☼☼☼☼\n" +
-                "☼   ☼\n" +
-                "☼   ☼\n" +
-                "☼♥  ☼\n" +
+                "☼111☼\n" +
+                "☼1*1☼\n" +
+                "☼♥11☼\n" +
                 "☼☼☼☼☼\n");
 
         cureDown();
         verifyAllEvents("");
 
         assertF("☼☼☼☼☼\n" +
-                "☼   ☼\n" +
-                "☼   ☼\n" +
-                "☼♥  ☼\n" +
+                "☼111☼\n" +
+                "☼1*1☼\n" +
+                "☼♥11☼\n" +
                 "☼☼☼☼☼\n");
 
         moveRight();
@@ -1218,9 +1231,9 @@ public class GameTest extends AbstractGameTest {
         verifyAllEvents("");
 
         assertF("☼☼☼☼☼\n" +
-                "☼   ☼\n" +
-                "☼   ☼\n" +
-                "☼  ♥☼\n" +
+                "☼111☼\n" +
+                "☼1*1☼\n" +
+                "☼11♥☼\n" +
                 "☼☼☼☼☼\n");
 
         moveUp();
@@ -1230,10 +1243,79 @@ public class GameTest extends AbstractGameTest {
         verifyAllEvents("");
 
         assertF("☼☼☼☼☼\n" +
-                "☼  ♥☼\n" +
-                "☼   ☼\n" +
-                "☼   ☼\n" +
+                "☼11♥☼\n" +
+                "☼1*1☼\n" +
+                "☼111☼\n" +
                 "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldWin_whenBoardWithoutContagions() {
+        givenFl("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼♥  ☼\n" +
+                "☼☼☼☼☼\n");
+
+        moveRight();
+
+        assertF("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼ ♥ ☼\n" +
+                "☼☼☼☼☼\n");
+
+        verifyAllEvents("[WIN]");
+
+        assertWin();
+
+        // это сделается в ответ на shouldLeave
+        game().newGame();
+
+        // добавляем заразу чтобы не было снова геймовера
+        field().contagions().add(new Contagion(pt(3, 3)));
+
+        assertF("☼☼☼☼☼\n" +
+                "☼ 11☼\n" +
+                "☼ 11☼\n" +
+                "☼♥  ☼\n" +
+                "☼☼☼☼☼\n");
+
+        verifyAllEvents("");
+
+        assertEquals(false, hero().isWin());
+        assertEquals(false, hero().isGameOver());
+        assertEquals(true, hero().isAlive());
+        assertEquals(true, hero().isActive());
+        // true тут просто потому, что тесты не пересоздают player как это делает Deals
+        assertEquals(true, player().shouldLeave());
+    }
+
+    private void assertWin() {
+        assertEquals(true, hero().isWin());
+        assertEquals(true, hero().isGameOver());
+        assertEquals(true, hero().isAlive());
+        assertEquals(true, hero().isActive());
+        assertEquals(true, player().shouldLeave());
+    }
+
+    private void assertNotWin() {
+        assertEquals(false, hero().isWin());
+        assertEquals(false, hero().isGameOver());
+        assertEquals(true, hero().isAlive());
+        assertEquals(true, hero().isActive());
+        assertEquals(false, player().shouldLeave());
+    }
+
+    private void assertDie() {
+        assertEquals(false, hero().isWin());
+        assertEquals(true, hero().isGameOver());
+        assertEquals(false, hero().isAlive());
+        assertEquals(true, hero().isActive());
+        // тут false потому что Single.isGameOver = true и так будет обновление борды,
+        // а shouldLeave надо делать, когда на поле не умер игрок, но выиграл и больше
+        // ему тут делать нечего
+        assertEquals(false, player().shouldLeave());
     }
 
     @Test

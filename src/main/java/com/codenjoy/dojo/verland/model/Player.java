@@ -26,24 +26,43 @@ package com.codenjoy.dojo.verland.model;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.round.RoundGamePlayer;
 import com.codenjoy.dojo.verland.services.GameSettings;
 
-public class Player extends GamePlayer<Hero, Field> {
+public class Player extends RoundGamePlayer<Hero, Field> {
+
+    private Calculator<Void> calculator;
 
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
+        calculator = settings.calculator();
+    }
+
+    @Override
+    public void start(int round, Object startEvent) {
+        super.start(round, startEvent);
+        hero.clearScores();
+    }
+
+    @Override
+    public boolean isWin() {
+        return hero.isWin();
+    }
+
+    @Override
+    public void event(Object event) {
+        hero.addScore(calculator.score(event));
+        super.event(event);
     }
 
     @Override
     public Hero createHero(Point pt) {
-        Hero hero = new Hero(pt);
-        hero.setPlayer(this); // TODO refactor like clifford/molly
-        return hero;
+        return new Hero(pt);
     }
 
-    @Override
-    public boolean shouldLeave() {
-        return !hero.isAlive();
+    private GameSettings settings() {
+        return (GameSettings) settings;
     }
 }

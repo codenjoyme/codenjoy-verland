@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.field.Accessor;
 import com.codenjoy.dojo.services.field.PointField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.round.RoundField;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.verland.model.items.*;
 import com.codenjoy.dojo.verland.services.Event;
@@ -38,14 +39,13 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 import static com.codenjoy.dojo.services.field.Generator.generate;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.COUNT_CONTAGIONS;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
 import static java.util.stream.Collectors.toList;
 
-public class Verland implements Field {
+public class Verland extends RoundField<Player> implements Field {
 
     private Level level;
     private PointField field;
@@ -53,12 +53,9 @@ public class Verland implements Field {
     private Dice dice;
     private GameSettings settings;
 
-    private int maxScore;
-    private int score;
-
-    private Player player;
-
     public Verland(Dice dice, Level level, GameSettings settings) {
+        super(Event.START_ROUND, Event.WIN, settings);
+
         this.level = level;
         this.dice = dice;
         this.settings = settings;
@@ -73,10 +70,48 @@ public class Verland implements Field {
         level.saveTo(field);
         field.init(this);
 
-        maxScore = 0;
-        score = 0;
-
         generateAll();
+
+        super.clearScore();
+    }
+
+    @Override
+    protected void onAdd(Player player) {
+        player.newHero(this);
+    }
+
+    @Override
+    protected void onRemove(Player player) {
+        heroes().removeExact(player.getHero());
+    }
+
+    @Override
+    protected List<Player> players() {
+        return players;
+    }
+
+    @Override
+    protected void tickField() {
+        heroes().forEach(Hero::tick);
+
+        if (!isContagionsExists()) {
+            if (!settings().isRoundsEnabled()) {
+                players.forEach(player -> {
+                    player.event(Event.WIN);
+                    player.leaveBoard();
+                });
+            }
+        }
+    }
+
+    @Override
+    public boolean isContagionsExists() {
+        return contagions().size() > 0;
+    }
+
+    @Override
+    public int size() {
+        return field.size();
     }
 
     private void generateAll() {
@@ -97,6 +132,12 @@ public class Verland implements Field {
         // но может быть и больше
         potions.update(Math.max(potions.getValue(),
                 contagions.getValue()));
+    }
+
+    private void generateContagions() {
+        generate(contagions(), settings, COUNT_CONTAGIONS,
+                this::freeRandomForContagions,
+                Contagion::new);
     }
 
     @Override
@@ -126,72 +167,6 @@ public class Verland implements Field {
 
     private Optional<Point> freeRandomForContagions(GamePlayer player) {
         return BoardUtils.freeRandom(size(), dice, this::isFreeForContagion);
-    }
-
-    private void generateContagions() {
-        generate(contagions(), settings, COUNT_CONTAGIONS,
-                this::freeRandomForContagions,
-                Contagion::new);
-    }
-
-    @Override
-    public int size() {
-        return field.size();
-    }
-
-    @Override
-    public boolean isContagion(Point pt) {
-        return contagions().contains(pt);
-    }
-
-    @Override
-    public BoardReader<Player> reader() {
-        // TODO может как-то по другому исключать объекты из отрисовки при gameOver?
-        Function function = (Object player) -> {
-            if (Verland.this.isGameOver()) {
-                return new Class[]{
-                        Hero.class,
-                        Wall.class,
-                        Contagion.class,
-                        Cured.class,
-                        Cure.class,
-                        Cell.class};
-            } else {
-                return new Class[]{
-                        Hero.class,
-                        Wall.class,
-                        Cure.class,
-                        Cell.class};
-            }
-        };
-        return field.reader(function);
-    }
-
-    // TODO удалить метод, когда полноценно будут юзеры
-    private boolean isGameOver() {
-        return hero() == null || hero().isGameOver();
-    }
-
-    // TODO удалить метод, когда полноценно будут юзеры
-    @Override
-    public Hero hero() {
-        List<Hero> heroes = heroes().all();
-        return (heroes.isEmpty()) ? null : heroes.get(0);
-    }
-
-    @Override
-    public void newGame(Player player) {
-        remove(player);
-        this.player = player;
-        player.newHero(this);
-    }
-
-    @Override
-    public void remove(Player player) {
-        this.player = null;
-        if (player.getHero() != null) {
-            heroes().removeExact(player.getHero());
-        }
     }
 
     @Override
@@ -228,47 +203,41 @@ public class Verland implements Field {
         hero.tryToCure(() -> {
             cures().add(new Cure(to));
             if (contagions().contains(to)) {
-                removeContagion(to);
+                removeContagion(hero, to);
             } else {
-                player.event(Event.FORGOT_POTION);
+                hero.getPlayer().event(Event.FORGOT_POTION);
             }
         });
 
-        if (hero.isNoPotionsButPresentContagions()) {
-            openAllBoard();
-            player.event(Event.NO_MORE_POTIONS);
+        if (isContagionsExists() && hero.noMorePotions()) {
+            hero.getPlayer().event(Event.NO_MORE_POTIONS);
         }
     }
 
-    private void removeContagion(Point pt) {
+    private void removeContagion(Hero hero, Point pt) {
         cured().add(new Cured(pt));
         contagions().removeAt(pt);
-        increaseScore();
+        Player player = hero.getPlayer();
         player.event(Event.CURE);
-        if (contagions().size() == 0) {
-            openAllBoard();
-            player.event(Event.WIN);
+        if (isContagionsExists()) {
+            return;
         }
-    }
-
-    @Override
-    public void openAllBoard() {
-        cells().forEach(Cell::open);
-    }
-
-    private void increaseScore() {
-        score++;
-        maxScore = Math.max(score, maxScore);
-    }
-
-    @Override
-    public void tick() {
-        heroes().forEach(Hero::tick);
     }
 
     @Override
     public GameSettings settings() {
         return settings;
+    }
+
+    @Override
+    public BoardReader<Player> reader() {
+        return field.reader(
+                Hero.class,
+                Wall.class,
+                Contagion.class,
+                Cured.class,
+                Cure.class,
+                Cell.class);
     }
 
     @Override

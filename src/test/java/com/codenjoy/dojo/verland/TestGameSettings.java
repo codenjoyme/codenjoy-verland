@@ -24,6 +24,7 @@ package com.codenjoy.dojo.verland;
 
 import com.codenjoy.dojo.verland.services.GameSettings;
 
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.*;
 
 public class TestGameSettings extends GameSettings {
@@ -32,6 +33,7 @@ public class TestGameSettings extends GameSettings {
      * Here you can override the settings for all tests.
      */
     public TestGameSettings() {
+        bool(ROUNDS_ENABLED, false);
         integer(WIN_SCORE, 30);
         integer(GOT_INFECTED_PENALTY, -10);
         integer(SUICIDE_PENALTY, -11);

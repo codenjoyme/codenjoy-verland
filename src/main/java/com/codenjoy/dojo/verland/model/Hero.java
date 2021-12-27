@@ -27,27 +27,32 @@ import com.codenjoy.dojo.games.verland.Element;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.services.round.RoundGamePlayer;
+import com.codenjoy.dojo.services.round.RoundPlayerHero;
 import com.codenjoy.dojo.verland.model.items.Cell;
-import com.codenjoy.dojo.verland.services.Event;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.verland.services.Event.SUICIDE;
+import static com.codenjoy.dojo.games.verland.Element.*;
+import static com.codenjoy.dojo.games.verland.Element.ENEMY_HERO;
+import static com.codenjoy.dojo.games.verland.Element.HERO;
+import static com.codenjoy.dojo.games.verland.Element.OTHER_HERO;
+import static com.codenjoy.dojo.services.StateUtils.filter;
+import static com.codenjoy.dojo.verland.services.Event.*;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
 
-public class Hero extends PlayerHero<Field> implements State<Element, Object> {
+public class Hero extends RoundPlayerHero<Field> implements State<Element, Player> {
 
-    private boolean isDead = false;
+    private int score;
     private Potions potions;
     private Direction direction;
     private boolean cure;
-    private Player player;
-    private int turnCount;
 
     public Hero(Point pt) {
         super(pt);
+        score = 0;
         cure = false;
+        direction = null;
     }
 
     @Override
@@ -58,21 +63,97 @@ public class Hero extends PlayerHero<Field> implements State<Element, Object> {
         recharge();
     }
 
-    public boolean isDead() {
-        return isDead;
-    }
-
-    public void die() {
-        isDead = true;
+    @Override
+    public void down() {
+        if (!isActiveAndAlive()) return;
+        
+        direction = Direction.DOWN;
     }
 
     @Override
-    public boolean isAlive() {
-        return !isDead() &&
-                !isNoPotionsButPresentContagions() &&
-                !isWin();
+    public void up() {
+        if (!isActiveAndAlive()) return;
+        
+        direction = Direction.UP;
     }
-    
+
+    @Override
+    public void left() {
+        if (!isActiveAndAlive()) return;
+        
+        direction = Direction.LEFT;
+    }
+
+    @Override
+    public void right() {
+        if (!isActiveAndAlive()) return;
+        
+        direction = Direction.RIGHT;
+    }
+
+    @Override
+    public void act(int... p) {
+        if (!isActiveAndAlive()) return;
+        
+        if (p.length == 0) {
+            cure = true;
+            return;
+        }
+
+        if (p.length == 1 && p[0] == 0) {
+            die(SUICIDE);
+            return;
+        }
+    }
+
+    @Override
+    public void die() {
+        if (isWin()) {
+            return;
+        }
+        die(GOT_INFECTED);
+    }
+
+    @Override
+    public void tick() {
+        if (direction == null) {
+            return;
+        }
+
+        if (cure) {
+            field.cure(this, direction);
+            cure = false;
+        } else {
+            moveTo(direction);
+        }
+
+        direction = null;
+    }
+
+    @Override
+    public Player getPlayer() {
+        return (Player) super.getPlayer();
+    }
+
+    @Override
+    public int scores() {
+        return score;
+    }
+
+    public void clearScores() {
+        score = 0;
+    }
+
+    public void addScore(int added) {
+        score = Math.max(0, score + added);
+    }
+
+//    @Override
+//    public boolean isAlive() {
+//        return super.isAlive() &&
+//                !isNoPotionsButPresentContagions();
+//    }
+
     private void cure() {
         if (potions.charge() > 0) {
             potions.useMe();
@@ -103,85 +184,19 @@ public class Hero extends PlayerHero<Field> implements State<Element, Object> {
         return potions;
     }
 
-    @Override
-    public Element state(Object player, Object... alsoAtPoint) {
-        if (field.isContagion(this)) {
-            return Element.HERO_DEAD;
-        } else {
-            return Element.HERO;
-        }
-    }
-
-    @Override
-    public void down() {
-        direction = Direction.DOWN;
-    }
-
-    @Override
-    public void up() {
-        direction = Direction.UP;
-    }
-
-    @Override
-    public void left() {
-        direction = Direction.LEFT;
-    }
-
-    @Override
-    public void right() {
-        direction = Direction.RIGHT;
-    }
-
-    @Override
-    public void act(int... p) {
-        if (p.length == 0) {
-            cure = true;
-            return;
-        }
-
-        if (p.length == 1 && p[0] == 0) {
-            player.event(SUICIDE);
-            die();
-            return;
-        }
-    }
-
-    @Override
-    public void tick() {
-        if (direction == null) {
-            return;
-        }
-
-        if (cure) {
-            field.cure(this, direction);
-            cure = false;
-        } else {
-            moveTo(direction);
-        }
-
-        direction = null;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
     public void moveTo(Direction direction) {
         if (!canMove(direction)) {
             return;
         }
 
         boolean cleaned = moveMe(direction);
-        if (field.isContagion(this)) {
-            die();
-            field.openAllBoard();
-            player.event(Event.GOT_INFECTED);
+        if (field.contagions().contains(this)) {
+            die(GOT_INFECTED);
         } else {
             if (cleaned) {
-                player.event(Event.CLEAN_AREA);
+                getPlayer().event(CLEAN_AREA);
             }
         }
-        nextTurn();
     }
 
     private boolean canMove(Direction direction) {
@@ -189,25 +204,14 @@ public class Hero extends PlayerHero<Field> implements State<Element, Object> {
         return !field.walls().contains(to);
     }
 
-    private void nextTurn() {
-        turnCount++;
-    }
-
-    public int getTurn() {
-        return turnCount;
+    public boolean isWin() {
+        return !field.isContagionsExists();
     }
 
     public boolean isGameOver() {
-        return !this.isAlive();
-    }
-
-    public boolean isNoPotionsButPresentContagions() {
-        return field.contagions().size() != 0
-                && noMorePotions();
-    }
-
-    public boolean isWin() {
-        return field.contagions().size() == 0 && !this.isDead();
+        return isWin()
+                || !isAlive()
+                || noMorePotions();
     }
 
     public boolean moveMe(Direction direction) {
@@ -222,5 +226,39 @@ public class Hero extends PlayerHero<Field> implements State<Element, Object> {
 
     public void recharge() {
         charge(settings().integer(POTIONS_COUNT));
+    }
+
+    // TODO do we use only settings.isTeamDeathMatch() here?
+    private boolean anyHeroFromAnotherTeam(Player player, List<Hero> heroes) {
+        return heroes.stream()
+                .anyMatch(hero -> player.getTeamId() != hero.getPlayer().getTeamId());
+    }
+
+    @Override
+    public Element state(Player player, Object... alsoAtPoint) {
+        List<Hero> heroes = filter(alsoAtPoint, Hero.class);
+
+        // player наблюдатель содержится в той же клетке которую прорисовываем
+        Hero hero = player.getHero();
+        if (heroes.contains(hero)) {
+            // герой наблюдателя (жив и активен) или он победил
+            if (!hero.isGameOver() || hero.isWin()) {
+                return HERO;
+            }
+
+            // герой наблюдателя неактивен или его вынесли
+            return HERO_DEAD;
+        }
+
+        // player наблюдает за клеткой в которой не находится сам
+
+        // в клетке только трупики?
+        if (heroes.stream().noneMatch(Hero::isActiveAndAlive)) {
+            // и если опасности нет, тогда уже рисуем останки
+            return anyHeroFromAnotherTeam(player, heroes) ? ENEMY_HERO_DEAD : OTHER_HERO_DEAD;
+        }
+
+        // в клетке есть другие активные и живые герои
+        return anyHeroFromAnotherTeam(player, heroes) ? ENEMY_HERO : OTHER_HERO;
     }
 }

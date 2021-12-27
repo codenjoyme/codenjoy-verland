@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.verland.TestGameSettings;
 import com.codenjoy.dojo.verland.model.items.Cell;
 import com.codenjoy.dojo.verland.model.items.HeroSpot;
 import com.codenjoy.dojo.verland.services.GameSettings;
@@ -67,7 +68,7 @@ public class HeroTest {
     }
 
     private void givenFl(String map) {
-        settings = new GameSettings()
+        settings = new TestGameSettings()
                 .integer(GameSettings.Keys.COUNT_CONTAGIONS, CONTAGIONS_COUNT)
                 .integer(GameSettings.Keys.POTIONS_COUNT, POTIONS_COUNT);
 
@@ -76,7 +77,8 @@ public class HeroTest {
         field = new Verland(dice, level, settings);
         listener = mock(EventListener.class);
         dice(spot.getX(), spot.getY());
-        field.newGame(new Player(listener, settings));
+        Player player = new Player(listener, settings);
+        field.newGame(player);
     }
 
     protected void dice(int... ints) {
@@ -243,18 +245,7 @@ public class HeroTest {
     public void shouldGameIsOver_whenHeroIsDead() {
         givenHeroMovedToContagion();
 
-        assertEquals(true, hero().isGameOver());
-        assertEquals(true, hero().isDead());
-    }
-
-    @Test
-    public void shouldNextTurn_whenHeroMove() {
-        int turnBeforeHeroMotion = hero().getTurn();
-
-        hero().moveTo(Direction.UP);
-        int turnAfterHeroMotion = hero().getTurn();
-
-        assertEquals(turnBeforeHeroMotion, turnAfterHeroMotion - 1);
+        assertEquals(false, hero().isAlive());
     }
 
     @Test
@@ -317,6 +308,7 @@ public class HeroTest {
 
     @Test
     public void shouldGameOver_whenNoMoreCharge() {
+        Player player = (Player) hero().getPlayer();
         hero().moveTo(Direction.UP);
         placeContagionUpFromHero();
         assertEquals(
@@ -324,7 +316,7 @@ public class HeroTest {
                 "☼***☼\n" +
                 "☼♥**☼\n" +
                 "☼ **☼\n" +
-                "☼☼☼☼☼\n", getBoardAsString(field));
+                "☼☼☼☼☼\n", getBoardAsString(field, player));
 
         field.cure(hero(), Direction.DOWN);
 //        board.usePotionsToGivenDirection(Direction.UP);  // there is contagion
@@ -336,7 +328,7 @@ public class HeroTest {
                 "☼***☼\n" +
                 "☼1♥*☼\n" +
                 "☼!**☼\n" +
-                "☼☼☼☼☼\n", getBoardAsString(field));
+                "☼☼☼☼☼\n", getBoardAsString(field, player));
 
         field.cure(hero(), Direction.DOWN);
         field.cure(hero(), Direction.UP);
@@ -348,7 +340,7 @@ public class HeroTest {
                 "☼*!*☼\n" +
                 "☼!!♥☼\n" +
                 "☼!!*☼\n" +
-                "☼☼☼☼☼\n", getBoardAsString(field));
+                "☼☼☼☼☼\n", getBoardAsString(field, player));
 
         field.cure(hero(), Direction.DOWN);
         field.cure(hero(), Direction.UP);
@@ -357,22 +349,19 @@ public class HeroTest {
         assertEquals(
                 "☼☼☼☼☼\n" +
                 "☼o!!☼\n" +
-                "☼!!♥☼\n" +
+                "☼!!X☼\n" +
                 "☼!!!☼\n" +
-                "☼☼☼☼☼\n", getBoardAsString(field));
+                "☼☼☼☼☼\n", getBoardAsString(field, player));
 
-        assertEquals(false, hero().isDead());
-        assertEquals(true, hero().isGameOver());
+        assertEquals(true, hero().isAlive());
     }
 
     private Hero hero() {
-        return field.hero();
+        return field.heroes().all().get(0);
     }
 
-    private String getBoardAsString(Field board) {
+    private String getBoardAsString(Field board, Player player) {
         return (String) new PrinterFactoryImpl<Element, Player>()
-                .getPrinter(board.reader(),
-                        new Player(listener, settings)).print();
+                .getPrinter(board.reader(), player).print();
     }
-
 }
