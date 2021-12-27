@@ -35,10 +35,7 @@ import com.codenjoy.dojo.verland.model.items.*;
 import com.codenjoy.dojo.verland.services.Event;
 import com.codenjoy.dojo.verland.services.GameSettings;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.codenjoy.dojo.services.field.Generator.generate;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.COUNT_CONTAGIONS;
@@ -92,7 +89,7 @@ public class Verland extends RoundField<Player> implements Field {
 
     @Override
     protected void tickField() {
-        heroes().forEach(Hero::tick);
+        heroes().copy().forEach(Hero::tick);
 
         if (!isContagionsExists()) {
             if (!settings().isRoundsEnabled()) {
@@ -158,7 +155,9 @@ public class Verland extends RoundField<Player> implements Field {
         // метод отдает только те координаты, которые в изначальной
         // карте отмечены как стартовые для героев, когда точек больше
         // не останется, будет возвращать -1 на что isFree скажет false
-        List<Integer> numbers = level.heroesSpots().stream()
+        List<HeroSpot> spots = level.heroesSpots();
+        Collections.shuffle(spots, new DiceRandomWrapper(dice)); // TODO test me
+        List<Integer> numbers = spots.stream()
                 .flatMap(pt -> Arrays.stream(new Integer[]{pt.getX(), pt.getY()}))
                 .collect(toList());
 
