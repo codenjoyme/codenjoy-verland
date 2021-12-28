@@ -132,7 +132,12 @@ public abstract class AbstractGameTest {
         Game game = new Single(player, printer);
         games.add(game);
 
-        dice(spot.getX(), spot.getY());
+        // так как метод поиска свободных мест бегает не по свободным,
+        // координатам как в других играх, а по спотам, то тут нужен только
+        // рандомайзер для collections shuffle, а не
+        // dice(spot.getX(), spot.getY());
+        dice(1);
+
         game.on(field);
         game.newGame();
     }

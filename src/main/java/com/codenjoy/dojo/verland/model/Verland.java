@@ -25,6 +25,8 @@ package com.codenjoy.dojo.verland.model;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.annotations.PerformanceOptimized;
+import com.codenjoy.dojo.services.dice.DiceRandomWrapper;
+import com.codenjoy.dojo.services.dice.NumbersCycleDice;
 import com.codenjoy.dojo.services.field.Accessor;
 import com.codenjoy.dojo.services.field.PointField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -50,6 +52,8 @@ public class Verland extends RoundField<Player> implements Field {
     private Dice dice;
     private GameSettings settings;
 
+    private Dice heroDice;
+
     public Verland(Dice dice, Level level, GameSettings settings) {
         super(Event.START_ROUND, Event.WIN, settings);
 
@@ -68,8 +72,22 @@ public class Verland extends RoundField<Player> implements Field {
         field.init(this);
 
         generateAll();
+        heroDice = initHeroDice();
 
         super.clearScore();
+    }
+
+    private Dice initHeroDice() {
+        // метод отдает только те координаты, которые в изначальной
+        // карте отмечены как стартовые для героев
+        List<HeroSpot> spots = level.heroesSpots();
+        // мы их перемешаем, чтобы была какая-то рендомность
+        Collections.shuffle(spots, new DiceRandomWrapper(dice));
+        // а когда точек больше не останется, пойдем по новому кругу
+        List<Integer> numbers = spots.stream()
+                .flatMap(pt -> Arrays.stream(new Integer[]{pt.getX(), pt.getY()}))
+                .collect(toList());
+        return new NumbersCycleDice(numbers, -1);
     }
 
     @Override
@@ -152,16 +170,7 @@ public class Verland extends RoundField<Player> implements Field {
 
     @Override
     public Optional<Point> freeRandom(Player player) {
-        // метод отдает только те координаты, которые в изначальной
-        // карте отмечены как стартовые для героев, когда точек больше
-        // не останется, будет возвращать -1 на что isFree скажет false
-        List<HeroSpot> spots = level.heroesSpots();
-        Collections.shuffle(spots, new DiceRandomWrapper(dice)); // TODO test me
-        List<Integer> numbers = spots.stream()
-                .flatMap(pt -> Arrays.stream(new Integer[]{pt.getX(), pt.getY()}))
-                .collect(toList());
-
-        return BoardUtils.freeRandom(size(), new NumbersDice(numbers, -1), this::isFree);
+        return BoardUtils.freeRandom(size(), heroDice, this::isFree);
     }
 
     private Optional<Point> freeRandomForContagions(GamePlayer player) {
