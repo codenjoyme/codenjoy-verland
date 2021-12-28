@@ -185,4 +185,38 @@ public class MultiplayerTest extends AbstractGameTest {
                 "listener(0) => [CURE]\n" +
                 "listener(1) => [CURE]\n");
     }
+
+    @Test
+    public void allHeroesWhoRemainOnTheFieldWinTheGame() {
+        // given
+        givenFl("☼☼☼☼☼☼\n" +
+                "☼♥**♥☼\n" +
+                "☼o***☼\n" +
+                "☼****☼\n" +
+                "☼****☼\n" +
+                "☼☼☼☼☼☼\n");
+
+        // when
+        hero(0).cure(Direction.DOWN);
+        tick();
+
+        // then
+        assertF("☼☼☼☼☼☼\n" +
+                "☼♥  ♠☼\n" +
+                "☼x   ☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼☼☼☼☼☼\n", 0);
+
+        assertF("☼☼☼☼☼☼\n" +
+                "☼♠  ♥☼\n" +
+                "☼x   ☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼☼☼☼☼☼\n", 1);
+
+        verifyAllEvents(
+                "listener(0) => [CURE, WIN]\n" +
+                "listener(1) => [WIN]\n");
+    }
 }
