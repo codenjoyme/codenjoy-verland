@@ -348,8 +348,8 @@ public class HeroTest {
         field.cure(hero(), Direction.RIGHT);
         assertEquals(
                 "☼☼☼☼☼\n" +
-                "☼o!!☼\n" +
-                "☼!!X☼\n" +
+                "☼*!!☼\n" +
+                "☼!!♥☼\n" +
                 "☼!!!☼\n" +
                 "☼☼☼☼☼\n", getBoardAsString(field, player));
 

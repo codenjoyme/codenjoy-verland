@@ -663,6 +663,8 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼\n");
 
         verifyAllEvents("[GOT_INFECTED]");
+
+        assertDie();
     }
 
     @Test
@@ -740,7 +742,7 @@ public class GameTest extends AbstractGameTest {
 
         verifyAllEvents("[FORGOT_POTION]");
 
-        assertNotWin();
+        assertAlive();
     }
 
     @Test
@@ -790,7 +792,7 @@ public class GameTest extends AbstractGameTest {
 
         verifyAllEvents("[FORGOT_POTION]");
 
-        assertNotWin();
+        assertAlive();
     }
 
     @Test
@@ -842,7 +844,7 @@ public class GameTest extends AbstractGameTest {
 
         verifyAllEvents("[FORGOT_POTION]");
 
-        assertNotWin();
+        assertAlive();
     }
 
     private void assertPotions(int expected) {
@@ -900,7 +902,7 @@ public class GameTest extends AbstractGameTest {
 
         verifyAllEvents("[FORGOT_POTION]");
 
-        assertNotWin();
+        assertAlive();
     }
 
     @Test
@@ -938,7 +940,7 @@ public class GameTest extends AbstractGameTest {
 
         verifyAllEvents("[CURE, CURE, CURE, CURE]");
 
-        assertNotWin();
+        assertAlive();
 
         // when
         hero().up();
@@ -959,7 +961,7 @@ public class GameTest extends AbstractGameTest {
 
         verifyAllEvents("[CLEAN_AREA, CURE, CURE]");
 
-        assertNotWin();
+        assertAlive();
 
         // when
         hero().down();
@@ -1087,6 +1089,8 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼\n");
 
         verifyAllEvents("[GOT_INFECTED]");
+
+        assertDie();
     }
 
     @Test
@@ -1223,12 +1227,14 @@ public class GameTest extends AbstractGameTest {
 
         // then
         assertF("☼☼☼☼☼\n" +
-                "☼   ☼\n" +
-                "☼!X!☼\n" +
-                "☼o! ☼\n" +
+                "☼***☼\n" +
+                "☼!♥!☼\n" +
+                "☼*!*☼\n" +
                 "☼☼☼☼☼\n");
 
         verifyAllEvents("[FORGOT_POTION, FORGOT_POTION, FORGOT_POTION, NO_MORE_POTIONS]");
+
+        assertAlive();
 
         // when
         hero().cure(UP);
@@ -1236,10 +1242,17 @@ public class GameTest extends AbstractGameTest {
 
         // then
         verifyAllEvents("");
+
+        // then
+        assertF("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼!♥!☼\n" +
+                "☼*!*☼\n" +
+                "☼☼☼☼☼\n");
     }
 
     @Test
-    public void shouldPrintAllBoardContagions_whenNoMoreCharge_case1() {
+    public void shouldWin_whenNoMoreCharge_andNoMoreContagions() {
         // given
         settings().integer(POTIONS_COUNT, 4);
 
@@ -1284,7 +1297,7 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldPrintAllBoardContagions_whenNoMoreCharge_case2() {
+    public void shouldStillAlive_whenNoMoreCharge_caseFourPotions() {
         // given
         settings().integer(POTIONS_COUNT, 4);
 
@@ -1320,18 +1333,31 @@ public class GameTest extends AbstractGameTest {
 
         // then
         assertF("☼☼☼☼☼\n" +
-                "☼o!o☼\n" +
-                "☼!X!☼\n" +
-                "☼o!o☼\n" +
+                "☼*!*☼\n" +
+                "☼!♥!☼\n" +
+                "☼*!*☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyAllEvents("[NO_MORE_POTIONS]");
+        verifyAllEvents("[FORGOT_POTION, NO_MORE_POTIONS]");
 
-        assertDie();
+        assertAlive();
+
+        // when
+        hero().up();
+        tick();
+
+        // then
+        assertF("☼☼☼☼☼\n" +
+                "☼*♥*☼\n" +
+                "☼!4!☼\n" +
+                "☼*!*☼\n" +
+                "☼☼☼☼☼\n");
+
+        verifyAllEvents("[CLEAN_AREA]");
     }
 
     @Test
-    public void shouldPrintAllBoardContagions_whenNoMoreCharge_case3() {
+    public void shouldStillAlive_whenNoMoreCharge_caseTwoPotions() {
         // given
         settings().integer(POTIONS_COUNT, 2);
 
@@ -1355,18 +1381,31 @@ public class GameTest extends AbstractGameTest {
 
         // then
         assertF("☼☼☼☼☼\n" +
-                "☼ 1o☼\n" +
-                "☼!X!☼\n" +
-                "☼ 1o☼\n" +
+                "☼***☼\n" +
+                "☼!♥!☼\n" +
+                "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
         verifyAllEvents("[FORGOT_POTION, NO_MORE_POTIONS]");
 
-        assertDie();
+        assertAlive();
+
+        // when
+        hero().up();
+        tick();
+
+        // then
+        assertF("☼☼☼☼☼\n" +
+                "☼*♥*☼\n" +
+                "☼!2!☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        verifyAllEvents("[CLEAN_AREA]");
     }
 
     @Test
-    public void shouldPrintAllBoardContagions_whenNoMoreCharge_case4() {
+    public void shouldStillAlive_whenNoMoreCharge_caseTwoPotions_anotherDirections() {
         // given
         settings().integer(POTIONS_COUNT, 2);
 
@@ -1390,14 +1429,27 @@ public class GameTest extends AbstractGameTest {
 
         // then
         assertF("☼☼☼☼☼\n" +
-                "☼ 1o☼\n" +
-                "☼!X2☼\n" +
-                "☼ !o☼\n" +
+                "☼***☼\n" +
+                "☼!♥*☼\n" +
+                "☼*!*☼\n" +
                 "☼☼☼☼☼\n");
 
         verifyAllEvents("[FORGOT_POTION, NO_MORE_POTIONS]");
 
-        assertDie();
+        assertAlive();
+
+        // when
+        hero().up();
+        tick();
+
+        // then
+        assertF("☼☼☼☼☼\n" +
+                "☼*♥*☼\n" +
+                "☼!2*☼\n" +
+                "☼*!*☼\n" +
+                "☼☼☼☼☼\n");
+
+        verifyAllEvents("[CLEAN_AREA]");
     }
 
     @Test
@@ -1702,7 +1754,7 @@ public class GameTest extends AbstractGameTest {
         assertEquals(true, player().shouldLeave());
     }
 
-    private void assertNotWin() {
+    private void assertAlive() {
         assertEquals(false, hero().isWin());
         assertEquals(false, hero().isGameOver());
         assertEquals(true, hero().isAlive());

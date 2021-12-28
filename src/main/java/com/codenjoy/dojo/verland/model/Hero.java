@@ -216,9 +216,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
     }
 
     public boolean isGameOver() {
-        return isWin()
-                || !isAlive()
-                || noMorePotions();
+        return !isAlive() || isWin();
     }
 
     public boolean moveMe(Direction direction) {
