@@ -172,6 +172,10 @@ public abstract class AbstractGameTest {
         return field;
     }
 
+    public Level level() {
+        return level;
+    }
+
     public EventsListenersAssert events() {
         return events;
     }
