@@ -27,7 +27,6 @@ import com.codenjoy.dojo.games.verland.Element;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.services.round.RoundGamePlayer;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 import com.codenjoy.dojo.verland.model.items.Cell;
 
@@ -106,6 +105,20 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
         }
     }
 
+    public void cure(Direction direction) {
+        act();
+        switch (direction) {
+            case UP: up(); break;
+            case DOWN: down(); break;
+            case LEFT: left(); break;
+            case RIGHT: right(); break;
+        }
+    }
+
+    public void suicide() {
+        act(0);
+    }
+
     @Override
     public void die() {
         if (isWin()) {
@@ -148,13 +161,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
         score = Math.max(0, score + added);
     }
 
-//    @Override
-//    public boolean isAlive() {
-//        return super.isAlive() &&
-//                !isNoPotionsButPresentContagions();
-//    }
-
-    private void cure() {
+    private void usePotion() {
         if (potions.charge() > 0) {
             potions.useMe();
         }
@@ -173,7 +180,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
             return;
         }
 
-        cure();
+        usePotion();
 
         if (action != null) {
             action.used();

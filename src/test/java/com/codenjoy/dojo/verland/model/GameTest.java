@@ -26,6 +26,7 @@ package com.codenjoy.dojo.verland.model;
 import com.codenjoy.dojo.verland.model.items.Contagion;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.COUNT_CONTAGIONS;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
@@ -48,7 +49,8 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼\n");
 
         // when
-        moveRight();
+        hero().right();
+        tick();
 
         // then
         assertF("☼☼☼☼☼\n" +
@@ -58,7 +60,8 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼\n");
 
         // when
-        moveDown();
+        hero().down();
+        tick();
 
         // then
         assertF("☼☼☼☼☼\n" +
@@ -68,7 +71,8 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼\n");
 
         // when
-        moveLeft();
+        hero().left();
+        tick();
 
         // then
         assertF("☼☼☼☼☼\n" +
@@ -76,26 +80,6 @@ public class GameTest extends AbstractGameTest {
                 "☼*1 ☼\n" +
                 "☼*♥ ☼\n" +
                 "☼☼☼☼☼\n");
-    }
-
-    private void moveLeft() {
-        hero().left();
-        tick();
-    }
-
-    private void moveDown() {
-        hero().down();
-        tick();
-    }
-
-    private void moveRight() {
-        hero().right();
-        tick();
-    }
-
-    private void suicide() {
-        hero().act(0);
-        tick();
     }
 
     @Test
@@ -108,7 +92,8 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼\n");
 
         // when
-        moveDown();
+        hero().down();
+        tick();
 
         // then
         assertF("☼☼☼☼☼\n" +
@@ -118,7 +103,8 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼\n");
 
         // when
-        moveRight();
+        hero().right();
+        tick();
 
         // then
         assertF("☼☼☼☼☼\n" +
@@ -128,7 +114,8 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼\n");
 
         // when
-        moveUp();
+        hero().up();
+        tick();
 
         // then
         assertF("☼☼☼☼☼\n" +
@@ -138,7 +125,8 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼\n");
 
         // when
-        moveUp();
+        hero().up();
+        tick();
 
         // then
         assertF("☼☼☼☼☼\n" +
@@ -150,30 +138,40 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldLeaveEmptySpace_whenWalkOnBoardUp() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼o**☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveUp();
+        // when
+        hero().up();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼*♥*☼\n" +
                 "☼*1*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveLeft();
+        // when
+        hero().left();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼♥ *☼\n" +
                 "☼*1*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveDown();
+        // when
+        hero().down();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼  *☼\n" +
                 "☼♥1*☼\n" +
@@ -183,14 +181,18 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldLeaveEmptySpace_whenWalkOnBoardLeft() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼o**☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveLeft();
+        // when
+        hero().left();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼♥1*☼\n" +
@@ -200,14 +202,18 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldCure_whenSetRight() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼o**☼\n" +
                 "☼☼☼☼☼\n");
 
-        cureRight();
+        // when
+        hero().cure(RIGHT);
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥!☼\n" +
@@ -217,14 +223,18 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldCure_whenSetUp() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼o**☼\n" +
                 "☼☼☼☼☼\n");
 
-        cureUp();
+        // when
+        hero().cure(UP);
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼*!*☼\n" +
                 "☼*♥*☼\n" +
@@ -234,14 +244,18 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldCure_whenSetDown() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼o**☼\n" +
                 "☼☼☼☼☼\n");
 
-        cureDown();
+        // when
+        hero().cure(DOWN);
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
@@ -251,14 +265,18 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldCure_whenSetLeft() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼o**☼\n" +
                 "☼☼☼☼☼\n");
 
-        cureLeft();
+        // when
+        hero().cure(LEFT);
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼!♥*☼\n" +
@@ -268,14 +286,18 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldDie_whenHeroAtContagion() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥o☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveRight();
+        // when
+        hero().right();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼ 11☼\n" +
                 "☼ 1X☼\n" +
@@ -287,22 +309,27 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldSaveCommandAndActAfterTick() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥o☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
+        // when
         hero().right();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
+        // when
         tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼ 11☼\n" +
                 "☼ 1X☼\n" +
@@ -314,17 +341,27 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldPrintAllContagions_whenHeroAtContagion() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼*oo☼\n" +
                 "☼*♥o☼\n" +
                 "☼*oo☼\n" +
                 "☼☼☼☼☼\n");
 
-        cureUp();
-        cureDown();
-        cureLeft();
-        moveRight();
+        // when
+        hero().cure(UP);
+        tick();
 
+        hero().cure(DOWN);
+        tick();
+
+        hero().cure(LEFT);
+        tick();
+
+        hero().right();
+        tick();
+
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼ xo☼\n" +
                 "☼!3X☼\n" +
@@ -336,12 +373,14 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldPrintBoard_whenNearHeroNoContagions() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼**♥☼\n" +
                 "☼***☼\n" +
                 "☼o**☼\n" +
                 "☼☼☼☼☼\n");
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼**♥☼\n" +
                 "☼***☼\n" +
@@ -351,6 +390,7 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldPrintBoard_whenNearHeroOneContagion() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼**o☼\n" +
                 "☼*♥*☼\n" +
@@ -363,8 +403,11 @@ public class GameTest extends AbstractGameTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveLeft();
+        // when
+        hero().left();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼♥1*☼\n" +
@@ -374,6 +417,7 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldPrintBoard_whenNearHeroTwoContagions() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼**o☼\n" +
                 "☼*♥o☼\n" +
@@ -386,8 +430,11 @@ public class GameTest extends AbstractGameTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveLeft();
+        // when
+        hero().left();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼♥2*☼\n" +
@@ -397,6 +444,7 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldPrintBoard_whenNearHeroThreeContagions() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼**o☼\n" +
                 "☼*♥o☼\n" +
@@ -409,8 +457,11 @@ public class GameTest extends AbstractGameTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveLeft();
+        // when
+        hero().left();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼♥3*☼\n" +
@@ -420,6 +471,7 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldPrintBoard_whenNearHeroFourContagions() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼**o☼\n" +
                 "☼*♥o☼\n" +
@@ -432,8 +484,11 @@ public class GameTest extends AbstractGameTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveLeft();
+        // when
+        hero().left();
+        tick();
 
+        // when
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼♥4*☼\n" +
@@ -443,6 +498,7 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldPrintBoard_whenNearHeroFiveContagions() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼*oo☼\n" +
                 "☼*♥o☼\n" +
@@ -455,8 +511,11 @@ public class GameTest extends AbstractGameTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveLeft();
+        // when
+        hero().left();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼♥5*☼\n" +
@@ -467,6 +526,7 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldPrintBoard_whenNearHeroSixContagions() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼ooo☼\n" +
                 "☼*♥o☼\n" +
@@ -479,8 +539,11 @@ public class GameTest extends AbstractGameTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveLeft();
+        // when
+        hero().left();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼♥6*☼\n" +
@@ -490,6 +553,7 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldPrintBoard_whenNearHeroSevenContagions() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼ooo☼\n" +
                 "☼*♥o☼\n" +
@@ -502,8 +566,11 @@ public class GameTest extends AbstractGameTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveLeft();
+        // when
+        hero().left();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼♥7*☼\n" +
@@ -513,6 +580,7 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldPrintBoard_whenNearHeroEightContagions() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼ooo☼\n" +
                 "☼o♥o☼\n" +
@@ -525,8 +593,11 @@ public class GameTest extends AbstractGameTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveDown();
+        // when
+        hero().down();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼ooo☼\n" +
                 "☼o8o☼\n" +
@@ -536,14 +607,18 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldCure_whenContagionAtRight() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥o☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        cureRight();
+        // when
+        hero().cure(RIGHT);
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼ ♥x☼\n" +
@@ -555,15 +630,21 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldCure_whenContagionAtRightAndLeft() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼o♥o☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        cureRight();
-        cureLeft();
+        // when
+        hero().cure(RIGHT);
+        tick();
 
+        hero().cure(LEFT);
+        tick();
+
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼x♥x☼\n" +
@@ -575,14 +656,18 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldCureOnEmptySpace_whenContagionAtRight() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼o♥*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        cureRight();
+        // when
+        hero().cure(RIGHT);
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥!☼\n" +
@@ -594,14 +679,18 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldCure_whenContagionAtDown() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼*o*☼\n" +
                 "☼☼☼☼☼\n");
 
-        cureDown();
+        // when
+        hero().cure(DOWN);
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼ ♥ ☼\n" +
@@ -613,14 +702,18 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldCureOnEmptySpace_whenContagionAtDown() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼*o*☼\n" +
                 "☼☼☼☼☼\n");
 
-        cureUp();
+        // when
+        hero().cure(UP);
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼*!*☼\n" +
                 "☼*♥*☼\n" +
@@ -632,14 +725,18 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldCure_whenContagionAtUp() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼*o*☼\n" +
                 "☼*♥*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        cureUp();
+        // when
+        hero().cure(UP);
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼ x ☼\n" +
                 "☼ ♥ ☼\n" +
@@ -651,6 +748,7 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldCureOnEmptySpace_whenContagionAtUp() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼*o*☼\n" +
                 "☼*♥*☼\n" +
@@ -659,8 +757,11 @@ public class GameTest extends AbstractGameTest {
 
         assertPotions(3);
 
-        cureDown();
+        // when
+        hero().cure(DOWN);
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
@@ -676,6 +777,7 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldCure_whenContagionAtLeft() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼o♥*☼\n" +
@@ -684,8 +786,11 @@ public class GameTest extends AbstractGameTest {
 
         assertPotions(3);
 
-        cureLeft();
+        // when
+        hero().cure(LEFT);
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼x♥ ☼\n" +
@@ -697,6 +802,7 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldCureOnEmptySpace_whenContagionAtLeft() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥o☼\n" +
@@ -705,8 +811,11 @@ public class GameTest extends AbstractGameTest {
 
         assertPotions(3);
 
-        cureLeft();
+        // when
+        hero().cure(LEFT);
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼!♥*☼\n" +
@@ -718,6 +827,7 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldWin_whenDestroyAllContagions() {
+        // given
         settings().integer(POTIONS_COUNT, 8);
 
         givenFl("☼☼☼☼☼\n" +
@@ -728,11 +838,20 @@ public class GameTest extends AbstractGameTest {
 
         assertPotions(8);
 
-        cureLeft();
-        cureDown();
-        cureRight();
-        cureUp();
+        // when
+        hero().cure(LEFT);
+        tick();
 
+        hero().cure(DOWN);
+        tick();
+
+        hero().cure(RIGHT);
+        tick();
+
+        hero().cure(UP);
+        tick();
+
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼*!*☼\n" +
                 "☼!♥!☼\n" +
@@ -741,10 +860,17 @@ public class GameTest extends AbstractGameTest {
 
         assertNotWin();
 
-        moveUp();
-        cureLeft();
-        cureRight();
+        // when
+        hero().up();
+        tick();
 
+        hero().cure(LEFT);
+        tick();
+
+        hero().cure(RIGHT);
+        tick();
+
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼!♥!☼\n" +
                 "☼!2!☼\n" +
@@ -753,18 +879,28 @@ public class GameTest extends AbstractGameTest {
 
         assertNotWin();
 
-        moveDown();
-        moveDown();
+        // when
+        hero().down();
+        tick();
 
+        hero().down();
+        tick();
+
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼!!!☼\n" +
                 "☼!2!☼\n" +
                 "☼*♥*☼\n" +
                 "☼☼☼☼☼\n");
 
-        cureLeft();
-        cureRight();
+        // when
+        hero().cure(LEFT);
+        tick();
 
+        hero().cure(RIGHT);
+        tick();
+
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼xxx☼\n" +
                 "☼x x☼\n" +
@@ -776,6 +912,7 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldLeaveContagionOnMap_whenWalkBetweenContagions() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼*o*☼\n" +
                 "☼*o*☼\n" +
@@ -790,32 +927,44 @@ public class GameTest extends AbstractGameTest {
                 "☼♥**☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveRight();
+        // when
+        hero().right();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼***☼\n" +
                 "☼1♥*☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveRight();
+        // when
+        hero().right();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼***☼\n" +
                 "☼11♥☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveUp();
+        // when
+        hero().up();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼**♥☼\n" +
                 "☼111☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveUp();
+        // when
+        hero().up();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼**♥☼\n" +
                 "☼**2☼\n" +
@@ -823,41 +972,20 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼\n");
     }
 
-    private void moveUp() {
-        hero().up();
-        tick();
-    }
-
-    private void cureUp() {
-        hero().act();
-        moveUp();
-    }
-
-    private void cureRight() {
-        hero().act();
-        moveRight();
-    }
-
-    private void cureDown() {
-        hero().act();
-        moveDown();
-    }
-
-    private void cureLeft() {
-        hero().act();
-        moveLeft();
-    }
-
     @Test
     public void shouldFireEvent_whenDie() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥o☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveRight();
+        // when
+        hero().right();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼ 11☼\n" +
                 "☼ 1X☼\n" +
@@ -869,14 +997,18 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldFireEvent_whenSuicide() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥o☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        suicide();
+        // when
+        hero().suicide();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼ 11☼\n" +
                 "☼ Xo☼\n" +
@@ -887,9 +1019,11 @@ public class GameTest extends AbstractGameTest {
 
         assertDie();
 
+        // when
         field().newGame(player());
         tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
@@ -899,14 +1033,18 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldFireEvent_whenOpenSpace() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼o**☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveRight();
+        // when
+        hero().right();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*1♥☼\n" +
@@ -918,14 +1056,18 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldNotFireEvent_whenReturnsHome() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼o**☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveRight();
+        // when
+        hero().right();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*1♥☼\n" +
@@ -934,8 +1076,11 @@ public class GameTest extends AbstractGameTest {
 
         verifyAllEvents("[CLEAN_AREA]");
 
-        moveLeft();
+        // when
+        hero().left();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥ ☼\n" +
@@ -947,6 +1092,7 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldFireEvent_whenNoMoreCharge() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
@@ -955,24 +1101,33 @@ public class GameTest extends AbstractGameTest {
 
         assertPotions(3);
 
-        cureDown();
+        // when
+        hero().cure(DOWN);
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥*☼\n" +
                 "☼*!*☼\n" +
                 "☼☼☼☼☼\n");
 
-        cureLeft();
+        // when
+        hero().cure(LEFT);
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼!♥*☼\n" +
                 "☼*!*☼\n" +
                 "☼☼☼☼☼\n");
 
-        cureRight();
+        // when
+        hero().cure(RIGHT);
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼!X!☼\n" +
@@ -981,13 +1136,17 @@ public class GameTest extends AbstractGameTest {
 
         verifyAllEvents("[FORGOT_POTION, FORGOT_POTION, FORGOT_POTION, NO_MORE_POTIONS]");
 
-        cureUp();
+        // when
+        hero().cure(UP);
+        tick();
 
+        // then
         verifyAllEvents("");
     }
 
     @Test
     public void shouldPrintAllBoardContagions_whenNoMoreCharge_case1() {
+        // given
         settings().integer(POTIONS_COUNT, 4);
 
         givenFl("☼☼☼☼☼\n" +
@@ -998,11 +1157,20 @@ public class GameTest extends AbstractGameTest {
 
         assertPotions(4);
 
-        cureRight();
-        cureLeft();
-        cureDown();
-        cureUp();
+        // when
+        hero().cure(RIGHT);
+        tick();
 
+        hero().cure(LEFT);
+        tick();
+
+        hero().cure(DOWN);
+        tick();
+
+        hero().cure(UP);
+        tick();
+
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼ x ☼\n" +
                 "☼x♥x☼\n" +
@@ -1012,6 +1180,7 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldPrintAllBoardContagions_whenNoMoreCharge_case2() {
+        // given
         settings().integer(POTIONS_COUNT, 4);
 
         givenFl("☼☼☼☼☼\n" +
@@ -1022,11 +1191,20 @@ public class GameTest extends AbstractGameTest {
 
         assertPotions(4);
 
-        cureRight();
-        cureLeft();
-        cureDown();
-        cureUp();
+        // when
+        hero().cure(RIGHT);
+        tick();
 
+        hero().cure(LEFT);
+        tick();
+
+        hero().cure(DOWN);
+        tick();
+
+        hero().cure(UP);
+        tick();
+
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼o!o☼\n" +
                 "☼!X!☼\n" +
@@ -1036,6 +1214,7 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldPrintAllBoardContagions_whenNoMoreCharge_case3() {
+        // given
         settings().integer(POTIONS_COUNT, 2);
 
         givenFl("☼☼☼☼☼\n" +
@@ -1046,9 +1225,14 @@ public class GameTest extends AbstractGameTest {
 
         assertPotions(2);
 
-        cureRight();
-        cureLeft();
+        // when
+        hero().cure(RIGHT);
+        tick();
 
+        hero().cure(LEFT);
+        tick();
+
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼ 1o☼\n" +
                 "☼!X!☼\n" +
@@ -1058,6 +1242,7 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldPrintAllBoardContagions_whenNoMoreCharge_case4() {
+        // given
         settings().integer(POTIONS_COUNT, 2);
 
         givenFl("☼☼☼☼☼\n" +
@@ -1068,9 +1253,14 @@ public class GameTest extends AbstractGameTest {
 
         assertPotions(2);
 
-        cureLeft();
-        cureDown();
+        // when
+        hero().cure(LEFT);
+        tick();
 
+        hero().cure(DOWN);
+        tick();
+
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼ 1o☼\n" +
                 "☼!X2☼\n" +
@@ -1080,6 +1270,7 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldFireEvent_whenCureContagion() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼o♥o☼\n" +
@@ -1088,8 +1279,11 @@ public class GameTest extends AbstractGameTest {
 
         assertPotions(3);
 
-        cureRight();
+        // when
+        hero().cure(RIGHT);
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*♥!☼\n" +
@@ -1101,6 +1295,7 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldFireEvent_whenCleanAllContagions() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼o♥*☼\n" +
@@ -1109,8 +1304,11 @@ public class GameTest extends AbstractGameTest {
 
         assertPotions(3);
 
-        cureLeft();
+        // when
+        hero().cure(LEFT);
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼x♥ ☼\n" +
@@ -1121,14 +1319,34 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldOnlyOneFlagPerSpace() {
+    public void shouldOnlyOneFlagPerCell() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼o♥*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        cureRight();
+        assertPotions(3);
+
+        // when
+        hero().cure(RIGHT);
+        tick();
+
+        // then
+        assertF("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥!☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        assertPotions(2);
+
+        verifyAllEvents("[FORGOT_POTION]");
+
+        // when
+        hero().cure(RIGHT);
+        tick();
 
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
@@ -1136,13 +1354,14 @@ public class GameTest extends AbstractGameTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyAllEvents("[FORGOT_POTION]");
+        assertPotions(2);
 
-        cureRight();
+        verifyAllEvents("");
     }
 
     @Test
     public void shouldCantGo_whenGoToBorder() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
@@ -1155,36 +1374,57 @@ public class GameTest extends AbstractGameTest {
                 "☼♥  ☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveLeft();
 
+        // when
+        hero().left();
+        tick();
+
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
                 "☼♥  ☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveDown();
+        // when
+        hero().down();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
                 "☼♥  ☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveRight();
-        moveRight();
-        moveRight();
+        // when
+        hero().right();
+        tick();
 
+        hero().right();
+        tick();
+
+        hero().right();
+        tick();
+
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
                 "☼  ♥☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveUp();
-        moveUp();
-        moveUp();
+        // when
+        hero().up();
+        tick();
 
+        hero().up();
+        tick();
+
+        hero().up();
+        tick();
+
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼  ♥☼\n" +
                 "☼   ☼\n" +
@@ -1194,6 +1434,7 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldCantCure_whenCureBorder() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼ o ☼\n" +
@@ -1206,42 +1447,64 @@ public class GameTest extends AbstractGameTest {
                 "☼♥11☼\n" +
                 "☼☼☼☼☼\n");
 
-        cureLeft();
+        // when
+        hero().cure(LEFT);
+        tick();
+
         verifyAllEvents("");
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼111☼\n" +
                 "☼1*1☼\n" +
                 "☼♥11☼\n" +
                 "☼☼☼☼☼\n");
 
-        cureDown();
+        // when
+        hero().cure(DOWN);
+        tick();
+
         verifyAllEvents("");
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼111☼\n" +
                 "☼1*1☼\n" +
                 "☼♥11☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveRight();
-        moveRight();
+        // when
+        hero().right();
+        tick();
 
-        cureRight();
+        hero().right();
+        tick();
+
+        hero().cure(RIGHT);
+        tick();
+
         verifyAllEvents("");
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼111☼\n" +
                 "☼1*1☼\n" +
                 "☼11♥☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveUp();
-        moveUp();
+        // when
+        hero().up();
+        tick();
 
-        cureUp();
+        hero().up();
+        tick();
+
+        hero().cure(UP);
+        tick();
+
         verifyAllEvents("");
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼11♥☼\n" +
                 "☼1*1☼\n" +
@@ -1251,14 +1514,18 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldWin_whenBoardWithoutContagions() {
+        // given
         givenFl("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
                 "☼♥  ☼\n" +
                 "☼☼☼☼☼\n");
 
-        moveRight();
+        // when
+        hero().right();
+        tick();
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
@@ -1270,11 +1537,13 @@ public class GameTest extends AbstractGameTest {
         assertWin();
 
         // это сделается в ответ на shouldLeave
+        // when
         game().newGame();
 
         // добавляем заразу чтобы не было снова геймовера
         field().contagions().add(new Contagion(pt(3, 3)));
 
+        // then
         assertF("☼☼☼☼☼\n" +
                 "☼ 11☼\n" +
                 "☼ 11☼\n" +
@@ -1462,6 +1731,7 @@ public class GameTest extends AbstractGameTest {
     public void performanceTest_isFreeForContagion() {
         // about (1_000_000 / 9s)
 
+        // given
         givenFl("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼     ****oooo☼\n" +
                 "☼     ****oooo☼\n" +
@@ -1478,6 +1748,7 @@ public class GameTest extends AbstractGameTest {
                 "☼♥            ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
 
+        // when
         int ticks = 100_000;
 
         int outOf = 5;
