@@ -218,5 +218,8 @@ public class MultiplayerTest extends AbstractGameTest {
         verifyAllEvents(
                 "listener(0) => [CURE, WIN]\n" +
                 "listener(1) => [WIN]\n");
+
+        assertWin(0);
+        assertWin(1);
     }
 }

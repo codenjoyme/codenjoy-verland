@@ -1746,33 +1746,6 @@ public class GameTest extends AbstractGameTest {
         assertEquals(true, player().shouldLeave());
     }
 
-    private void assertWin() {
-        assertEquals(true, hero().isWin());
-        assertEquals(true, hero().isGameOver());
-        assertEquals(true, hero().isAlive());
-        assertEquals(true, hero().isActive());
-        assertEquals(true, player().shouldLeave());
-    }
-
-    private void assertAlive() {
-        assertEquals(false, hero().isWin());
-        assertEquals(false, hero().isGameOver());
-        assertEquals(true, hero().isAlive());
-        assertEquals(true, hero().isActive());
-        assertEquals(false, player().shouldLeave());
-    }
-
-    private void assertDie() {
-        assertEquals(false, hero().isWin());
-        assertEquals(true, hero().isGameOver());
-        assertEquals(false, hero().isAlive());
-        assertEquals(true, hero().isActive());
-        // тут false потому что Single.isGameOver = true и так будет обновление борды,
-        // а shouldLeave надо делать, когда на поле не умер игрок, но выиграл и больше
-        // ему тут делать нечего
-        assertEquals(false, player().shouldLeave());
-    }
-
     @Test
     public void shouldIncreaseNumberOfPotions_whenItLessThanNumberOfContagions() {
         // given

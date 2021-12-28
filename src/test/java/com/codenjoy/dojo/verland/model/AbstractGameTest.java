@@ -213,4 +213,45 @@ public abstract class AbstractGameTest {
     public Hero hero() {
         return hero(0);
     }
+
+    // other methods
+
+    public void assertWin() {
+        assertWin(0);
+    }
+
+    public void assertAlive() {
+        assertAlive(0);
+    }
+
+    public void assertDie() {
+        assertDie(0);
+    }
+
+    public void assertWin(int index) {
+        assertEquals(true, hero(index).isWin());
+        assertEquals(true, hero(index).isGameOver());
+        assertEquals(true, hero(index).isAlive());
+        assertEquals(true, hero(index).isActive());
+        assertEquals(true, player(index).shouldLeave());
+    }
+
+    public void assertAlive(int index) {
+        assertEquals(false, hero(index).isWin());
+        assertEquals(false, hero(index).isGameOver());
+        assertEquals(true, hero(index).isAlive());
+        assertEquals(true, hero(index).isActive());
+        assertEquals(false, player(index).shouldLeave());
+    }
+
+    public void assertDie(int index) {
+        assertEquals(false, hero(index).isWin());
+        assertEquals(true, hero(index).isGameOver());
+        assertEquals(false, hero(index).isAlive());
+        assertEquals(true, hero(index).isActive());
+        // тут false потому что Single.isGameOver = true и так будет обновление борды,
+        // а shouldLeave надо делать, когда на поле не умер игрок, но выиграл и больше
+        // ему тут делать нечего
+        assertEquals(false, player(index).shouldLeave());
+    }
 }
