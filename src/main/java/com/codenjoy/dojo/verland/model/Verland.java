@@ -178,13 +178,6 @@ public class Verland extends RoundField<Player> implements Field {
     }
 
     @Override
-    public Contagion tryCreateContagion(Point cell) {
-        Contagion result = new Contagion(cell);
-        contagions().add(result);
-        return result;
-    }
-
-    @Override
     public int contagionsNear(Point pt) {
         return (int)Arrays.stream(QDirection.values())
                 .map(direction -> direction.change(pt))

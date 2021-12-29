@@ -30,8 +30,36 @@ import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.COUNT_CONTAGIONS;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
+import static org.junit.Assert.assertEquals;
 
 public class GameTest extends AbstractGameTest {
+
+    @Test
+    public void shouldBoardSizeSpecify_whenGameStart() {
+        // given when
+        givenFl("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼*******o☼\n" +
+                "☼********☼\n" +
+                "☼********☼\n" +
+                "☼********☼\n" +
+                "☼********☼\n" +
+                "☼********☼\n" +
+                "☼********☼\n" +
+                "☼♥*******☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        // then
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼********☼\n" +
+                "☼********☼\n" +
+                "☼********☼\n" +
+                "☼********☼\n" +
+                "☼********☼\n" +
+                "☼********☼\n" +
+                "☼********☼\n" +
+                "☼♥*******☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+    }
 
     @Test
     public void shouldLeaveEmptySpace_whenWalkOnBoardRight() {

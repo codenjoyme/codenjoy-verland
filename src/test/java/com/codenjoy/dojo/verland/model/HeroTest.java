@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.verland.TestGameSettings;
 import com.codenjoy.dojo.verland.model.items.Cell;
+import com.codenjoy.dojo.verland.model.items.Contagion;
 import com.codenjoy.dojo.verland.model.items.HeroSpot;
 import com.codenjoy.dojo.verland.services.GameSettings;
 import org.junit.Before;
@@ -86,61 +87,6 @@ public class HeroTest {
         for (int i : ints) {
             when = when.thenReturn(i);
         }
-    }
-
-    @Test
-    public void shouldBoardConsistOfCells() {
-        assertNotNull(field.cells());
-    }
-
-    @Test
-    public void shouldFreeCellsNumberBeMoreThanZero() {
-        assertEquals(true, field.cells().size() > 0);
-    }
-
-    @Test
-    public void shouldContagionsCountLessThenAllCells_whenGameStart() {
-        // given
-        settings.integer(GameSettings.Keys.COUNT_CONTAGIONS, 100);
-
-        // when
-        setup();
-
-        // then
-        assertEquals(4, (int)settings.integer(GameSettings.Keys.COUNT_CONTAGIONS));
-    }
-
-    @Test
-    public void shouldPotionsChargeMoreThanContagions_whenGameStart() {
-        // given
-        settings.integer(GameSettings.Keys.COUNT_CONTAGIONS, 20)
-                .integer(GameSettings.Keys.POTIONS_COUNT, 10);
-
-        // when
-        setup();
-
-        // then
-        assertEquals(4, (int)settings.integer(GameSettings.Keys.COUNT_CONTAGIONS));
-        assertEquals(8, (int)settings.integer(GameSettings.Keys.POTIONS_COUNT));
-    }
-
-    @Test
-    public void shouldBoardSizeSpecify_whenGameStart() {
-        // given
-        // when
-        givenFl("☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼********☼\n" +
-                "☼********☼\n" +
-                "☼********☼\n" +
-                "☼********☼\n" +
-                "☼********☼\n" +
-                "☼********☼\n" +
-                "☼********☼\n" +
-                "☼♥*******☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
-
-        // then
-        assertEquals(10, field.size());
     }
 
     @Test
@@ -237,7 +183,7 @@ public class HeroTest {
     private void placeContagionUpFromHero() {
         Point upstairs = Direction.UP.change(hero());
         if (!field.contagions().contains(upstairs)) {
-            field.tryCreateContagion(upstairs);
+            field.contagions().add(new Contagion(upstairs));
         }
     }
 
