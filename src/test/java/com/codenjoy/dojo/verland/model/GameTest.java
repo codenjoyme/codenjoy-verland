@@ -259,6 +259,8 @@ public class GameTest extends AbstractGameTest {
                 "☼o**☼\n" +
                 "☼☼☼☼☼\n");
 
+        assertPotions(3);
+
         // when
         hero().cure(RIGHT);
         tick();
@@ -269,6 +271,8 @@ public class GameTest extends AbstractGameTest {
                 "☼*♥!☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
+
+        assertPotions(2);
 
         verifyAllEvents("[FORGOT_POTION]");
     }
@@ -282,6 +286,8 @@ public class GameTest extends AbstractGameTest {
                 "☼o**☼\n" +
                 "☼☼☼☼☼\n");
 
+        assertPotions(3);
+
         // when
         hero().cure(UP);
         tick();
@@ -292,6 +298,8 @@ public class GameTest extends AbstractGameTest {
                 "☼*♥*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
+
+        assertPotions(2);
 
         verifyAllEvents("[FORGOT_POTION]");
     }
@@ -305,6 +313,8 @@ public class GameTest extends AbstractGameTest {
                 "☼o**☼\n" +
                 "☼☼☼☼☼\n");
 
+        assertPotions(3);
+
         // when
         hero().cure(DOWN);
         tick();
@@ -315,6 +325,8 @@ public class GameTest extends AbstractGameTest {
                 "☼*♥*☼\n" +
                 "☼*!*☼\n" +
                 "☼☼☼☼☼\n");
+
+        assertPotions(2);
 
         verifyAllEvents("[FORGOT_POTION]");
     }
@@ -328,6 +340,8 @@ public class GameTest extends AbstractGameTest {
                 "☼o**☼\n" +
                 "☼☼☼☼☼\n");
 
+        assertPotions(3);
+
         // when
         hero().cure(LEFT);
         tick();
@@ -338,6 +352,8 @@ public class GameTest extends AbstractGameTest {
                 "☼!♥*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
+
+        assertPotions(2);
 
         verifyAllEvents("[FORGOT_POTION]");
     }
@@ -351,6 +367,8 @@ public class GameTest extends AbstractGameTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
+        assertContagions(1);
+
         // when
         hero().right();
         tick();
@@ -361,6 +379,8 @@ public class GameTest extends AbstractGameTest {
                 "☼ 1X☼\n" +
                 "☼ 11☼\n" +
                 "☼☼☼☼☼\n");
+
+        assertContagions(1);
 
         verifyAllEvents("[GOT_INFECTED]");
 
@@ -410,6 +430,8 @@ public class GameTest extends AbstractGameTest {
                 "☼*oo☼\n" +
                 "☼☼☼☼☼\n");
 
+        assertContagions(5);
+
         // when
         hero().cure(UP);
         tick();
@@ -417,17 +439,25 @@ public class GameTest extends AbstractGameTest {
         // then
         verifyAllEvents("[CURE]");
 
+        assertContagions(4);
+
+        // when
         hero().cure(DOWN);
         tick();
 
         // then
         verifyAllEvents("[CURE]");
 
+        assertContagions(3);
+
+        // when
         hero().cure(LEFT);
         tick();
 
         // then
         verifyAllEvents("[FORGOT_POTION]");
+
+        assertContagions(3);
 
         hero().right();
         tick();
@@ -438,6 +468,8 @@ public class GameTest extends AbstractGameTest {
                 "☼!3X☼\n" +
                 "☼ xo☼\n" +
                 "☼☼☼☼☼\n");
+
+        assertContagions(3);
 
         verifyAllEvents("[GOT_INFECTED]");
 
@@ -877,6 +909,10 @@ public class GameTest extends AbstractGameTest {
 
     private void assertPotions(int expected) {
         assertEquals(expected, hero().potions().charge());
+    }
+
+    private void assertContagions(int expected) {
+        assertEquals(expected, field().contagions().size());
     }
 
     @Test
