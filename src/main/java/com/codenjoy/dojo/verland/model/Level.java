@@ -59,7 +59,7 @@ public class Level extends AbstractLevel {
     }
 
     public List<Cure> cures() {
-        return find(Cure::new, HERO_CURE);
+        return find(pt -> new Cure(pt, null), HERO_CURE);
     }
 
     public List<Cell> hidden() {

@@ -27,16 +27,40 @@ import com.codenjoy.dojo.games.verland.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.verland.model.Hero;
 import com.codenjoy.dojo.verland.model.Player;
+
+import java.util.Objects;
 
 public class Cure extends PointImpl implements State<Element, Player> {
 
-    public Cure(Point pt) {
+    private Hero owner;
+
+    public Cure(Point pt, Hero owner) {
         super(pt);
+        this.owner = owner;
     }
 
     @Override
     public Element state(Player player, Object... alsoAtPoint) {
         return Element.HERO_CURE;
+    }
+
+    public Hero owner() {
+        return owner;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Cure cure = (Cure) o;
+        return Objects.equals(owner, cure.owner);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), owner);
     }
 }

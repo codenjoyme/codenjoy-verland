@@ -109,6 +109,19 @@ public class Verland extends RoundField<Player> implements Field {
     protected void tickField() {
         heroes().copy().forEach(Hero::tick);
 
+        for (Contagion contagion : contagions().copy()) {
+            List<Cure> cures = cures().getAt(contagion);
+            for (Cure cure : cures) {
+                cured().add(new Cured(cure));
+                contagions().removeAt(cure);
+
+                Hero hero = cure.owner();
+                if (hero != null) {
+                    hero.getPlayer().event(Event.CURE);
+                }
+            }
+        }
+
         if (!isContagionsExists()) {
             if (!settings().isRoundsEnabled()) {
                 players.forEach(player -> {
@@ -197,32 +210,19 @@ public class Verland extends RoundField<Player> implements Field {
             return;
         }
 
-        if (cures().contains(to)) {
+        Cure cure = new Cure(to, hero);
+        if (cures().getAt(to).contains(cure)) {
             return;
         }
 
         hero.tryToCure(() -> {
-            cures().add(new Cure(to));
+            cures().add(cure);
             if (contagions().contains(to)) {
-                removeContagion(hero, to);
-            } else {
-                hero.getPlayer().event(Event.FORGOT_POTION);
+                return;
             }
+            hero.getPlayer().event(Event.FORGOT_POTION);
+            hero.tryFireMorePotions();
         });
-
-        if (isContagionsExists() && hero.noMorePotions()) {
-            hero.getPlayer().event(Event.NO_MORE_POTIONS);
-        }
-    }
-
-    private void removeContagion(Hero hero, Point pt) {
-        cured().add(new Cured(pt));
-        contagions().removeAt(pt);
-        Player player = hero.getPlayer();
-        player.event(Event.CURE);
-        if (isContagionsExists()) {
-            return;
-        }
     }
 
     @Override

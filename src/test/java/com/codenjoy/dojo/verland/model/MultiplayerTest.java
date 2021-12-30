@@ -22,8 +22,9 @@ package com.codenjoy.dojo.verland.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Direction;
 import org.junit.Test;
+
+import static com.codenjoy.dojo.services.Direction.*;
 
 public class MultiplayerTest extends AbstractGameTest {
 
@@ -162,8 +163,8 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼☼☼☼☼☼\n");
 
         // when
-        hero(0).cure(Direction.DOWN);
-        hero(1).cure(Direction.DOWN);
+        hero(0).cure(DOWN);
+        hero(1).cure(DOWN);
         tick();
 
         // then
@@ -197,7 +198,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼☼☼☼☼☼\n");
 
         // when
-        hero(0).cure(Direction.DOWN);
+        hero(0).cure(DOWN);
         tick();
 
         // then
@@ -218,6 +219,37 @@ public class MultiplayerTest extends AbstractGameTest {
         verifyAllEvents(
                 "listener(0) => [CURE, WIN]\n" +
                 "listener(1) => [WIN]\n");
+
+        assertWin(0);
+        assertWin(1);
+    }
+
+    @Test
+    public void shouldPointsAreGainedByBothPlayers_whenCompetitionForAHealedCell() {
+        // given
+        givenFl("☼☼☼☼☼☼\n" +
+                "☼♥o♥*☼\n" +
+                "☼****☼\n" +
+                "☼****☼\n" +
+                "☼****☼\n" +
+                "☼☼☼☼☼☼\n");
+
+        // when
+        hero(0).cure(RIGHT);
+        hero(1).cure(LEFT);
+        tick();
+
+        // then
+        givenFl("☼☼☼☼☼☼\n" +
+                "☼♥o♥*☼\n" +
+                "☼****☼\n" +
+                "☼****☼\n" +
+                "☼****☼\n" +
+                "☼☼☼☼☼☼\n");
+
+        verifyAllEvents(
+                "listener(0) => [CURE, WIN]\n" +
+                "listener(1) => [CURE, WIN]\n");
 
         assertWin(0);
         assertWin(1);

@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 import com.codenjoy.dojo.verland.model.items.Cell;
+import com.codenjoy.dojo.verland.services.Event;
 
 import java.util.List;
 
@@ -175,8 +176,16 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
         return potions.charge() == 0;
     }
 
-    public void tryToCure(PotionsAction action) {
+    public boolean tryFireMorePotions() {
         if (noMorePotions()) {
+            getPlayer().event(Event.NO_MORE_POTIONS);
+            return true;
+        }
+        return false;
+    }
+
+    public void tryToCure(PotionsAction action) {
+        if (tryFireMorePotions()) {
             return;
         }
 
