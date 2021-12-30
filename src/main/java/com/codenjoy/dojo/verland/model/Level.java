@@ -78,8 +78,6 @@ public class Level extends AbstractLevel {
         field.addAll(heroesSpots());
         // туман войны
         field.addAll(hidden());
-        // чистое поле
-        field.addAll(clear());
         // места заражения
         List<Contagion> contagions = contagions();
         field.addAll(contagions);
@@ -92,7 +90,7 @@ public class Level extends AbstractLevel {
         // попытки исцелить
         field.addAll(cures());
         // cell должны быть по всему полю, так как они сигналят о заражении
-        // заполняем остаток поля
+        // заполняем остаток поля пустыми ячейками
         field.addAll(otherCells(field.of(Cell.class)));
     }
 
