@@ -34,6 +34,7 @@ import com.codenjoy.dojo.verland.model.items.Cell;
 import java.util.List;
 
 import static com.codenjoy.dojo.games.verland.Element.*;
+import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.StateUtils.filter;
 import static com.codenjoy.dojo.verland.services.Event.*;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
@@ -66,28 +67,28 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
     public void down() {
         if (!isActiveAndAlive()) return;
         
-        direction = Direction.DOWN;
+        direction = DOWN;
     }
 
     @Override
     public void up() {
         if (!isActiveAndAlive()) return;
         
-        direction = Direction.UP;
+        direction = UP;
     }
 
     @Override
     public void left() {
         if (!isActiveAndAlive()) return;
         
-        direction = Direction.LEFT;
+        direction = LEFT;
     }
 
     @Override
     public void right() {
         if (!isActiveAndAlive()) return;
         
-        direction = Direction.RIGHT;
+        direction = RIGHT;
     }
 
     @Override
