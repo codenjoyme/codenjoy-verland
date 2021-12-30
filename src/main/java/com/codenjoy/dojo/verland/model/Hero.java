@@ -86,7 +86,7 @@ public class Hero extends RoundPlayerHero<Field>
         }
     }
 
-    public void cure(Direction direction) {
+    void cure(Direction direction) {
         act();
         switch (direction) {
             case UP: up(); break;
@@ -96,7 +96,7 @@ public class Hero extends RoundPlayerHero<Field>
         }
     }
 
-    public void suicide() {
+    void suicide() {
         act(ACT_SUICIDE);
     }
 
