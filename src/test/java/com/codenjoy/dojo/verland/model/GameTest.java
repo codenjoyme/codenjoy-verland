@@ -746,7 +746,7 @@ public class GameTest extends AbstractGameTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyAllEvents("[CURE, WIN]");
+        verifyAllEvents("[CURE, WIN_ROUND]");
 
         assertWin();
     }
@@ -774,7 +774,7 @@ public class GameTest extends AbstractGameTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyAllEvents("[CURE, CURE, WIN]");
+        verifyAllEvents("[CURE, CURE, WIN_ROUND]");
 
         assertWin();
     }
@@ -824,7 +824,7 @@ public class GameTest extends AbstractGameTest {
                 "☼ x ☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyAllEvents("[CURE, WIN]");
+        verifyAllEvents("[CURE, WIN_ROUND]");
 
         assertWin();
     }
@@ -874,7 +874,7 @@ public class GameTest extends AbstractGameTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyAllEvents("[CURE, WIN]");
+        verifyAllEvents("[CURE, WIN_ROUND]");
 
         assertWin();
     }
@@ -928,7 +928,7 @@ public class GameTest extends AbstractGameTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyAllEvents("[CURE, WIN]");
+        verifyAllEvents("[CURE, WIN_ROUND]");
 
         assertWin();
     }
@@ -1048,7 +1048,7 @@ public class GameTest extends AbstractGameTest {
                 "☼x♥x☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyAllEvents("[CURE, CURE, WIN]");
+        verifyAllEvents("[CURE, CURE, WIN_ROUND]");
 
         assertWin();
     }
@@ -1370,7 +1370,7 @@ public class GameTest extends AbstractGameTest {
                 "☼ x ☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyAllEvents("[CURE, WIN]");
+        verifyAllEvents("[CURE, WIN_ROUND]");
     }
 
     @Test
@@ -1576,7 +1576,7 @@ public class GameTest extends AbstractGameTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyAllEvents("[CURE, WIN]");
+        verifyAllEvents("[CURE, WIN_ROUND]");
     }
 
     @Test
@@ -1692,7 +1692,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼\n");
 
         // TODO это случается потому, что поле пустое и нет на нем инфекций
-        verifyAllEvents("[WIN, WIN, WIN, WIN, WIN, WIN, WIN, WIN]");
+        verifyAllEvents("[WIN_ROUND, WIN_ROUND, WIN_ROUND, WIN_ROUND, WIN_ROUND, WIN_ROUND, WIN_ROUND, WIN_ROUND]");
     }
 
     @Test
@@ -1795,7 +1795,7 @@ public class GameTest extends AbstractGameTest {
                 "☼ ♥ ☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyAllEvents("[WIN]");
+        verifyAllEvents("[WIN_ROUND]");
 
         assertWin();
 

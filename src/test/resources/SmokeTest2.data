@@ -10309,7 +10309,7 @@
 415: 1:Scores: 693
 415: 1:Answer: ACT,UP
 415: 1:Fire Event: CURE
-415: 1:Fire Event: WIN
+415: 1:Fire Event: WIN_ROUND
 ------------------------------------------
 416: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 416: 1:☼    x        xx x ☼
@@ -20500,7 +20500,7 @@
 825: 1:Scores: 1419
 825: 1:Answer: ACT,UP
 825: 1:Fire Event: CURE
-825: 1:Fire Event: WIN
+825: 1:Fire Event: WIN_ROUND
 ------------------------------------------
 826: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 826: 1:☼    x        xx x ☼

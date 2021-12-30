@@ -29,14 +29,10 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 import com.codenjoy.dojo.verland.model.items.Cell;
-import com.codenjoy.dojo.verland.services.Event;
 
 import java.util.List;
 
 import static com.codenjoy.dojo.games.verland.Element.*;
-import static com.codenjoy.dojo.games.verland.Element.ENEMY_HERO;
-import static com.codenjoy.dojo.games.verland.Element.HERO;
-import static com.codenjoy.dojo.games.verland.Element.OTHER_HERO;
 import static com.codenjoy.dojo.services.StateUtils.filter;
 import static com.codenjoy.dojo.verland.services.Event.*;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
@@ -177,7 +173,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
     }
 
     public void fireMorePotions() {
-        getPlayer().event(Event.NO_MORE_POTIONS);
+        getPlayer().event(NO_MORE_POTIONS);
     }
 
     public void tryToCure(PotionsAction action) {

@@ -34,12 +34,12 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.round.RoundField;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.verland.model.items.*;
-import com.codenjoy.dojo.verland.services.Event;
 import com.codenjoy.dojo.verland.services.GameSettings;
 
 import java.util.*;
 
 import static com.codenjoy.dojo.services.field.Generator.generate;
+import static com.codenjoy.dojo.verland.services.Event.*;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.COUNT_CONTAGIONS;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
 import static java.util.stream.Collectors.toList;
@@ -55,7 +55,7 @@ public class Verland extends RoundField<Player> implements Field {
     private Dice heroDice;
 
     public Verland(Dice dice, Level level, GameSettings settings) {
-        super(Event.START_ROUND, Event.WIN, settings);
+        super(START_ROUND, WIN_ROUND, settings);
 
         this.level = level;
         this.dice = dice;
@@ -104,7 +104,7 @@ public class Verland extends RoundField<Player> implements Field {
 
                 Hero hero = cure.owner();
                 if (hero != null) {
-                    hero.getPlayer().event(Event.CURE);
+                    hero.getPlayer().event(CURE);
                 }
             }
         }
@@ -112,7 +112,7 @@ public class Verland extends RoundField<Player> implements Field {
         if (!isContagionsExists()) {
             if (!settings().isRoundsEnabled()) {
                 players.forEach(player -> {
-                    player.event(Event.WIN);
+                    player.event(WIN_ROUND);
                     player.leaveBoard();
                 });
             }
@@ -221,7 +221,7 @@ public class Verland extends RoundField<Player> implements Field {
             if (contagions().contains(to)) {
                 return;
             }
-            hero.getPlayer().event(Event.FORGOT_POTION);
+            hero.getPlayer().event(FORGOT_POTION);
             if (hero.noMorePotions()) {
                 hero.fireMorePotions();
             }

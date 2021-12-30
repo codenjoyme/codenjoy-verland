@@ -229,8 +229,8 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼☼☼☼☼☼\n", 1);
 
         verifyAllEvents(
-                "listener(0) => [CURE, WIN]\n" +
-                "listener(1) => [WIN]\n");
+                "listener(0) => [CURE, WIN_ROUND]\n" +
+                "listener(1) => [WIN_ROUND]\n");
 
         assertWin(0);
         assertWin(1);
@@ -264,8 +264,8 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼☼☼☼☼☼\n");
 
         verifyAllEvents(
-                "listener(0) => [CURE, WIN]\n" +
-                "listener(1) => [CURE, WIN]\n");
+                "listener(0) => [CURE, WIN_ROUND]\n" +
+                "listener(1) => [CURE, WIN_ROUND]\n");
 
         assertWin(0);
         assertWin(1);
@@ -302,8 +302,8 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼☼☼☼☼☼\n");
 
         verifyAllEvents(
-                "listener(0) => [CURE, WIN]\n" +
-                "listener(1) => [CLEAN_AREA, CURE, WIN]\n");
+                "listener(0) => [CURE, WIN_ROUND]\n" +
+                "listener(1) => [CLEAN_AREA, CURE, WIN_ROUND]\n");
 
         assertWin(0);
         assertWin(1);

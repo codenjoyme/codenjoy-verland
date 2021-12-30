@@ -3872,7 +3872,7 @@
 195: 1:Scores: 250
 195: 1:Answer: ACT,LEFT
 195: 1:Fire Event: CURE
-195: 1:Fire Event: WIN
+195: 1:Fire Event: WIN_ROUND
 ------------------------------------------
 196: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 196: 1:☼             ☼
@@ -7787,7 +7787,7 @@
 392: 1:Scores: 540
 392: 1:Answer: ACT,LEFT
 392: 1:Fire Event: CURE
-392: 1:Fire Event: WIN
+392: 1:Fire Event: WIN_ROUND
 ------------------------------------------
 393: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 393: 1:☼             ☼
@@ -11646,7 +11646,7 @@
 586: 1:Scores: 831
 586: 1:Answer: ACT,UP
 586: 1:Fire Event: CURE
-586: 1:Fire Event: WIN
+586: 1:Fire Event: WIN_ROUND
 ------------------------------------------
 587: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 587: 1:☼             ☼
@@ -15615,7 +15615,7 @@
 786: 1:Scores: 1118
 786: 1:Answer: ACT,UP
 786: 1:Fire Event: CURE
-786: 1:Fire Event: WIN
+786: 1:Fire Event: WIN_ROUND
 ------------------------------------------
 787: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 787: 1:☼  x          ☼
@@ -19083,7 +19083,7 @@
 960: 1:Scores: 1398
 960: 1:Answer: ACT,UP
 960: 1:Fire Event: CURE
-960: 1:Fire Event: WIN
+960: 1:Fire Event: WIN_ROUND
 ------------------------------------------
 961: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 961: 1:☼        xx   ☼

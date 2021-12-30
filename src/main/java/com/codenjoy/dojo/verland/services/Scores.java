@@ -44,7 +44,7 @@ public class Scores extends ScoresMap<Void> {
         put(Event.NO_MORE_POTIONS,
                 value -> settings.integer(NO_MORE_POTIONS_PENALTY));
 
-        put(Event.WIN,
+        put(Event.WIN_ROUND,
                 value -> settings.integer(WIN_SCORE));
 
         put(Event.SUICIDE,

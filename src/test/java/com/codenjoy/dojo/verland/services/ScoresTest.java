@@ -63,7 +63,7 @@ public class ScoresTest {
     }
 
     public void win() {
-        scores.event(Event.WIN);
+        scores.event(Event.WIN_ROUND);
     }
 
     @Before
