@@ -274,4 +274,42 @@ public class MultiplayerTest extends AbstractGameTest {
                 "hero(0)=40\n" +
                 "hero(1)=40");
     }
+
+    @Test
+    public void shouldPointsAreGainedByBothPlayers_evenIfOnePlayerHasMorePointsThanOthers() {
+        // given
+        givenFl("☼☼☼☼☼☼\n" +
+                "☼♥o*♥☼\n" +
+                "☼****☼\n" +
+                "☼****☼\n" +
+                "☼****☼\n" +
+                "☼☼☼☼☼☼\n");
+
+        // when
+        hero(1).left();
+        tick();
+
+        hero(0).cure(RIGHT);
+        hero(1).cure(LEFT);
+        tick();
+
+        // then
+        assertF("☼☼☼☼☼☼\n" +
+                "☼♥x♠ ☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼☼☼☼☼☼\n");
+
+        verifyAllEvents(
+                "listener(0) => [CURE, WIN]\n" +
+                "listener(1) => [CLEAN_AREA, CURE, WIN]\n");
+
+        assertWin(0);
+        assertWin(1);
+
+        assertScore(
+                "hero(0)=40\n" +
+                "hero(1)=41");
+    }
 }
