@@ -1265,6 +1265,8 @@ public class GameTest extends AbstractGameTest {
                 "☼*!*☼\n" +
                 "☼☼☼☼☼\n");
 
+        verifyAllEvents("[FORGOT_POTION]");
+
         // when
         hero().cure(LEFT);
         tick();
@@ -1275,6 +1277,8 @@ public class GameTest extends AbstractGameTest {
                 "☼!♥*☼\n" +
                 "☼*!*☼\n" +
                 "☼☼☼☼☼\n");
+
+        verifyAllEvents("[FORGOT_POTION]");
 
         // when
         hero().cure(RIGHT);
@@ -1287,18 +1291,36 @@ public class GameTest extends AbstractGameTest {
                 "☼*!*☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyAllEvents("[FORGOT_POTION, FORGOT_POTION, FORGOT_POTION, NO_MORE_POTIONS]");
+        verifyAllEvents("[FORGOT_POTION, NO_MORE_POTIONS]");
 
         assertAlive();
+    }
+
+    @Test
+    public void shouldFireEventAgain_whenNoMoreCharge() {
+        // given
+        shouldFireEvent_whenNoMoreCharge();
 
         // when
         hero().cure(UP);
         tick();
 
         // then
-        verifyAllEvents("");
+        verifyAllEvents("[NO_MORE_POTIONS]");
+
+        assertF("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼!♥!☼\n" +
+                "☼*!*☼\n" +
+                "☼☼☼☼☼\n");
+
+        // when
+        hero().cure(UP);
+        tick();
 
         // then
+        verifyAllEvents("[NO_MORE_POTIONS]");
+
         assertF("☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼!♥!☼\n" +

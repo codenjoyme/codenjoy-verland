@@ -176,16 +176,12 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
         return potions.charge() == 0;
     }
 
-    public boolean tryFireMorePotions() {
-        if (noMorePotions()) {
-            getPlayer().event(Event.NO_MORE_POTIONS);
-            return true;
-        }
-        return false;
+    public void fireMorePotions() {
+        getPlayer().event(Event.NO_MORE_POTIONS);
     }
 
     public void tryToCure(PotionsAction action) {
-        if (tryFireMorePotions()) {
+        if (noMorePotions()) {
             return;
         }
 

@@ -207,6 +207,7 @@ public class Verland extends RoundField<Player> implements Field {
         }
 
         if (hero.noMorePotions()) {
+            hero.fireMorePotions();
             return;
         }
 
@@ -221,7 +222,9 @@ public class Verland extends RoundField<Player> implements Field {
                 return;
             }
             hero.getPlayer().event(Event.FORGOT_POTION);
-            hero.tryFireMorePotions();
+            if (hero.noMorePotions()) {
+                hero.fireMorePotions();
+            }
         });
     }
 
