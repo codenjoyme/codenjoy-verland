@@ -70,13 +70,13 @@ public class Hero extends RoundPlayerHero<Field>
     }
 
     @Override
-    public void act(Act is) {
-        if (is.act()) {
+    public void act(Act act) {
+        if (act.is()) {
             cure = true;
             return;
         }
 
-        if (is.act(ACT_SUICIDE)) {
+        if (act.is(ACT_SUICIDE)) {
             die(SUICIDE);
             return;
         }
