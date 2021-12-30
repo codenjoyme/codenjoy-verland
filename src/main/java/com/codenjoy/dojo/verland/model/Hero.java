@@ -28,18 +28,19 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.joystick.Act;
+import com.codenjoy.dojo.services.joystick.RoundsDirectionJoystick;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 import com.codenjoy.dojo.verland.model.items.Cell;
 
 import java.util.List;
 
 import static com.codenjoy.dojo.games.verland.Element.*;
-import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.StateUtils.filter;
 import static com.codenjoy.dojo.verland.services.Event.*;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
 
-public class Hero extends RoundPlayerHero<Field> implements State<Element, Player> {
+public class Hero extends RoundPlayerHero<Field>
+        implements RoundsDirectionJoystick, State<Element, Player> {
 
     private static final int ACT_SUICIDE = 0;
 
@@ -64,31 +65,8 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
     }
 
     @Override
-    public void down() {
-        if (!isActiveAndAlive()) return;
-        
-        direction = DOWN;
-    }
-
-    @Override
-    public void up() {
-        if (!isActiveAndAlive()) return;
-        
-        direction = UP;
-    }
-
-    @Override
-    public void left() {
-        if (!isActiveAndAlive()) return;
-        
-        direction = LEFT;
-    }
-
-    @Override
-    public void right() {
-        if (!isActiveAndAlive()) return;
-        
-        direction = RIGHT;
+    public void change(Direction direction) {
+        this.direction = direction;
     }
 
     @Override
