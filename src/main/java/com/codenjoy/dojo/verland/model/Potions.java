@@ -38,4 +38,8 @@ public class Potions {
         this.charge--;
     }
 
+    @Override
+    public String toString() {
+        return String.valueOf(charge);
+    }
 }

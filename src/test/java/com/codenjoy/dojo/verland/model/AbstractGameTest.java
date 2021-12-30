@@ -170,6 +170,15 @@ public abstract class AbstractGameTest {
                 TestUtils.collectHeroesData(players, "scores", true));
     }
 
+    public void assertPotions(String expected) {
+        assertEquals(expected,
+                TestUtils.collectHeroesData(players, "potions", true));
+    }
+
+    public void assertContagions(int expected) {
+        assertEquals(expected, field().contagions().size());
+    }
+
     public GameSettings settings() {
         return settings;
     }

@@ -312,4 +312,42 @@ public class MultiplayerTest extends AbstractGameTest {
                 "hero(0)=40\n" +
                 "hero(1)=41");
     }
+
+    @Test
+    public void shouldCureCell_whenThereIsAnotherHeroOnIt() {
+        // given
+        givenFl("☼☼☼☼☼\n" +
+                "☼♥♥*☼\n" +
+                "☼***☼\n" +
+                "☼**o☼\n" +
+                "☼☼☼☼☼\n");
+
+        assertPotions(
+                "hero(0)=3\n" +
+                "hero(1)=3");
+
+        // when
+        hero(0).cure(RIGHT);
+        hero(1).cure(LEFT);
+        tick();
+
+        hero(0).down();
+        hero(1).down();
+        tick();
+
+        // then
+        assertF("☼☼☼☼☼\n" +
+                "☼!!*☼\n" +
+                "☼♥♠*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        verifyAllEvents(
+                "listener(0) => [FORGOT_POTION, CLEAN_AREA]\n" +
+                "listener(1) => [FORGOT_POTION, CLEAN_AREA]\n");
+
+        assertPotions(
+                "hero(0)=2\n" +
+                "hero(1)=2");
+    }
 }
