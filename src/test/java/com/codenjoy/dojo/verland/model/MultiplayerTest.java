@@ -350,4 +350,84 @@ public class MultiplayerTest extends AbstractGameTest {
                 "hero(0)=2\n" +
                 "hero(1)=2");
     }
+
+    @Test
+    public void shouldGoForward_whenThereIsAnotherHeroOnIt_caseMovingInTurn() {
+        // given
+        givenFl("☼☼☼☼☼\n" +
+                "☼♥♥*☼\n" +
+                "☼***☼\n" +
+                "☼**o☼\n" +
+                "☼☼☼☼☼\n");
+
+        // when
+        hero(0).right();
+        tick();
+
+        // then
+        assertF("☼☼☼☼☼\n" +
+                "☼ ♥*☼\n" +
+                "☼***☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n", 0);
+
+        assertF("☼☼☼☼☼\n" +
+                "☼ ♥*☼\n" +
+                "☼***☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n", 1);
+
+        verifyAllEvents("");
+
+        // when
+        hero(1).left();
+        tick();
+
+        // then
+        assertF("☼☼☼☼☼\n" +
+                "☼♠♥*☼\n" +
+                "☼***☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n", 0);
+
+        assertF("☼☼☼☼☼\n" +
+                "☼♥♠*☼\n" +
+                "☼***☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n", 1);
+
+        verifyAllEvents("");
+    }
+
+    @Test
+    public void shouldGoForward_whenThereIsAnotherHeroOnIt_simultaneousMovement() {
+        // given
+        givenFl("☼☼☼☼☼\n" +
+                "☼♥♥*☼\n" +
+                "☼***☼\n" +
+                "☼**o☼\n" +
+                "☼☼☼☼☼\n");
+
+        // when
+        hero(0).right();
+        tick();
+
+        hero(1).left();
+        tick();
+
+        // then
+        assertF("☼☼☼☼☼\n" +
+                "☼♠♥*☼\n" +
+                "☼***☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n", 0);
+
+        assertF("☼☼☼☼☼\n" +
+                "☼♥♠*☼\n" +
+                "☼***☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n", 1);
+
+        verifyAllEvents("");
+    }
 }
