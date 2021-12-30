@@ -77,19 +77,6 @@ public class Verland extends RoundField<Player> implements Field {
         super.clearScore();
     }
 
-    private Dice initHeroDice() {
-        // метод отдает только те координаты, которые в изначальной
-        // карте отмечены как стартовые для героев
-        List<HeroSpot> spots = level.heroesSpots();
-        // мы их перемешаем, чтобы была какая-то рендомность
-        Collections.shuffle(spots, new DiceRandomWrapper(dice));
-        // а когда точек больше не останется, пойдем по новому кругу
-        List<Integer> numbers = spots.stream()
-                .flatMap(pt -> Arrays.stream(new Integer[]{pt.getX(), pt.getY()}))
-                .collect(toList());
-        return new NumbersCycleDice(numbers, -1);
-    }
-
     @Override
     protected void onAdd(Player player) {
         player.newHero(this);
@@ -140,6 +127,19 @@ public class Verland extends RoundField<Player> implements Field {
     @Override
     public int size() {
         return field.size();
+    }
+
+    private Dice initHeroDice() {
+        // метод отдает только те координаты, которые в изначальной
+        // карте отмечены как стартовые для героев
+        List<HeroSpot> spots = level.heroesSpots();
+        // мы их перемешаем, чтобы была какая-то рендомность
+        Collections.shuffle(spots, new DiceRandomWrapper(dice));
+        // а когда точек больше не останется, пойдем по новому кругу
+        List<Integer> numbers = spots.stream()
+                .flatMap(pt -> Arrays.stream(new Integer[]{pt.getX(), pt.getY()}))
+                .collect(toList());
+        return new NumbersCycleDice(numbers, -1);
     }
 
     private void generateAll() {
