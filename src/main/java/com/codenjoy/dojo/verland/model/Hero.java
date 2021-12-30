@@ -27,6 +27,7 @@ import com.codenjoy.dojo.games.verland.Element;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.joystick.Act;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 import com.codenjoy.dojo.verland.model.items.Cell;
 
@@ -38,6 +39,8 @@ import static com.codenjoy.dojo.verland.services.Event.*;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
 
 public class Hero extends RoundPlayerHero<Field> implements State<Element, Player> {
+
+    private static final int ACT_SUICIDE = 0;
 
     private int score;
     private Potions potions;
@@ -90,13 +93,15 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
     @Override
     public void act(int... p) {
         if (!isActiveAndAlive()) return;
-        
-        if (p.length == 0) {
+
+        Act is = new Act(p);
+
+        if (is.act()) {
             cure = true;
             return;
         }
 
-        if (p.length == 1 && p[0] == 0) {
+        if (is.act(ACT_SUICIDE)) {
             die(SUICIDE);
             return;
         }
@@ -113,7 +118,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
     }
 
     public void suicide() {
-        act(0);
+        act(ACT_SUICIDE);
     }
 
     @Override
