@@ -102,6 +102,12 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼****☼\n" +
                 "☼****☼\n" +
                 "☼☼☼☼☼☼\n", 3);
+
+        assertScore(
+                "0=0\n" +
+                "1=0\n" +
+                "2=0\n" +
+                "3=0");
     }
 
     @Test
@@ -150,6 +156,12 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼****☼\n" +
                 "☼****☼\n" +
                 "☼☼☼☼☼☼\n", 3);
+
+        assertScore(
+                "0=1\n" +
+                "1=1\n" +
+                "2=1\n" +
+                "3=1");
     }
 
     @Test
@@ -185,6 +197,10 @@ public class MultiplayerTest extends AbstractGameTest {
         verifyAllEvents(
                 "listener(0) => [CURE]\n" +
                 "listener(1) => [CURE]\n");
+
+        assertScore(
+                "0=10\n" +
+                "1=10");
     }
 
     @Test
@@ -222,6 +238,10 @@ public class MultiplayerTest extends AbstractGameTest {
 
         assertWin(0);
         assertWin(1);
+
+        assertScore(
+                "0=40\n" +
+                "1=30");
     }
 
     @Test
@@ -240,11 +260,11 @@ public class MultiplayerTest extends AbstractGameTest {
         tick();
 
         // then
-        givenFl("☼☼☼☼☼☼\n" +
-                "☼♥o♥*☼\n" +
-                "☼****☼\n" +
-                "☼****☼\n" +
-                "☼****☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
+                "☼♥x♠ ☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
                 "☼☼☼☼☼☼\n");
 
         verifyAllEvents(
@@ -253,5 +273,9 @@ public class MultiplayerTest extends AbstractGameTest {
 
         assertWin(0);
         assertWin(1);
+        
+        assertScore(
+                "0=40\n" +
+                "1=40");
     }
 }

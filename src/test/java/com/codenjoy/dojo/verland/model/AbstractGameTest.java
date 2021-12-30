@@ -24,6 +24,7 @@ package com.codenjoy.dojo.verland.model;
 
 
 import com.codenjoy.dojo.games.sample.Element;
+import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.verland.TestGameSettings;
 import com.codenjoy.dojo.verland.model.items.HeroSpot;
 import com.codenjoy.dojo.verland.services.Event;
@@ -254,4 +255,10 @@ public abstract class AbstractGameTest {
         // ему тут делать нечего
         assertEquals(false, player(index).shouldLeave());
     }
+
+    public void assertScore(String expected) {
+        assertEquals(expected, TestUtils.collectHeroesData(players, "scores"));
+    }
+
+
 }
