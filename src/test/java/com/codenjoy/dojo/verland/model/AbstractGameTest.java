@@ -165,6 +165,11 @@ public abstract class AbstractGameTest {
         assertEquals(expected, events().getEvents());
     }
 
+    public void assertScore(String expected) {
+        assertEquals(expected,
+                TestUtils.collectHeroesData(players, "scores", true));
+    }
+
     public GameSettings settings() {
         return settings;
     }
@@ -255,10 +260,4 @@ public abstract class AbstractGameTest {
         // ему тут делать нечего
         assertEquals(false, player(index).shouldLeave());
     }
-
-    public void assertScore(String expected) {
-        assertEquals(expected, TestUtils.collectHeroesData(players, "scores"));
-    }
-
-
 }

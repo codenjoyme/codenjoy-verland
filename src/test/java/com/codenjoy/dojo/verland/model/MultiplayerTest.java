@@ -103,11 +103,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼****☼\n" +
                 "☼☼☼☼☼☼\n", 3);
 
-        assertScore(
-                "0=0\n" +
-                "1=0\n" +
-                "2=0\n" +
-                "3=0");
+        assertScore("");
     }
 
     @Test
@@ -158,10 +154,10 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼☼☼☼☼☼\n", 3);
 
         assertScore(
-                "0=1\n" +
-                "1=1\n" +
-                "2=1\n" +
-                "3=1");
+                "hero(0)=1\n" +
+                "hero(1)=1\n" +
+                "hero(2)=1\n" +
+                "hero(3)=1");
     }
 
     @Test
@@ -199,8 +195,8 @@ public class MultiplayerTest extends AbstractGameTest {
                 "listener(1) => [CURE]\n");
 
         assertScore(
-                "0=10\n" +
-                "1=10");
+                "hero(0)=10\n" +
+                "hero(1)=10");
     }
 
     @Test
@@ -240,8 +236,8 @@ public class MultiplayerTest extends AbstractGameTest {
         assertWin(1);
 
         assertScore(
-                "0=40\n" +
-                "1=30");
+                "hero(0)=40\n" +
+                "hero(1)=30");
     }
 
     @Test
@@ -275,7 +271,7 @@ public class MultiplayerTest extends AbstractGameTest {
         assertWin(1);
         
         assertScore(
-                "0=40\n" +
-                "1=40");
+                "hero(0)=40\n" +
+                "hero(1)=40");
     }
 }
