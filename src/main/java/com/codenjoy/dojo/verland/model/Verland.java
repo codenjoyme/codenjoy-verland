@@ -35,8 +35,10 @@ import com.codenjoy.dojo.services.round.RoundField;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.verland.model.items.*;
 import com.codenjoy.dojo.verland.services.GameSettings;
+import com.codenjoy.dojo.whatsnext.WhatsNextUtils;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 import static com.codenjoy.dojo.services.field.Generator.generate;
 import static com.codenjoy.dojo.verland.services.Event.*;
@@ -68,6 +70,8 @@ public class Verland extends RoundField<Player> implements Field {
 
     @Override
     public void clearScore() {
+        if (level == null) return;
+
         level.saveTo(field);
         field.init(this);
 
@@ -242,6 +246,15 @@ public class Verland extends RoundField<Player> implements Field {
                 Cured.class,
                 Cure.class,
                 Cell.class);
+    }
+
+    @Override
+    public List<Player> load(String board, Supplier<Player> player) {
+        level = new Level(board);
+        List<Hero> heroes = level.heroesSpots().stream()
+                .map(Hero::new)
+                .collect(toList());
+        return WhatsNextUtils.load(this, heroes, player);
     }
 
     @Override

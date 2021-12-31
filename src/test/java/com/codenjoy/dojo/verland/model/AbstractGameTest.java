@@ -24,20 +24,20 @@ package com.codenjoy.dojo.verland.model;
 
 
 import com.codenjoy.dojo.games.sample.Element;
-import com.codenjoy.dojo.utils.TestUtils;
-import com.codenjoy.dojo.verland.TestGameSettings;
-import com.codenjoy.dojo.verland.model.items.HeroSpot;
-import com.codenjoy.dojo.verland.services.Event;
-import com.codenjoy.dojo.verland.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
-import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.utils.events.EventsListenersAssert;
 import com.codenjoy.dojo.utils.smart.SmartAssert;
+import com.codenjoy.dojo.verland.TestGameSettings;
+import com.codenjoy.dojo.verland.services.Event;
+import com.codenjoy.dojo.verland.services.GameSettings;
+import com.codenjoy.dojo.whatsnext.WhatsNextUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.mockito.stubbing.OngoingStubbing;
@@ -45,7 +45,9 @@ import org.mockito.stubbing.OngoingStubbing;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.utils.TestUtils.asArray;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.COUNT_CONTAGIONS;
+import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -85,6 +87,7 @@ public abstract class AbstractGameTest {
     }
 
     public void dice(int... ints) {
+        if (ints.length == 0) return;
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
         for (int i : ints) {
             when = when.thenReturn(i);
@@ -98,10 +101,22 @@ public abstract class AbstractGameTest {
 
         beforeCreateField();
 
-        field = new Verland(dice, level, settings);
-        level.heroesSpots().forEach(this::givenPlayer);
+        field = new Verland(dice, null, settings);
+        field.load(level.map(), this::givenPlayer);
+
+        setupHeroesDice();
+
+        games = WhatsNextUtils.newGameForAll(players, printer, field);
 
         afterCreateField();
+    }
+
+    private void setupHeroesDice() {
+        // так как метод поиска свободных мест бегает не по свободным,
+        // координатам как в других играх, а по спотам, то тут нужен только
+        // рандомайзер для collections shuffle, а не
+        // dice(asArray(level.heroesSpots()));
+        dice(1);
     }
 
     private void afterCreateField() {
@@ -123,24 +138,23 @@ public abstract class AbstractGameTest {
         return number / Math.abs(number) == DESPITE_LEVEL;
     }
 
-    protected void givenPlayer(HeroSpot spot) {
+    protected Player givenPlayer() {
         EventListener listener = mock(EventListener.class);
         listeners.add(listener);
 
         Player player = new Player(listener, settings);
         players.add(player);
+        return player;
+    }
 
-        Game game = new Single(player, printer);
+    public Player givenPlayer(Point pt) {
+        Player player = givenPlayer();
+
+        dice(asArray(asList(pt)));
+        Game game = WhatsNextUtils.newGame(player, printer, field);
         games.add(game);
 
-        // так как метод поиска свободных мест бегает не по свободным,
-        // координатам как в других играх, а по спотам, то тут нужен только
-        // рандомайзер для collections shuffle, а не
-        // dice(spot.getX(), spot.getY());
-        dice(1);
-
-        game.on(field);
-        game.newGame();
+        return players.get(players.size() - 1);
     }
 
     protected int despiteLevel(int countContagions) {
