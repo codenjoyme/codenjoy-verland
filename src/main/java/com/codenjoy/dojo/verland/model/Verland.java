@@ -137,7 +137,7 @@ public class Verland extends RoundField<Player> implements Field {
         Collections.shuffle(spots, new DiceRandomWrapper(dice));
         // а когда точек больше не останется, пойдем по новому кругу
         List<Integer> numbers = spots.stream()
-                .flatMap(pt -> Arrays.stream(new Integer[]{pt.getX(), pt.getY()}))
+                .flatMap(Point::stream)
                 .collect(toList());
         return new NumbersCycleDice(numbers, -1);
     }
