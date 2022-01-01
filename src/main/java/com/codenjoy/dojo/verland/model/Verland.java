@@ -33,9 +33,9 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.round.RoundField;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.utils.whatsnext.WhatsNextUtils;
 import com.codenjoy.dojo.verland.model.items.*;
 import com.codenjoy.dojo.verland.services.GameSettings;
-import com.codenjoy.dojo.whatsnext.WhatsNextUtils;
 
 import java.util.*;
 import java.util.function.Supplier;
