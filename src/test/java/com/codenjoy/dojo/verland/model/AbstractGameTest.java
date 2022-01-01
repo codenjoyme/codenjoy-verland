@@ -23,95 +23,39 @@ package com.codenjoy.dojo.verland.model;
  */
 
 
-import com.codenjoy.dojo.games.sample.Element;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.multiplayer.LevelProgress;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.multiplayer.TriFunction;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.codenjoy.dojo.utils.events.EventsListenersAssert;
-import com.codenjoy.dojo.utils.smart.SmartAssert;
+import com.codenjoy.dojo.utils.gametest.AbstractBaseGameTest;
 import com.codenjoy.dojo.verland.TestGameSettings;
 import com.codenjoy.dojo.verland.services.Event;
 import com.codenjoy.dojo.verland.services.GameSettings;
-import com.codenjoy.dojo.whatsnext.WhatsNextUtils;
 import org.junit.After;
 import org.junit.Before;
-import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
-import static com.codenjoy.dojo.utils.TestUtils.asArray;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.COUNT_CONTAGIONS;
-import static java.util.Arrays.asList;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-public abstract class AbstractGameTest {
+public abstract class AbstractGameTest
+        extends AbstractBaseGameTest<Player, Verland, GameSettings, Level, Hero> {
 
     private static final int DESPITE_LEVEL = -1;
 
-    private List<EventListener> listeners;
-    private List<Game> games;
-    private List<Player> players;
-
-    private Dice dice;
-    private PrinterFactory<Element, Player> printer;
-    private Verland field;
-    private GameSettings settings;
-    private EventsListenersAssert events;
-    private Level level;
-
     @Before
     public void setup() {
-        listeners = new LinkedList<>();
-        players = new LinkedList<>();
-        games = new LinkedList<>();
-
-        dice = mock(Dice.class);
-        settings = new TestGameSettings();
-        setupSettings();
-        printer = new PrinterFactoryImpl<>();
-        events = new EventsListenersAssert(() -> listeners, Event.class);
+        super.setup();
     }
 
     @After
     public void after() {
-        verifyAllEvents("");
-        SmartAssert.checkResult();
+        super.after();
     }
 
-    public void dice(int... ints) {
-        if (ints.length == 0) return;
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int i : ints) {
-            when = when.thenReturn(i);
-        }
-    }
-
-    public void givenFl(String... maps) {
-        int levelNumber = LevelProgress.levelsStartsFrom1;
-        settings.setLevelMaps(levelNumber, maps);
-        level = settings.level(levelNumber, dice, Level::new);
-
-        beforeCreateField();
-
-        field = new Verland(dice, null, settings);
-        field.load(level.map(), this::givenPlayer);
-
-        setupHeroesDice();
-
-        games = WhatsNextUtils.newGameForAll(players, printer, field);
-
-        afterCreateField();
-    }
-
-    private void setupHeroesDice() {
+    @Override
+    protected void setupHeroesDice() {
         // так как метод поиска свободных мест бегает не по свободным,
         // координатам как в других играх, а по спотам, то тут нужен только
         // рандомайзер для collections shuffle, а не
@@ -119,131 +63,66 @@ public abstract class AbstractGameTest {
         dice(1);
     }
 
-    private void afterCreateField() {
-        settings.integer(COUNT_CONTAGIONS, field.contagions().size());
+    @Override
+    protected void afterCreateField() {
+        settings().integer(COUNT_CONTAGIONS, field().contagions().size());
     }
 
-    private void beforeCreateField() {
-        if (isNegative(settings.integer(COUNT_CONTAGIONS))) {
+    @Override
+    protected  void beforeCreateField() {
+        if (isNegative(settings().integer(COUNT_CONTAGIONS))) {
             // таким хитрым костыльным способом мы сообщаем, что будем
             // игнорировать количество заражений на поле,
             // и попробуем до-генерировать их генератором
-            settings.integer(COUNT_CONTAGIONS, Math.abs(settings.integer(COUNT_CONTAGIONS)));
+            settings().integer(COUNT_CONTAGIONS, Math.abs(settings().integer(COUNT_CONTAGIONS)));
         } else {
-            settings.integer(COUNT_CONTAGIONS, level.contagions().size());
+            settings().integer(COUNT_CONTAGIONS, level().contagions().size());
         }
     }
 
+    @Override
+    protected GameSettings setupSettings() {
+        return new TestGameSettings();
+    }
+
+    @Override
+    protected Function<String, Level> createLevel() {
+        return Level::new;
+    }
+
+    @Override
+    protected BiFunction<EventListener, GameSettings, Player> createPlayer() {
+        return Player::new;
+    }
+
+    @Override
+    protected TriFunction<Dice, Level, GameSettings, Verland> createField() {
+        return Verland::new;
+    }
+
+    @Override
+    protected Class<?> eventClass() {
+        return Event.class;
+    }
+
+    // other methods
+
     private boolean isNegative(int number) {
         return number / Math.abs(number) == DESPITE_LEVEL;
-    }
-
-    protected Player givenPlayer() {
-        EventListener listener = mock(EventListener.class);
-        listeners.add(listener);
-
-        Player player = new Player(listener, settings);
-        players.add(player);
-        return player;
-    }
-
-    public Player givenPlayer(Point pt) {
-        Player player = givenPlayer();
-
-        dice(asArray(asList(pt)));
-        Game game = WhatsNextUtils.newGame(player, printer, field);
-        games.add(game);
-
-        return players.get(players.size() - 1);
     }
 
     protected int despiteLevel(int countContagions) {
         return DESPITE_LEVEL * countContagions;
     }
 
-    public void assertEquals(Object expected, Object actual) {
-        SmartAssert.assertEquals(expected, actual);
-    }
-
-    protected void setupSettings() {
-        // do something with settings
-    }
-
-    public void tick() {
-        field.tick();
-    }
-
-    // getters & asserts
-
-    public void verifyAllEvents(String expected) {
-        assertEquals(expected, events().getEvents());
-    }
-
-    public void assertScore(String expected) {
-        assertEquals(expected,
-                TestUtils.collectHeroesData(players, "scores", true));
-    }
-
     public void assertPotions(String expected) {
         assertEquals(expected,
-                TestUtils.collectHeroesData(players, "potions", true));
+                TestUtils.collectHeroesData(players(), "potions", true));
     }
 
     public void assertContagions(int expected) {
         assertEquals(expected, field().contagions().size());
     }
-
-    public GameSettings settings() {
-        return settings;
-    }
-
-    public Verland field() {
-        return field;
-    }
-
-    public Level level() {
-        return level;
-    }
-
-    public EventsListenersAssert events() {
-        return events;
-    }
-
-    public void assertF(String expected, int index) {
-        assertEquals(expected, game(index).getBoardAsString());
-    }
-
-    public Game game(int index) {
-        return games.get(index);
-    }
-
-    public Player player(int index) {
-        return players.get(index);
-    }
-
-    public Hero hero(int index) {
-        return (Hero) game(index).getPlayer().getHero();
-    }
-
-    // getters, if only one player
-
-    public void assertF(String expected) {
-        assertF(expected, 0);
-    }
-
-    public Game game() {
-        return game(0);
-    }
-
-    public Player player() {
-        return player(0);
-    }
-
-    public Hero hero() {
-        return hero(0);
-    }
-
-    // other methods
 
     public void assertWin() {
         assertWin(0);
