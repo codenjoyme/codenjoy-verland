@@ -38,7 +38,7 @@ import com.codenjoy.dojo.verland.model.items.*;
 import com.codenjoy.dojo.verland.services.GameSettings;
 
 import java.util.*;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import static com.codenjoy.dojo.services.field.Generator.generate;
 import static com.codenjoy.dojo.verland.services.Event.*;
@@ -46,7 +46,7 @@ import static com.codenjoy.dojo.verland.services.GameSettings.Keys.COUNT_CONTAGI
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
 import static java.util.stream.Collectors.toList;
 
-public class Verland extends RoundField<Player> implements Field {
+public class Verland extends RoundField<Player, Hero> implements Field {
 
     private Level level;
     private PointField field;
@@ -249,7 +249,7 @@ public class Verland extends RoundField<Player> implements Field {
     }
 
     @Override
-    public List<Player> load(String board, Supplier<Player> player) {
+    public List<Player> load(String board, Function<Hero, Player> player) {
         level = new Level(board);
         List<Hero> heroes = level.heroesSpots().stream()
                 .map(Hero::new)

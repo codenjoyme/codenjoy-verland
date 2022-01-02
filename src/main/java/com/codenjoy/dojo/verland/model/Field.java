@@ -23,16 +23,15 @@ package com.codenjoy.dojo.verland.model;
  */
 
 
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.field.Accessor;
 import com.codenjoy.dojo.services.round.RoundGameField;
 import com.codenjoy.dojo.verland.model.items.*;
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.multiplayer.GameField;
 
 import java.util.List;
 
-public interface Field extends RoundGameField<Player> {
+public interface Field extends RoundGameField<Player, Hero> {
 
     boolean isFree(Point pt);
 

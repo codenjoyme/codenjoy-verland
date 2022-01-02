@@ -55,15 +55,6 @@ public abstract class AbstractGameTest
     }
 
     @Override
-    protected void setupHeroesDice() {
-        // так как метод поиска свободных мест бегает не по свободным,
-        // координатам как в других играх, а по спотам, то тут нужен только
-        // рандомайзер для collections shuffle, а не
-        // dice(asArray(level.heroesSpots()));
-        dice(1);
-    }
-
-    @Override
     protected void afterCreateField() {
         settings().integer(COUNT_CONTAGIONS, field().contagions().size());
     }

@@ -40,10 +40,10 @@ public class MultiplayerTest extends AbstractGameTest {
 
         // when then
         assertF("☼☼☼☼☼☼\n" +
-                "☼♠**♠☼\n" +
+                "☼♥**♠☼\n" +
                 "☼****☼\n" +
                 "☼****☼\n" +
-                "☼***♥☼\n" +
+                "☼***♠☼\n" +
                 "☼☼☼☼☼☼\n", 0);
 
         assertF("☼☼☼☼☼☼\n" +
@@ -54,10 +54,10 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼☼☼☼☼☼\n", 1);
 
         assertF("☼☼☼☼☼☼\n" +
-                "☼♥**♠☼\n" +
+                "☼♠**♠☼\n" +
                 "☼****☼\n" +
                 "☼****☼\n" +
-                "☼***♠☼\n" +
+                "☼***♥☼\n" +
                 "☼☼☼☼☼☼\n", 2);
     }
 
