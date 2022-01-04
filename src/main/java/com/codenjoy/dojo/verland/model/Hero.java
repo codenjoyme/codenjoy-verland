@@ -105,7 +105,7 @@ public class Hero extends RoundPlayerHero<Field>
     }
 
     @Override
-    public void tick() {
+    public void tickHero() {
         if (direction == null) {
             return;
         }
