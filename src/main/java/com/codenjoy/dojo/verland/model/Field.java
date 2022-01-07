@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.field.Accessor;
 import com.codenjoy.dojo.services.round.RoundGameField;
 import com.codenjoy.dojo.verland.model.items.*;
+import com.codenjoy.dojo.verland.services.GameSettings;
 
 import java.util.List;
 
@@ -42,6 +43,8 @@ public interface Field extends RoundGameField<Player, Hero> {
     void cure(Hero hero, Direction direction);
 
     int contagionsNear(Point pt);
+
+    GameSettings settings();
 
     Accessor<Contagion> contagions();
 
