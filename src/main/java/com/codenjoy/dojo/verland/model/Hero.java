@@ -26,9 +26,10 @@ package com.codenjoy.dojo.verland.model;
 import com.codenjoy.dojo.games.verland.Element;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.printer.state.State;
 import com.codenjoy.dojo.services.joystick.Act;
 import com.codenjoy.dojo.services.joystick.RoundsDirectionActJoystick;
+import com.codenjoy.dojo.services.printer.state.HeroState;
+import com.codenjoy.dojo.services.printer.state.State;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 import com.codenjoy.dojo.verland.model.items.Cell;
 
@@ -40,7 +41,8 @@ import static com.codenjoy.dojo.verland.services.Event.*;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
 
 public class Hero extends RoundPlayerHero<Field>
-        implements RoundsDirectionActJoystick, State<Element, Player> {
+        implements RoundsDirectionActJoystick, State<Element, Player>,
+                   HeroState<Element, Hero, Player> {
 
     private static final int ACT_SUICIDE = 0;
 
@@ -214,37 +216,16 @@ public class Hero extends RoundPlayerHero<Field>
         charge(settings().integer(POTIONS_COUNT));
     }
 
-    // TODO do we use only settings.isTeamDeathMatch() here?
-    private boolean anyHeroFromAnotherTeam(Player player, List<Hero> heroes) {
-        return heroes.stream()
-                .anyMatch(hero -> player.getTeamId() != hero.getPlayer().getTeamId());
+    @Override
+    public Element state(Player player, Object... alsoAtPoint) {
+        return HeroState.super.state(player, alsoAtPoint);
     }
 
     @Override
-    public Element state(Player player, Object... alsoAtPoint) {
-        List<Hero> heroes = filter(alsoAtPoint, Hero.class);
-
-        // player наблюдатель содержится в той же клетке которую прорисовываем
-        Hero hero = player.getHero();
-        if (heroes.contains(hero)) {
-            // герой наблюдателя (жив и активен) или он победил
-            if (!hero.isGameOver() || hero.isWin()) {
-                return HERO;
-            }
-
-            // герой наблюдателя неактивен или его вынесли
+    public Element beforeState(Object... alsoAtPoint) {
+        if (isGameOver() && !isWin()) {
             return HERO_DEAD;
         }
-
-        // player наблюдает за клеткой в которой не находится сам
-
-        // в клетке только трупики?
-        if (heroes.stream().noneMatch(Hero::isActiveAndAlive)) {
-            // и если опасности нет, тогда уже рисуем останки
-            return anyHeroFromAnotherTeam(player, heroes) ? ENEMY_HERO_DEAD : OTHER_HERO_DEAD;
-        }
-
-        // в клетке есть другие активные и живые герои
-        return anyHeroFromAnotherTeam(player, heroes) ? ENEMY_HERO : OTHER_HERO;
+        return HERO;
     }
 }
