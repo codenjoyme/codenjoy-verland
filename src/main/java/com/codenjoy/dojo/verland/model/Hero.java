@@ -26,7 +26,7 @@ package com.codenjoy.dojo.verland.model;
 import com.codenjoy.dojo.games.verland.Element;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.printer.state.State;
 import com.codenjoy.dojo.services.joystick.Act;
 import com.codenjoy.dojo.services.joystick.RoundsDirectionActJoystick;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
@@ -35,7 +35,7 @@ import com.codenjoy.dojo.verland.model.items.Cell;
 import java.util.List;
 
 import static com.codenjoy.dojo.games.verland.Element.*;
-import static com.codenjoy.dojo.services.StateUtils.filter;
+import static com.codenjoy.dojo.services.printer.state.StateUtils.filter;
 import static com.codenjoy.dojo.verland.services.Event.*;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
 

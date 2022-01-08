@@ -24,10 +24,9 @@ package com.codenjoy.dojo.verland.model.items;
 
 
 import com.codenjoy.dojo.games.verland.Element;
-import com.codenjoy.dojo.verland.model.Field;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.printer.state.State;
 import com.codenjoy.dojo.verland.model.Player;
 
 public class Contagion extends PointImpl implements State<Element, Player> {
