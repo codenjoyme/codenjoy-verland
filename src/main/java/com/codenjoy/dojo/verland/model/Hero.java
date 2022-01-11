@@ -41,7 +41,8 @@ import static com.codenjoy.dojo.verland.services.Event.*;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
 
 public class Hero extends RoundPlayerHero<Field>
-        implements RoundsDirectionActJoystick, State<Element, Player>,
+        implements RoundsDirectionActJoystick,
+                   State<Element, Player>,
                    HeroState<Element, Hero, Player> {
 
     private static final int ACT_SUICIDE = 0;
