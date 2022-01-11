@@ -24,6 +24,7 @@ package com.codenjoy.dojo.verland.services;
 
 
 public enum Event {
+
     START_ROUND,
     WIN_ROUND,
 
