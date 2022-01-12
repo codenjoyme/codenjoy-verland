@@ -36,7 +36,7 @@ public class PerformanceTest {
     @Test
     public void test() {
 
-        // about 6.4 sec
+        // about 6.35 sec
         int players = 4;
         int ticks = 10000;
 

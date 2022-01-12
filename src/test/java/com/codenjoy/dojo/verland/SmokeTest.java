@@ -55,6 +55,7 @@ public class SmokeTest {
     public void test() {
         // about 5 sec -> 7 sec -> 3.5 sec (100.000 / 50 sec) -> (100.000 / 44 sec)
         //   -> (100.000 / 38 sec) -> 2.8 sec (100.000 / 32 sec) -> 2.2 sec (100.000 / 25 sec)
+        //  -> 0.86 sec (100.000 / 23 sec)
         int ticks = 1000;
 
         SmokeUtils.recheck = actual -> {
@@ -106,7 +107,7 @@ public class SmokeTest {
 
     @Test
     public void test2() {
-        // about 50 sec -> 23 sec -> 3 sec -> 2 sec -> 1.6 sec -> 1.3 sec > 2.4 sec
+        // about 50 sec -> 23 sec -> 3 sec -> 2 sec -> 1.6 sec -> 1.3 sec > 2.4 sec > 0.7 src
         int ticks = 1000;
 
         SmokeUtils.recheck = actual -> {
