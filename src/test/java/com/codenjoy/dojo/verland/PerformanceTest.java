@@ -36,15 +36,15 @@ public class PerformanceTest {
     @Test
     public void test() {
 
-        // about 5.6 sec
+        // about 6.4 sec
         int players = 4;
         int ticks = 10000;
 
-        int expectedCreation = 900;
+        int expectedCreation = 1200;
         int expectedTick = 300;
-        int expectedPrint = 4000;
+        int expectedPrint = 4500;
 
-        Dice dice = new DiceGenerator().getDice();
+        Dice dice = new DiceGenerator().getDice(2000);
         GameRunner runner = new GameRunner(){
 
             @Override
