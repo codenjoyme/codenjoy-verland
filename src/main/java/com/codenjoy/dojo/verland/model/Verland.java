@@ -221,14 +221,18 @@ public class Verland extends RoundField<Player, Hero> implements Field {
         }
 
         hero.tryToCure(() -> {
+            if (cures().contains(cure)) {
+                // TODO тут чисто теоретически может случиться переполение
+                //      ячейки флажками если несколько героев тыцвнет туда
+                //      флажок. Элементов может быть всего 7 в клетке.
+                //      Но если я тут ограничу, то другие герои не получат
+                //      очки за флаг, если там была бомба, на что есть тест.
+            }
             cures().add(cure);
             if (contagions().contains(to)) {
                 return;
             }
-            hero.getPlayer().event(FORGOT_POTION);
-            if (hero.noMorePotions()) {
-                hero.fireMorePotions();
-            }
+            hero.fireUsedPotion();
         });
     }
 

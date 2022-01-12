@@ -229,4 +229,11 @@ public class Hero extends RoundPlayerHero<Field>
         }
         return HERO;
     }
+
+    public void fireUsedPotion() {
+        getPlayer().event(FORGOT_POTION);
+        if (noMorePotions()) {
+            fireMorePotions();
+        }
+    }
 }
