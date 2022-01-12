@@ -23,43 +23,45 @@ package com.codenjoy.dojo.verland;
  */
 
 
-import com.codenjoy.dojo.profile.Profiler;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.utils.TestUtils;
+import com.codenjoy.dojo.client.local.DiceGenerator;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.verland.services.GameRunner;
+import com.codenjoy.dojo.verland.services.GameSettings;
 import org.junit.Test;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.mockito.Mockito.mock;
+import static com.codenjoy.dojo.utils.TestUtils.assertPerformance;
 
 public class PerformanceTest {
 
     @Test
     public void test() {
-        GameRunner gameType = new GameRunner();
 
-        List<Game> games = new LinkedList<>();
+        // about 5.6 sec
+        int players = 4;
+        int ticks = 10000;
 
-        PrinterFactory factory = new PrinterFactoryImpl();
-        for (int index = 0; index < 50; index++) {
-            Game game = TestUtils.buildGame(gameType, mock(EventListener.class), factory);
-            games.add(game);
-        }
+        int expectedCreation = 900;
+        int expectedTick = 300;
+        int expectedPrint = 4000;
 
-        Profiler profiler = new Profiler();
+        Dice dice = new DiceGenerator().getDice();
+        GameRunner runner = new GameRunner(){
 
-        for (Game game : games) {
-            profiler.start();
+            @Override
+            public Dice getDice() {
+                return dice;
+            }
 
-           game.getBoardAsString();
+            @Override
+            public GameSettings getSettings() {
+                return new GameSettings();
+            }
+        };
 
-            profiler.done("getBoardAsString");
-            profiler.print();
-        }
+        boolean printBoard = false;
+        assertPerformance(runner,
+                players, ticks,
+                expectedCreation, expectedTick, expectedPrint,
+                printBoard);
     }
 }
