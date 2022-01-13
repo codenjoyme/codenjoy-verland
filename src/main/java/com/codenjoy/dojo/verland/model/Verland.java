@@ -167,7 +167,7 @@ public class Verland extends RoundField<Player, Hero> implements Field {
     }
 
     private void generateContagions() {
-        generate(contagions(), settings, COUNT_CONTAGIONS,
+        generate(contagions(), size(), settings, COUNT_CONTAGIONS,
                 this::freeRandomForContagions,
                 Contagion::new);
     }

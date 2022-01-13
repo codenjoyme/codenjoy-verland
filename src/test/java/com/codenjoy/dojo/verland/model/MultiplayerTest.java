@@ -64,15 +64,13 @@ public class MultiplayerTest extends AbstractGameTest {
     @Test
     public void severalHeroesCanAppearOnTheMap_ifThereAreNotEnoughSpots_heroesAppearAlongWithOthers() {
         // given
+        dice(0); // прогоняем ramdomize для shuffle спотов
         givenFl("☼☼☼☼☼☼\n" +
                 "☼♥**♥☼\n" +
                 "☼****☼\n" +
                 "☼****☼\n" +
                 "☼o***☼\n" +
                 "☼☼☼☼☼☼\n");
-
-        // генерируем еще 2 героя
-        level().heroesSpots().forEach(this::givenPlayer);
 
         // when then
         assertF("☼☼☼☼☼☼\n" +
@@ -88,6 +86,9 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼****☼\n" +
                 "☼****☼\n" +
                 "☼☼☼☼☼☼\n", 1);
+
+        // генерируем еще 2 героя
+        level().heroesSpots().forEach(this::givenPlayer);
 
         assertF("☼☼☼☼☼☼\n" +
                 "☼♥**♠☼\n" +
