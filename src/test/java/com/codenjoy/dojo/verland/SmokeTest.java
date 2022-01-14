@@ -60,9 +60,9 @@ public class SmokeTest {
 
         SmokeUtils.recheck = actual -> {
             // мы ни разу не проиграли и всегда правильно отгадывали, где мины
-            assertEquals(true, actual.contains(Event.GOT_INFECTED.name()));
+            assertEquals(false, actual.contains(Event.GOT_INFECTED.name()));
             assertEquals(false, actual.contains(Event.FORGOT_POTION.name()));
-            assertEquals(false, actual.contains(Event.SUICIDE.name()));
+            assertEquals(true, actual.contains(Event.SUICIDE.name()));
         };
 
         smoke.settings().removeWhenWin(true);
@@ -112,8 +112,8 @@ public class SmokeTest {
 
         SmokeUtils.recheck = actual -> {
             // мы все же проиграли
-            assertEquals(false, actual.contains(Event.GOT_INFECTED.name()));
-            assertEquals(false, actual.contains(Event.FORGOT_POTION.name()));
+            assertEquals(true, actual.contains(Event.GOT_INFECTED.name()));
+            assertEquals(true, actual.contains(Event.FORGOT_POTION.name()));
             assertEquals(true, actual.contains(Event.SUICIDE.name()));
         };
 
