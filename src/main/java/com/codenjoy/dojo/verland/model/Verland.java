@@ -23,11 +23,15 @@ package com.codenjoy.dojo.verland.model;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.annotations.PerformanceOptimized;
 import com.codenjoy.dojo.services.dice.DiceRandomWrapper;
 import com.codenjoy.dojo.services.dice.NumbersCycleDice;
 import com.codenjoy.dojo.services.field.Accessor;
+import com.codenjoy.dojo.services.field.Generator;
 import com.codenjoy.dojo.services.field.PointField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -187,11 +191,11 @@ public class Verland extends RoundField<Player, Hero> implements Field {
 
     @Override
     public Optional<Point> freeRandom(Player player) {
-        return BoardUtils.freeRandom(size(), heroDice, this::isFree);
+        return Generator.freeRandom(size(), heroDice, this::isFree);
     }
 
     private Optional<Point> freeRandomForContagions(GamePlayer player) {
-        return BoardUtils.freeRandom(size(), dice, this::isFreeForContagion);
+        return Generator.freeRandom(size(), dice, this::isFreeForContagion);
     }
 
     @Override
