@@ -43,7 +43,7 @@ public class PerformanceTest {
         // about 16.2 sec
         int players = 4;
         int countContagions = 200;
-        int ticks = 1000;
+        int ticks = 1100;
 
         int expectedCreation = 1400;
         int expectedPrint = 14000;
@@ -124,54 +124,54 @@ public class PerformanceTest {
 
         assertEquals(
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼   x               x      x                     ☼\n" +
-                "☼               x               x                ☼\n" +
-                "☼            x     x       x                     ☼\n" +
-                "☼        x              x       x   x      xx   x☼\n" +
-                "☼              x        x                        ☼\n" +
-                "☼        x     x               xx x              ☼\n" +
-                "☼                    x                  xx     x ☼\n" +
-                "☼    x        x                                  ☼\n" +
-                "☼           x x x               x  x       x     ☼\n" +
-                "☼     x          x      x   x           x        ☼\n" +
-                "☼              xx x         x x                  ☼\n" +
-                "☼    xx  xx     x             x                  ☼\n" +
-                "☼   x      x                x             x      ☼\n" +
-                "☼x            x             x                    ☼\n" +
-                "☼         x   x                      x    x      ☼\n" +
-                "☼                                        x    x  ☼\n" +
-                "☼ x    x  x   x        x    x                    ☼\n" +
-                "☼        x                                     x ☼\n" +
-                "☼            x                                 x ☼\n" +
-                "☼x    x         x    x                  x  x   x ☼\n" +
-                "☼   x            x            x   xx   x         ☼\n" +
-                "☼ x  x         x              x                x ☼\n" +
-                "☼       x   xx                          x   x    ☼\n" +
-                "☼               x          x                x    ☼\n" +
-                "☼    x x           x          x             x    ☼\n" +
-                "☼         x     xx                        x      ☼\n" +
-                "☼         x      x  x                            ☼\n" +
-                "☼ x xx  x      x       x                x    x   ☼\n" +
-                "☼  x  x         x     x                       x  ☼\n" +
-                "☼              x     x                           ☼\n" +
-                "☼ x    x         x  x                   x        ☼\n" +
-                "☼          x x                 x        x     x  ☼\n" +
-                "☼ x                 x x                          ☼\n" +
-                "☼             xx                                 ☼\n" +
-                "☼        x       x                               ☼\n" +
-                "☼      x    x x  x x                             ☼\n" +
-                "☼x  x   xx x                          x          ☼\n" +
-                "☼x                   x x       x        x      x ☼\n" +
-                "☼           x      x         x                   ☼\n" +
-                "☼          xx   x                  x             ☼\n" +
-                "☼   x  x                       x                 ☼\n" +
-                "☼  x  x      x                           x       ☼\n" +
-                "☼   ♠♠♠♥x    x  x            x                   ☼\n" +
-                "☼             x      x      xx               xx  ☼\n" +
-                "☼         x            x                         ☼\n" +
-                "☼   x  x   xxx    x                         x    ☼\n" +
-                "☼       x       xx x                             ☼\n" +
-                "☼      x   x                               x     ☼\n" +
+                "☼    xx                    x      x x   x x      ☼\n" +
+                "☼           x              !  x              x   ☼\n" +
+                "☼              x          xx                     ☼\n" +
+                "☼    x     x       x x     x    x              x ☼\n" +
+                "☼                                           x x  ☼\n" +
+                "☼     x             x                          x ☼\n" +
+                "☼    x x    x  x                   x             ☼\n" +
+                "☼  x                       x     x          x    ☼\n" +
+                "☼   x   x            x     x   x   x             ☼\n" +
+                "☼x                 x  x     x           x        ☼\n" +
+                "☼               x  x x        x   xx   x x x     ☼\n" +
+                "☼                x         x   x         x       ☼\n" +
+                "☼   x                           x  x            x☼\n" +
+                "☼                 x                   x   x      ☼\n" +
+                "☼            x                        x          ☼\n" +
+                "☼          x     xx    x   x         x  x        ☼\n" +
+                "☼  x   x♠                                        ☼\n" +
+                "☼      xx      x                 xx           x  ☼\n" +
+                "☼                                   x            ☼\n" +
+                "☼       x    x  x      x   x x                   ☼\n" +
+                "☼     x       xx          x   x         x        ☼\n" +
+                "☼                 x          x                   ☼\n" +
+                "☼ ♥ ♠    x        x       x  x x     x           ☼\n" +
+                "☼   ♠             xx                    x        ☼\n" +
+                "☼        x  x                                x  x☼\n" +
+                "☼    x     x                      x x x          ☼\n" +
+                "☼x                    x      x  xx               ☼\n" +
+                "☼x     x             x       x           x  x    ☼\n" +
+                "☼     x x                 x                      ☼\n" +
+                "☼                                                ☼\n" +
+                "☼             x    x      x                x     ☼\n" +
+                "☼              x               x       x x       ☼\n" +
+                "☼x      x        x               x      x        ☼\n" +
+                "☼          x     x                               ☼\n" +
+                "☼  x                         x          x      x ☼\n" +
+                "☼ x         x                 x        x  x   x  ☼\n" +
+                "☼   x                    x x                     ☼\n" +
+                "☼     x        x                              x  ☼\n" +
+                "☼       x                  x  x      x        x  ☼\n" +
+                "☼                  x                  x          ☼\n" +
+                "☼         x x  xx                      x         ☼\n" +
+                "☼            x         x  x                      ☼\n" +
+                "☼         x                x  x              x   ☼\n" +
+                "☼                                            x x ☼\n" +
+                "☼         x           x        xx      x        x☼\n" +
+                "☼    x    x          x x  x       x              ☼\n" +
+                "☼                x    x                   x      ☼\n" +
+                "☼               x x    x                x        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n", board);
     }
 }

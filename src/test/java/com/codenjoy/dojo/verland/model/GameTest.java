@@ -10,12 +10,12 @@ package com.codenjoy.dojo.verland.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -911,7 +911,7 @@ public class GameTest extends AbstractGameTest {
 
         assertAlive();
     }
-    
+
     @Test
     public void shouldCure_whenContagionAtLeft() {
         // given
@@ -1838,7 +1838,7 @@ public class GameTest extends AbstractGameTest {
         // when
         // всю заразу за пределы поля,
         // а значит ни одной не будет
-        dice(-1);
+        dice(-1, -1);
         givenFl("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
@@ -1889,7 +1889,8 @@ public class GameTest extends AbstractGameTest {
         // when
         // все будет генерироваться в одной клетке,
         // но реально только 1 инфекция там будет, остальные пропустим
-        // так как там свободно
+        dice(3, 3);
+
         givenFl("☼☼☼☼☼\n" +
                 "☼  *☼\n" +
                 "☼   ☼\n" +
@@ -1915,6 +1916,20 @@ public class GameTest extends AbstractGameTest {
         settings().integer(COUNT_CONTAGIONS, despiteLevel(100));
 
         // when
+        // генерим по-всюду
+        dice(
+                0, 0, // пробуем под стенкой
+                1, 1, // пробуем под героем
+                1, 2,
+                1, 3,
+                2, 1,
+                2, 2,
+                2, 3,
+                3, 1,
+                3, 3, // и под уже установленной в level инфекцией
+                3, 2
+        );
+
         givenFl("☼☼☼☼☼\n" +
                 "☼ *o☼\n" +
                 "☼ **☼\n" +
@@ -1949,11 +1964,11 @@ public class GameTest extends AbstractGameTest {
         settings().integer(COUNT_CONTAGIONS, despiteLevel(1));
 
         // when
-        dice(7); // рендомный индекс в списке свободных ячеек
+        dice(3, 3);
         givenFl("☼☼☼☼☼\n" +
-                "☼***☼\n" +
-                "☼***☼\n" +
-                "☼♥**☼\n" +
+                "☼  *☼\n" +
+                "☼   ☼\n" +
+                "☼♥  ☼\n" +
                 "☼☼☼☼☼\n");
 
         // then
@@ -1963,58 +1978,44 @@ public class GameTest extends AbstractGameTest {
                 sorted(field().contagions()));
 
         assertF("☼☼☼☼☼\n" +
-                "☼***☼\n" +
-                "☼***☼\n" +
-                "☼♥**☼\n" +
+                "☼ 1*☼\n" +
+                "☼ 11☼\n" +
+                "☼♥  ☼\n" +
                 "☼☼☼☼☼\n");
     }
 
     @Test
-    public void performanceTest_freeForContagions() {
-        // about (1_000_000 / 11.8 sec)
-        // about (100_000 / 2.8 sec)
+    public void performanceTest_isFreeForContagion() {
+        // about (1_000_000 / 9s)
 
         // given
         givenFl("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼   *****ooo  ☼\n" +
-                "☼   *****ooo  ☼\n" +
-                "☼   *****ooooo☼\n" +
-                "☼   *****ooooo☼\n" +
-                "☼   *****ooooo☼\n" +
-                "☼   **********☼\n" +
-                "☼!  **********☼\n" +
-                "☼!  **********☼\n" +
-                "☼!  **********☼\n" +
-                "☼♥  **********☼\n" +
+                "☼     ****oooo☼\n" +
+                "☼     ****oooo☼\n" +
+                "☼     ****oooo☼\n" +
+                "☼     ****oooo☼\n" +
+                "☼     ********☼\n" +
+                "☼     ********☼\n" +
+                "☼     ********☼\n" +
+                "☼     ********☼\n" +
+                "☼             ☼\n" +
+                "☼             ☼\n" +
+                "☼             ☼\n" +
+                "☼             ☼\n" +
                 "☼♥            ☼\n" +
-                "☼♥            ☼\n" +
-                "☼♥♥♥♥!!!      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
 
         // when
         int ticks = 100_000;
 
+        int outOf = 5;
         for (int count = 0; count < ticks; count++) {
-            field().freeForContagions();
+            for (int x = -outOf; x < field().size() + outOf; x++) {
+                for (int y = -outOf; y < field().size() + outOf; y++) {
+                    field().isFreeForContagion(pt(x, y));
+                }
+            }
         }
-
-        // then
-        assertEquals("[[4,4], [4,5], [4,6], [4,7], [4,8], [4,9], " +
-                        "[4,10], [4,11], [4,12], [4,13], " +
-                        "[5,4], [5,5], [5,6], [5,7], [5,8], " +
-                        "[5,9], [5,10], [5,11], [5,12], [5,13], " +
-                        "[6,4], [6,5], [6,6], [6,7], [6,8], " +
-                        "[6,9], [6,10], [6,11], [6,12], [6,13], " +
-                        "[7,4], [7,5], [7,6], [7,7], [7,8], " +
-                        "[7,9], [7,10], [7,11], [7,12], [7,13], " +
-                        "[8,4], [8,5], [8,6], [8,7], [8,8], " +
-                        "[8,9], [8,10], [8,11], [8,12], [8,13], " +
-                        "[9,4], [9,5], [9,6], [9,7], [9,8], " +
-                        "[10,4], [10,5], [10,6], [10,7], [10,8], " +
-                        "[11,4], [11,5], [11,6], [11,7], [11,8], " +
-                        "[12,4], [12,5], [12,6], [12,7], [12,8], " +
-                        "[13,4], [13,5], [13,6], [13,7], [13,8]]",
-                sorted(field().freeForContagions()));
     }
 
     @Test
@@ -2022,7 +2023,7 @@ public class GameTest extends AbstractGameTest {
         // given
         settings().integer(COUNT_CONTAGIONS, despiteLevel(20));
 
-        Dice dice = new DiceGenerator().getDice("soul", 20*20, 20);
+        Dice dice = new DiceGenerator().getDice("soul", 20*20, 200);
         dice().then(dice::next);
         givenFl("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼*************☼\n" +
@@ -2045,19 +2046,19 @@ public class GameTest extends AbstractGameTest {
 
         // then
         assertF("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼ 1o1111    1o☼\n" +
-                "☼ 1222o211 122☼\n" +
-                "☼  1o223o1 1o1☼\n" +
-                "☼  1122o21 111☼\n" +
-                "☼    1o21     ☼\n" +
-                "☼111 111      ☼\n" +
-                "☼1o1      111 ☼\n" +
-                "☼1121211112o1 ☼\n" +
-                "☼112o2o11o211 ☼\n" +
-                "☼1o32322222 11☼\n" +
-                "☼12o11o11o1 1o☼\n" +
-                "☼ 122211122111☼\n" +
-                "☼X 1o1   1o1  ☼\n" +
+                "☼11     111   ☼\n" +
+                "☼o1 111 1o1   ☼\n" +
+                "☼11 1o21111   ☼\n" +
+                "☼   23o32211  ☼\n" +
+                "☼1111o3oo3o2  ☼\n" +
+                "☼1o1112334o2  ☼\n" +
+                "☼111   1o43311☼\n" +
+                "☼11 11112oo2o1☼\n" +
+                "☼o1 1o21222211☼\n" +
+                "☼11 112o1  111☼\n" +
+                "☼   11211  1o1☼\n" +
+                "☼  12o1    111☼\n" +
+                "☼X 1o21       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
 
         verifyAllEvents("[GOT_INFECTED]");

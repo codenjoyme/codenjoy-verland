@@ -33,6 +33,7 @@ import com.codenjoy.dojo.services.dice.NumbersCycleDice;
 import com.codenjoy.dojo.services.field.Accessor;
 import com.codenjoy.dojo.services.field.Generator;
 import com.codenjoy.dojo.services.field.PointField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.round.RoundField;
 import com.codenjoy.dojo.services.settings.Parameter;
@@ -43,7 +44,7 @@ import com.codenjoy.dojo.verland.services.GameSettings;
 import java.util.*;
 import java.util.function.Function;
 
-import static com.codenjoy.dojo.services.field.Generator.generate2;
+import static com.codenjoy.dojo.services.field.Generator.generate;
 import static com.codenjoy.dojo.verland.services.Event.*;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.COUNT_CONTAGIONS;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
@@ -170,9 +171,8 @@ public class Verland extends RoundField<Player, Hero> implements Field {
     }
 
     private void generateContagions() {
-        generate2(contagions(), dice,
-                settings, COUNT_CONTAGIONS,
-                this::freeForContagions,
+        generate(contagions(), size(), settings, COUNT_CONTAGIONS,
+                this::freeRandomForContagions,
                 Contagion::new);
     }
 
@@ -183,14 +183,19 @@ public class Verland extends RoundField<Player, Hero> implements Field {
                 && !walls().contains(pt);
     }
 
+    @PerformanceOptimized
+    public boolean isFreeForContagion(Point pt) {
+        return !pt.isOutOf(size())
+                && freeForContagion(field.get(pt).allValues());
+    }
+
     @Override
     public Optional<Point> freeRandom(Player player) {
         return Generator.freeRandom(size(), heroDice, this::isFree);
     }
 
-    @PerformanceOptimized
-    public List<Point> freeForContagions() {
-        return field.pointsMatch(this::freeForContagion);
+    private Optional<Point> freeRandomForContagions(GamePlayer player) {
+        return Generator.freeRandom(size(), dice, this::isFreeForContagion);
     }
 
     private boolean freeForContagion(List<Point> objects) {
@@ -200,9 +205,9 @@ public class Verland extends RoundField<Player, Hero> implements Field {
 
         for (Point pt : objects) {
             if (pt instanceof Cell && ((Cell)pt).isClean()
-                || pt instanceof Wall
-                || pt instanceof HeroSpot
-                || pt instanceof Contagion)
+                    || pt instanceof Wall
+                    || pt instanceof HeroSpot
+                    || pt instanceof Contagion)
             {
                 return false;
             }
