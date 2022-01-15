@@ -46,19 +46,17 @@ public class Field {
 
     public Field(int size) {
         this.size = size;
-        cells = new PointField();
+        cells = new PointField().size(size);
         createCells();
     }
 
     public void clear() {
         groups = new ArrayList<>();
-        cells.size(size);
 
         List<QDirection> directions = QDirection.getValues();
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 Cell cell = matrix[x][y];
-                cells.add(cell);
                 cell.clear();
 
                 for (QDirection direction : directions) {
@@ -77,6 +75,7 @@ public class Field {
             for (int y = 0; y < size; y++) {
                 Cell cell = new Cell(x, y);
                 matrix[x][y] = cell;
+                cells.add(cell);
             }
         }
     }
