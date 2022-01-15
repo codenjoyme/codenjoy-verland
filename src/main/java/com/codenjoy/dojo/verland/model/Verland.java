@@ -42,6 +42,7 @@ import com.codenjoy.dojo.verland.model.items.*;
 import com.codenjoy.dojo.verland.services.GameSettings;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static com.codenjoy.dojo.services.field.Generator.generate;
@@ -107,8 +108,11 @@ public class Verland extends RoundField<Player, Hero> implements Field {
         for (Contagion contagion : contagions().copy()) {
             List<Cure> cures = cures().getAt(contagion);
             for (Cure cure : cures) {
-                cured().add(new Cured(cure));
-                contagions().removeAt(cure);
+                if (!cured().contains(cure)) {
+                    cured().add(new Cured(cure));
+                    contagions().removeAt(cure);
+                    changeNear(cure, Cell::decrease);
+                }
 
                 Hero hero = cure.owner();
                 if (hero != null) {
@@ -117,8 +121,6 @@ public class Verland extends RoundField<Player, Hero> implements Field {
             }
         }
 
-        calculateContagionsCount();
-
         if (!isContagionsExists()) {
             if (!settings().isRoundsEnabled()) {
                 players.forEach(player -> {
@@ -126,12 +128,6 @@ public class Verland extends RoundField<Player, Hero> implements Field {
                     player.leaveBoard();
                 });
             }
-        }
-    }
-
-    public void calculateContagionsCount() {
-        for (Cell cell : cells()) {
-            cell.contagionsNear(contagionsNear(cell));
         }
     }
 
@@ -161,7 +157,8 @@ public class Verland extends RoundField<Player, Hero> implements Field {
     private void generateAll() {
         validateContagions();
         generateContagions();
-        calculateContagionsCount();
+        contagions().forEach(pt -> changeNear(pt, Cell::increase));
+
     }
 
     private void validateContagions() {
@@ -183,6 +180,13 @@ public class Verland extends RoundField<Player, Hero> implements Field {
         generate(contagions(), size(), settings, COUNT_CONTAGIONS,
                 this::freeRandomForContagions,
                 Contagion::new);
+    }
+
+    public void changeNear(Point pt, Consumer<Cell> consumer) {
+        Arrays.stream(QDirection.values())
+                .map(direction -> direction.change(pt))
+                .filter(around -> !around.isOutOf(size()))
+                .forEach(around -> consumer.accept(cells().getFirstAt(around)));
     }
 
     @Override
@@ -222,15 +226,6 @@ public class Verland extends RoundField<Player, Hero> implements Field {
             }
         }
         return true;
-    }
-
-    @Override
-    public int contagionsNear(Point pt) {
-        return (int)Arrays.stream(QDirection.values())
-                .map(direction -> direction.change(pt))
-                .filter(around -> !around.isOutOf(size()))
-                .filter(around -> contagions().contains(around))
-                .count();
     }
 
     @Override

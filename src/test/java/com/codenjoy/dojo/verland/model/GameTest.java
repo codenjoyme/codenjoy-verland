@@ -26,6 +26,7 @@ package com.codenjoy.dojo.verland.model;
 import com.codenjoy.dojo.client.local.DiceGenerator;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.field.Accessor;
+import com.codenjoy.dojo.verland.model.items.Cell;
 import com.codenjoy.dojo.verland.model.items.Contagion;
 import org.junit.Test;
 
@@ -1352,18 +1353,42 @@ public class GameTest extends AbstractGameTest {
         tick();
 
         // then
+        assertF("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*♥!☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        assertPotions("hero(0)=3");
+
         verifyAllEvents("[CURE]");
 
         hero().cure(LEFT);
         tick();
 
         // then
+        assertF("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼!♥!☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        assertPotions("hero(0)=2");
+
         verifyAllEvents("[CURE]");
 
         hero().cure(DOWN);
         tick();
 
         // then
+        assertF("☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼!♥!☼\n" +
+                "☼*!*☼\n" +
+                "☼☼☼☼☼\n");
+
+        assertPotions("hero(0)=1");
+
         verifyAllEvents("[CURE]");
 
         hero().cure(UP);
@@ -1375,6 +1400,8 @@ public class GameTest extends AbstractGameTest {
                 "☼x♥x☼\n" +
                 "☼ x ☼\n" +
                 "☼☼☼☼☼\n");
+
+        assertPotions("hero(0)=0");
 
         verifyAllEvents("[CURE, WIN_ROUND]");
     }
@@ -1810,8 +1837,9 @@ public class GameTest extends AbstractGameTest {
         game().newGame();
 
         // добавляем заразу чтобы не было снова геймовера
-        field().contagions().add(new Contagion(pt(3, 3)));
-        field().calculateContagionsCount();
+        Contagion contagion = new Contagion(pt(3, 3));
+        field().contagions().add(contagion);
+        field().changeNear(contagion, Cell::increase);
 
         // then
         assertF("☼☼☼☼☼\n" +

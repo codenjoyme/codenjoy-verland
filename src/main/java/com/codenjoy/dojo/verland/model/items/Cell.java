@@ -26,17 +26,14 @@ package com.codenjoy.dojo.verland.model.items;
 import com.codenjoy.dojo.games.verland.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.field.Fieldable;
 import com.codenjoy.dojo.services.printer.state.State;
-import com.codenjoy.dojo.verland.model.Field;
 import com.codenjoy.dojo.verland.model.Player;
 
-public class Cell extends PointImpl implements Fieldable<Field>, State<Element, Player> {
+public class Cell extends PointImpl implements State<Element, Player> {
 
     public static final boolean HIDDEN = false;
     public static final boolean CLEAN = !HIDDEN;
 
-    private Field field;
     private boolean clean;
     private int near;
 
@@ -55,11 +52,6 @@ public class Cell extends PointImpl implements Fieldable<Field>, State<Element, 
     }
 
     @Override
-    public void init(Field field) {
-        this.field = field;
-    }
-
-    @Override
     public Element state(Player player, Object... alsoAtPoint) {
         if (!clean && !player.getHero().isGameOver()) {
             return Element.HIDDEN;
@@ -67,7 +59,7 @@ public class Cell extends PointImpl implements Fieldable<Field>, State<Element, 
 
         return near == 0
                 ? Element.CLEAR
-                : Element.valueOf(near);
+                : Element.contagions()[near - 1];
     }
 
     public boolean isClean() {
@@ -78,7 +70,14 @@ public class Cell extends PointImpl implements Fieldable<Field>, State<Element, 
         clean = CLEAN;
     }
 
-    public void contagionsNear(int near) {
-        this.near = near;
+    public void increase() {
+        near++;
+    }
+
+    public void decrease() {
+        if (near == 0) {
+            throw new IllegalStateException("Negative contagions!");
+        }
+        near--;
     }
 }

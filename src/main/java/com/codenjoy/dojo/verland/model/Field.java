@@ -42,8 +42,6 @@ public interface Field extends RoundGameField<Player, Hero> {
 
     void cure(Hero hero, Direction direction);
 
-    int contagionsNear(Point pt);
-
     GameSettings settings();
 
     Accessor<Contagion> contagions();
