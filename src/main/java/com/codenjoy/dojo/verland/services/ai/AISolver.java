@@ -29,7 +29,6 @@ import com.codenjoy.dojo.games.verland.Element;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.codenjoy.dojo.verland.services.ai.logic.Cell;
 import com.codenjoy.dojo.verland.services.ai.logic.Field;
@@ -49,6 +48,7 @@ public class AISolver implements Solver<Board> {
     private Element underMe;
     private Direction where;
     private Dice dice;
+    private Field field;
 
     public AISolver(Dice dice) {
         this.dice = dice;
@@ -65,7 +65,12 @@ public class AISolver implements Solver<Board> {
             return UP.toString();
         }
 
-        Field field = new Field(board.size());
+        // дорого каждый тик создавать поле, мы его создаем 1 раз, а потом чистим
+        field = (field == null)
+                ? new Field(board.size())
+                : field;
+        field.clear();
+
         field.scan(pt -> convert(board.getAt(pt)));
         Collection<Cell> actions = field.actions();
         if (actions.isEmpty()) {

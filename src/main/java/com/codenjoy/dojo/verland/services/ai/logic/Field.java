@@ -28,10 +28,12 @@ import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.field.Accessor;
 import com.codenjoy.dojo.services.field.PointField;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.function.Function;
 
-import static com.codenjoy.dojo.games.verland.Element.PATHLESS;
 import static com.codenjoy.dojo.games.verland.Element.CLEAR;
 import static java.util.stream.Collectors.toCollection;
 
@@ -44,9 +46,28 @@ public class Field {
 
     public Field(int size) {
         this.size = size;
-        groups = new ArrayList<>();
-        cells = new PointField().size(size);
+        cells = new PointField();
         createCells();
+    }
+
+    public void clear() {
+        groups = new ArrayList<>();
+        cells.size(size);
+
+        List<QDirection> directions = QDirection.getValues();
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                Cell cell = matrix[x][y];
+                cells.add(cell);
+                cell.clear();
+
+                for (QDirection direction : directions) {
+                    Point to = direction.change(cell);
+                    if (to.isOutOf(size)) continue;
+                    cell.add(matrix[to.getX()][to.getY()]);
+                }
+            }
+        }
     }
 
     private void createCells() {
@@ -55,21 +76,7 @@ public class Field {
             matrix[x] = new Cell[size];
             for (int y = 0; y < size; y++) {
                 Cell cell = new Cell(x, y);
-                cells.add(cell);
                 matrix[x][y] = cell;
-            }
-        }
-
-        List<QDirection> directions = QDirection.getValues();
-        for (int x = 0; x < size; x++) {
-            for (int y = 0; y < size; y++) {
-                Cell cell = matrix[x][y];
-                for (QDirection direction : directions) {
-                    Point to = direction.change(cell);
-                    if (to.isOutOf(size)) continue;
-
-                    cell.add(matrix[to.getX()][to.getY()]);
-                }
             }
         }
     }

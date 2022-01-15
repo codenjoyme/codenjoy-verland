@@ -27,12 +27,9 @@ import com.codenjoy.dojo.services.PointImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.games.verland.Element.HIDDEN;
 import static com.codenjoy.dojo.games.verland.Element.PATHLESS;
-import static java.util.function.Predicate.not;
-import static java.util.stream.Collectors.toList;
 
 public class Cell extends PointImpl {
 
@@ -43,7 +40,14 @@ public class Cell extends PointImpl {
 
     public Cell(int x, int y) {
         super(x, y);
+        clear();
+    }
+
+    public void clear() {
+        element = null;
+        valued = false;
         neighbours = new ArrayList<>();
+        action = null;
     }
 
     public void add(Cell cell) {
