@@ -40,13 +40,13 @@ public class Cell extends PointImpl {
 
     public Cell(int x, int y) {
         super(x, y);
+        neighbours = new ArrayList<>();
         clear();
     }
 
     public void clear() {
         element = null;
         valued = false;
-        neighbours = new ArrayList<>();
         action = null;
     }
 

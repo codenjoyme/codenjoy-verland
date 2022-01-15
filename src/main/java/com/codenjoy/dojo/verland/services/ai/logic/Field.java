@@ -53,17 +53,10 @@ public class Field {
     public void clear() {
         groups = new ArrayList<>();
 
-        List<QDirection> directions = QDirection.getValues();
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 Cell cell = matrix[x][y];
                 cell.clear();
-
-                for (QDirection direction : directions) {
-                    Point to = direction.change(cell);
-                    if (to.isOutOf(size)) continue;
-                    cell.add(matrix[to.getX()][to.getY()]);
-                }
             }
         }
     }
@@ -76,6 +69,19 @@ public class Field {
                 Cell cell = new Cell(x, y);
                 matrix[x][y] = cell;
                 cells.add(cell);
+            }
+        }
+
+        List<QDirection> directions = QDirection.getValues();
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                Cell cell = matrix[x][y];
+
+                for (QDirection direction : directions) {
+                    Point to = direction.change(cell);
+                    if (to.isOutOf(size)) continue;
+                    cell.add(matrix[to.getX()][to.getY()]);
+                }
             }
         }
     }
