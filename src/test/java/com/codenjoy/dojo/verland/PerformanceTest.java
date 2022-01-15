@@ -25,26 +25,31 @@ package com.codenjoy.dojo.verland;
 
 import com.codenjoy.dojo.client.local.DiceGenerator;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.verland.services.GameRunner;
 import com.codenjoy.dojo.verland.services.GameSettings;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.client.local.DiceGenerator.SOUL;
 import static com.codenjoy.dojo.utils.TestUtils.assertPerformance;
+import static com.codenjoy.dojo.verland.services.GameSettings.Keys.COUNT_CONTAGIONS;
+import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
+import static org.junit.Assert.assertEquals;
 
 public class PerformanceTest {
 
     @Test
     public void test() {
-
-        // about 6.35 sec
+        // about 16.2 sec
         int players = 4;
-        int ticks = 10000;
+        int countContagions = 200;
+        int ticks = 1000;
 
-        int expectedCreation = 1200;
-        int expectedTick = 300;
-        int expectedPrint = 4500;
+        int expectedCreation = 1400;
+        int expectedPrint = 14000;
+        int expectedTick = 500;
 
-        Dice dice = new DiceGenerator().getDice(2000);
+        Dice dice = new DiceGenerator().getDice(SOUL, 3000, 2000);
         GameRunner runner = new GameRunner(){
 
             @Override
@@ -54,14 +59,119 @@ public class PerformanceTest {
 
             @Override
             public GameSettings getSettings() {
-                return new GameSettings();
+                return new GameSettings()
+                        .integer(COUNT_CONTAGIONS, countContagions)
+                        .integer(POTIONS_COUNT, countContagions*2)
+                        .setLevelMaps(LevelProgress.levelsStartsFrom1,
+                                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                                "☼♥  ******************************************  ♥☼\n" +
+                                "☼   ******************************************   ☼\n" +
+                                "☼   ******************************************   ☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼************************************************☼\n" +
+                                "☼   ******************************************   ☼\n" +
+                                "☼   ******************************************   ☼\n" +
+                                "☼♥  ******************************************  ♥☼\n" +
+                                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
             }
         };
 
         boolean printBoard = false;
-        assertPerformance(runner,
+        String board = assertPerformance(runner,
                 players, ticks,
                 expectedCreation, expectedTick, expectedPrint,
                 printBoard);
+
+        assertEquals(
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼   x               x      x                     ☼\n" +
+                "☼               x               x                ☼\n" +
+                "☼            x     x       x                     ☼\n" +
+                "☼        x              x       x   x      xx   x☼\n" +
+                "☼              x        x                        ☼\n" +
+                "☼        x     x               xx x              ☼\n" +
+                "☼                    x                  xx     x ☼\n" +
+                "☼    x        x                                  ☼\n" +
+                "☼           x x x               x  x       x     ☼\n" +
+                "☼     x          x      x   x           x        ☼\n" +
+                "☼              xx x         x x                  ☼\n" +
+                "☼    xx  xx     x             x                  ☼\n" +
+                "☼   x      x                x             x      ☼\n" +
+                "☼x            x             x                    ☼\n" +
+                "☼         x   x                      x    x      ☼\n" +
+                "☼                                        x    x  ☼\n" +
+                "☼ x    x  x   x        x    x                    ☼\n" +
+                "☼        x                                     x ☼\n" +
+                "☼            x                                 x ☼\n" +
+                "☼x    x         x    x                  x  x   x ☼\n" +
+                "☼   x            x            x   xx   x         ☼\n" +
+                "☼ x  x         x              x                x ☼\n" +
+                "☼       x   xx                          x   x    ☼\n" +
+                "☼               x          x                x    ☼\n" +
+                "☼    x x           x          x             x    ☼\n" +
+                "☼         x     xx                        x      ☼\n" +
+                "☼         x      x  x                            ☼\n" +
+                "☼ x xx  x      x       x                x    x   ☼\n" +
+                "☼  x  x         x     x                       x  ☼\n" +
+                "☼              x     x                           ☼\n" +
+                "☼ x    x         x  x                   x        ☼\n" +
+                "☼          x x                 x        x     x  ☼\n" +
+                "☼ x                 x x                          ☼\n" +
+                "☼             xx                                 ☼\n" +
+                "☼        x       x                               ☼\n" +
+                "☼      x    x x  x x                             ☼\n" +
+                "☼x  x   xx x                          x          ☼\n" +
+                "☼x                   x x       x        x      x ☼\n" +
+                "☼           x      x         x                   ☼\n" +
+                "☼          xx   x                  x             ☼\n" +
+                "☼   x  x                       x                 ☼\n" +
+                "☼  x  x      x                           x       ☼\n" +
+                "☼   ♠♠♠♥x    x  x            x                   ☼\n" +
+                "☼             x      x      xx               xx  ☼\n" +
+                "☼         x            x                         ☼\n" +
+                "☼   x  x   xxx    x                         x    ☼\n" +
+                "☼       x       xx x                             ☼\n" +
+                "☼      x   x                               x     ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n", board);
     }
 }
