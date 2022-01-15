@@ -40,7 +40,7 @@ public class PerformanceTest {
 
     @Test
     public void test() {
-        // about 9.8 sec
+        // about 10.2 sec
         int players = 4;
         int countContagions = 200;
         int ticks = 1100;
@@ -119,7 +119,7 @@ public class PerformanceTest {
         boolean printBoard = false;
         String board = assertPerformance(runner,
                 players, ticks,
-                expectedCreation, expectedTick, expectedPrint,
+                expectedCreation, expectedPrint, expectedTick,
                 printBoard);
 
         assertEquals(

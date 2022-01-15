@@ -59,7 +59,7 @@ public class Cell extends PointImpl implements State<Element, Player> {
 
         return near == 0
                 ? Element.CLEAR
-                : Element.contagions()[near - 1];
+                : Element.contagions[near - 1];
     }
 
     public boolean isClean() {
