@@ -1811,6 +1811,7 @@ public class GameTest extends AbstractGameTest {
 
         // добавляем заразу чтобы не было снова геймовера
         field().contagions().add(new Contagion(pt(3, 3)));
+        field().calculateContagionsCount();
 
         // then
         assertF("☼☼☼☼☼\n" +
@@ -1986,7 +1987,8 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void performanceTest_isFreeForContagion() {
-        // about (1_000_000 / 9s)
+        // about (1_000_000 / 9 sec)
+        // about (100_000 / 2.7 sec)
 
         // given
         givenFl("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +

@@ -117,6 +117,8 @@ public class Verland extends RoundField<Player, Hero> implements Field {
             }
         }
 
+        calculateContagionsCount();
+
         if (!isContagionsExists()) {
             if (!settings().isRoundsEnabled()) {
                 players.forEach(player -> {
@@ -124,6 +126,12 @@ public class Verland extends RoundField<Player, Hero> implements Field {
                     player.leaveBoard();
                 });
             }
+        }
+    }
+
+    public void calculateContagionsCount() {
+        for (Cell cell : cells()) {
+            cell.contagionsNear(contagionsNear(cell));
         }
     }
 
@@ -153,6 +161,7 @@ public class Verland extends RoundField<Player, Hero> implements Field {
     private void generateAll() {
         validateContagions();
         generateContagions();
+        calculateContagionsCount();
     }
 
     private void validateContagions() {

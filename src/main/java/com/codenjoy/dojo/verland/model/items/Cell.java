@@ -26,8 +26,8 @@ package com.codenjoy.dojo.verland.model.items;
 import com.codenjoy.dojo.games.verland.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.printer.state.State;
 import com.codenjoy.dojo.services.field.Fieldable;
+import com.codenjoy.dojo.services.printer.state.State;
 import com.codenjoy.dojo.verland.model.Field;
 import com.codenjoy.dojo.verland.model.Player;
 
@@ -38,6 +38,7 @@ public class Cell extends PointImpl implements Fieldable<Field>, State<Element, 
 
     private Field field;
     private boolean clean;
+    private int near;
 
     public static Cell hidden(Point pt) {
         return new Cell(pt, Cell.HIDDEN);
@@ -50,6 +51,7 @@ public class Cell extends PointImpl implements Fieldable<Field>, State<Element, 
     private Cell(Point pt, boolean clean) {
         super(pt);
         this.clean = clean;
+        near = 0;
     }
 
     @Override
@@ -63,10 +65,9 @@ public class Cell extends PointImpl implements Fieldable<Field>, State<Element, 
             return Element.HIDDEN;
         }
 
-        int count = field.contagionsNear(this);
-        return count == 0
+        return near == 0
                 ? Element.CLEAR
-                : Element.valueOf(count);
+                : Element.valueOf(near);
     }
 
     public boolean isClean() {
@@ -75,5 +76,9 @@ public class Cell extends PointImpl implements Fieldable<Field>, State<Element, 
 
     public void open() {
         clean = CLEAN;
+    }
+
+    public void contagionsNear(int near) {
+        this.near = near;
     }
 }
