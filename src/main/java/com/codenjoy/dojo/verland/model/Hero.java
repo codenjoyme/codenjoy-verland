@@ -35,8 +35,8 @@ import com.codenjoy.dojo.verland.model.items.Cell;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.games.verland.Element.*;
-import static com.codenjoy.dojo.services.printer.state.StateUtils.filter;
+import static com.codenjoy.dojo.games.verland.Element.HERO;
+import static com.codenjoy.dojo.games.verland.Element.HERO_DEAD;
 import static com.codenjoy.dojo.verland.services.Event.*;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
 
@@ -192,7 +192,8 @@ public class Hero extends RoundPlayerHero<Field>
 
     private boolean canMove(Direction direction) {
         Point to = direction.change(this);
-        return !field.walls().contains(to);
+        return !field.walls().contains(to)
+                && !field.heroes().contains(to);
     }
 
     public boolean isWin() {

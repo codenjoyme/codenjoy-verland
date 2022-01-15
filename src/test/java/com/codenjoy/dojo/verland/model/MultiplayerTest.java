@@ -353,7 +353,7 @@ public class MultiplayerTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldGoForward_whenThereIsAnotherHeroOnIt_caseMovingInTurn() {
+    public void shouldCantGoForward_whenThereIsAnotherHeroOnIt_caseMovingInTurn() {
         // given
         givenFl("☼☼☼☼☼\n" +
                 "☼♥♥*☼\n" +
@@ -361,19 +361,31 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼**o☼\n" +
                 "☼☼☼☼☼\n");
 
+        assertF("☼☼☼☼☼\n" +
+                "☼♥♠*☼\n" +
+                "☼***☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n", 0);
+
+        assertF("☼☼☼☼☼\n" +
+                "☼♠♥*☼\n" +
+                "☼***☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n", 1);
+
         // when
         hero(0).right();
         tick();
 
         // then
         assertF("☼☼☼☼☼\n" +
-                "☼ ♥*☼\n" +
+                "☼♥♠*☼\n" +
                 "☼***☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n", 0);
 
         assertF("☼☼☼☼☼\n" +
-                "☼ ♥*☼\n" +
+                "☼♠♥*☼\n" +
                 "☼***☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n", 1);
@@ -386,13 +398,13 @@ public class MultiplayerTest extends AbstractGameTest {
 
         // then
         assertF("☼☼☼☼☼\n" +
-                "☼♠♥*☼\n" +
+                "☼♥♠*☼\n" +
                 "☼***☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n", 0);
 
         assertF("☼☼☼☼☼\n" +
-                "☼♥♠*☼\n" +
+                "☼♠♥*☼\n" +
                 "☼***☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n", 1);
@@ -401,7 +413,7 @@ public class MultiplayerTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldGoForward_whenThereIsAnotherHeroOnIt_simultaneousMovement() {
+    public void shouldCantGoForward_whenThereIsAnotherHeroOnIt_simultaneousMovement() {
         // given
         givenFl("☼☼☼☼☼\n" +
                 "☼♥♥*☼\n" +
@@ -418,13 +430,13 @@ public class MultiplayerTest extends AbstractGameTest {
 
         // then
         assertF("☼☼☼☼☼\n" +
-                "☼♠♥*☼\n" +
+                "☼♥♠*☼\n" +
                 "☼***☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n", 0);
 
         assertF("☼☼☼☼☼\n" +
-                "☼♥♠*☼\n" +
+                "☼♠♥*☼\n" +
                 "☼***☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n", 1);
