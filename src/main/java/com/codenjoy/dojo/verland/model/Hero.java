@@ -54,6 +54,10 @@ public class Hero extends RoundPlayerHero<Field>
 
     public Hero(Point pt) {
         super(pt);
+        clearScores();
+    }
+
+    public void clearScores() {
         score = 0;
         cure = false;
         direction = null;
@@ -131,10 +135,6 @@ public class Hero extends RoundPlayerHero<Field>
     @Override
     public int scores() {
         return score;
-    }
-
-    public void clearScores() {
-        score = 0;
     }
 
     public void addScore(int added) {
