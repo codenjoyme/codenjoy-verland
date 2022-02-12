@@ -24,6 +24,7 @@ package com.codenjoy.dojo.verland.model.items;
 
 
 import com.codenjoy.dojo.games.verland.Element;
+import com.codenjoy.dojo.games.verland.ElementUtils;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.state.State;
@@ -59,7 +60,7 @@ public class Cell extends PointImpl implements State<Element, Player> {
 
         return near == 0
                 ? Element.CLEAR
-                : Element.contagions[near - 1];
+                : ElementUtils.contagions[near - 1];
     }
 
     public boolean isClean() {

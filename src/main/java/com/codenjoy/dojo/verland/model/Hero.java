@@ -37,6 +37,7 @@ import java.util.List;
 
 import static com.codenjoy.dojo.games.verland.Element.HERO;
 import static com.codenjoy.dojo.games.verland.Element.HERO_DEAD;
+import static com.codenjoy.dojo.games.verland.ElementUtils.TEAM_ELEMENT;
 import static com.codenjoy.dojo.verland.services.Event.*;
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.POTIONS_COUNT;
 
@@ -220,7 +221,7 @@ public class Hero extends RoundPlayerHero<Field>
 
     @Override
     public Element state(Player player, Object... alsoAtPoint) {
-        return HeroState.super.state(player, alsoAtPoint);
+        return HeroState.super.state(player, TEAM_ELEMENT, alsoAtPoint);
     }
 
     @Override
