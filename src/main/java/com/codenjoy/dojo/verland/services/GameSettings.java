@@ -24,8 +24,8 @@ package com.codenjoy.dojo.verland.services;
 
 
 import com.codenjoy.dojo.services.event.Calculator;
-import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.services.settings.AllSettings;
+import com.codenjoy.dojo.services.settings.PropertiesKey;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 import java.util.Arrays;
@@ -35,25 +35,23 @@ import static com.codenjoy.dojo.verland.services.GameSettings.Keys.*;
 
 public class GameSettings extends SettingsImpl implements AllSettings<GameSettings> {
 
-    public enum Keys implements Key {
+    public enum Keys implements PropertiesKey {
 
-        COUNT_CONTAGIONS("[Score] Count contagions"),
-        POTIONS_COUNT("[Score] Potions count"),
-
-        CURE_SCORE("[Score] Cure score"),
-        CLEAN_AREA_SCORE("[Score] Clear area score"),
-        WIN_SCORE("[Score] Win score"),
-
-        GOT_INFECTED_PENALTY("[Game] Got infected penalty"),
-        SUICIDE_PENALTY("[Game] Suicide penalty"),
-        NO_MORE_POTIONS_PENALTY("[Score] No more potions penalty"),
-        FORGOT_POTION_PENALTY("[Score] Forgot potion penalty"),
-        SCORE_COUNTING_TYPE(ScoresImpl.SCORE_COUNTING_TYPE.key());
+        COUNT_CONTAGIONS,
+        POTIONS_COUNT,
+        CURE_SCORE,
+        CLEAN_AREA_SCORE,
+        WIN_SCORE,
+        GOT_INFECTED_PENALTY,
+        SUICIDE_PENALTY,
+        NO_MORE_POTIONS_PENALTY,
+        FORGOT_POTION_PENALTY,
+        SCORE_COUNTING_TYPE;
 
         private String key;
 
-        Keys(String key) {
-            this.key = key;
+        Keys() {
+            this.key = key(GameRunner.GAME_NAME);
         }
 
         @Override

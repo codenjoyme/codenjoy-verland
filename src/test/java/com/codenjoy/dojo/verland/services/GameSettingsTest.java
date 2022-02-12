@@ -22,7 +22,7 @@ package com.codenjoy.dojo.verland.services;
  * #L%
  */
 
-import com.codenjoy.dojo.client.Utils;
+import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -31,16 +31,16 @@ public class GameSettingsTest {
 
     @Test
     public void shouldGetAllKeys() {
-        assertEquals("[COUNT_CONTAGIONS, \n" +
-                        "POTIONS_COUNT, \n" +
-                        "CURE_SCORE, \n" +
-                        "CLEAN_AREA_SCORE, \n" +
-                        "WIN_SCORE, \n" +
-                        "GOT_INFECTED_PENALTY, \n" +
-                        "SUICIDE_PENALTY, \n" +
-                        "NO_MORE_POTIONS_PENALTY, \n" +
-                        "FORGOT_POTION_PENALTY, \n" +
-                        "SCORE_COUNTING_TYPE]",
-                Utils.split(new GameSettings().allKeys(), ", \n"));
+        assertEquals("COUNT_CONTAGIONS        =[Score] Count contagions\n" +
+                    "POTIONS_COUNT           =[Score] Potions count\n" +
+                    "CURE_SCORE              =[Score] Cure score\n" +
+                    "CLEAN_AREA_SCORE        =[Score] Clear area score\n" +
+                    "WIN_SCORE               =[Score] Win score\n" +
+                    "GOT_INFECTED_PENALTY    =[Game] Got infected penalty\n" +
+                    "SUICIDE_PENALTY         =[Game] Suicide penalty\n" +
+                    "NO_MORE_POTIONS_PENALTY =[Score] No more potions penalty\n" +
+                    "FORGOT_POTION_PENALTY   =[Score] Forgot potion penalty\n" +
+                    "SCORE_COUNTING_TYPE     =[Score] Counting score mode",
+                TestUtils.toString(new GameSettings().allKeys()));
     }
 }
