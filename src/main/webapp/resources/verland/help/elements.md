@@ -3,9 +3,9 @@
 ## Symbol breakdown
 | Sprite | Code | Description |
 | -------- | -------- | -------- |
-|<img src="https://github.com/codenjoyme/codenjoy-verland/raw/master/src/main/webapp/resources/verland/sprite/hero_dead.png" style="width:40px;" /> | `HERO_DEAD('X')` | Герой заразился инфекцией. | 
-|<img src="https://github.com/codenjoyme/codenjoy-verland/raw/master/src/main/webapp/resources/verland/sprite/hero.png" style="width:40px;" /> | `HERO('♥')` | Герой. | 
-|<img src="https://github.com/codenjoyme/codenjoy-verland/raw/master/src/main/webapp/resources/verland/sprite/hero_cure.png" style="width:40px;" /> | `HERO_CURE('!')` | Попытка героем зачистить инфекцию. Если инфекция была устранена ситуация вокруг обновится. Если герой ошибся и зона была не инфицирована - штраф. | 
+|<img src="https://github.com/codenjoyme/codenjoy-verland/raw/master/src/main/webapp/resources/verland/sprite/hero_dead.png" style="width:40px;" /> | `HERO_DEAD('X')` | Мой герой заразился инфекцией. | 
+|<img src="https://github.com/codenjoyme/codenjoy-verland/raw/master/src/main/webapp/resources/verland/sprite/hero.png" style="width:40px;" /> | `HERO('♥')` | Мой герой. | 
+|<img src="https://github.com/codenjoyme/codenjoy-verland/raw/master/src/main/webapp/resources/verland/sprite/hero_cure.png" style="width:40px;" /> | `HERO_CURE('!')` | Попытка моим героем зачистить инфекцию. Если инфекция была устранена ситуация вокруг обновится. Если герой ошибся и зона была не инфицирована - штраф. | 
 |<img src="https://github.com/codenjoyme/codenjoy-verland/raw/master/src/main/webapp/resources/verland/sprite/hero_healing.png" style="width:40px;" /> | `HERO_HEALING('x')` | На секунду после окончания игры поле открывается и можно увидеть какую инфекцию удалось обеззаразить герою. | 
 |<img src="https://github.com/codenjoyme/codenjoy-verland/raw/master/src/main/webapp/resources/verland/sprite/other_hero_dead.png" style="width:40px;" /> | `OTHER_HERO_DEAD('Y')` | Герой из моей команды заразился инфекцией. | 
 |<img src="https://github.com/codenjoyme/codenjoy-verland/raw/master/src/main/webapp/resources/verland/sprite/other_hero.png" style="width:40px;" /> | `OTHER_HERO('♠')` | Герой из моей команды в работе. | 

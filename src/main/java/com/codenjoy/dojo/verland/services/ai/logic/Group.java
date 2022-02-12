@@ -23,13 +23,13 @@ package com.codenjoy.dojo.verland.services.ai.logic;
  */
 
 import com.codenjoy.dojo.games.verland.Element;
+import com.codenjoy.dojo.games.verland.ElementUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.codenjoy.dojo.games.verland.Element.CLEAR;
 import static com.codenjoy.dojo.games.verland.Element.HERO;
-import static java.util.stream.Collectors.toList;
 
 public class Group {
 
@@ -61,7 +61,7 @@ public class Group {
             return Action.GO;
         }
 
-        if (size() == element.value()) {
+        if (size() == ElementUtils.contagions(element)) {
             return Action.CURE;
         }
 
