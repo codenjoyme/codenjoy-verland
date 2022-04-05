@@ -24,6 +24,7 @@ package com.codenjoy.dojo.verland.services;
 
 
 import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.multiplayer.Mode;
 import com.codenjoy.dojo.services.settings.AllSettings;
 import com.codenjoy.dojo.services.settings.PropertiesKey;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -67,6 +68,11 @@ public class GameSettings extends SettingsImpl implements AllSettings<GameSettin
 
     public GameSettings() {
         initAll();
+        // TODO сделать красивше, инициалиазация уже есть в initAll
+        //      но там MULTIPLAYER и он не работает в verland поскольку когда
+        //      весь уровень пройден, то ребята зацикливаются а надо бы обнулять
+        //      уровень, потому тут стоит по умолчанию SINGLE
+        initMultiplayer(Mode.keys().indexOf(Mode.SINGLE.key()));
 
         integer(COUNT_CONTAGIONS, 30);
         integer(POTIONS_COUNT, 100);
