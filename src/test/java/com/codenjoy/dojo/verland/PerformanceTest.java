@@ -124,7 +124,7 @@ public class PerformanceTest {
 
         assertEquals(
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼    xx                    x      x x   x x      ☼\n" +
+                "☼♠   xx                    x      x x   x x     ♠☼\n" +
                 "☼           x              !  x              x   ☼\n" +
                 "☼              x          xx                     ☼\n" +
                 "☼    x     x       x x     x    x              x ☼\n" +
@@ -140,14 +140,14 @@ public class PerformanceTest {
                 "☼                 x                   x   x      ☼\n" +
                 "☼            x                        x          ☼\n" +
                 "☼          x     xx    x   x         x  x        ☼\n" +
-                "☼  x   x♠                                        ☼\n" +
+                "☼  x   x                                         ☼\n" +
                 "☼      xx      x                 xx           x  ☼\n" +
                 "☼                                   x            ☼\n" +
                 "☼       x    x  x      x   x x                   ☼\n" +
                 "☼     x       xx          x   x         x        ☼\n" +
                 "☼                 x          x                   ☼\n" +
-                "☼ ♥ ♠    x        x       x  x x     x           ☼\n" +
-                "☼   ♠             xx                    x        ☼\n" +
+                "☼        x        x       x  x x     x           ☼\n" +
+                "☼                 xx                    x        ☼\n" +
                 "☼        x  x                                x  x☼\n" +
                 "☼    x     x                      x x x          ☼\n" +
                 "☼x                    x      x  xx               ☼\n" +
@@ -171,7 +171,7 @@ public class PerformanceTest {
                 "☼         x           x        xx      x        x☼\n" +
                 "☼    x    x          x x  x       x              ☼\n" +
                 "☼                x    x                   x      ☼\n" +
-                "☼               x x    x                x        ☼\n" +
+                "☼♥              x x    x                x       ♠☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n", board);
     }
 }

@@ -131,7 +131,7 @@ public abstract class AbstractGameTest
         assertEquals(true, hero(index).isWin());
         assertEquals(true, hero(index).isGameOver());
         assertEquals(true, hero(index).isAlive());
-        assertEquals(true, hero(index).isActive());
+        assertEquals(false, hero(index).isActive());
         assertEquals(true, player(index).shouldLeave());
     }
 

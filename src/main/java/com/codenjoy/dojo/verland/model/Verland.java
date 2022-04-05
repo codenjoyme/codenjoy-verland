@@ -124,8 +124,12 @@ public class Verland extends RoundField<Player, Hero> implements Field {
         if (!isContagionsExists()) {
             if (!settings().isRoundsEnabled()) {
                 players.forEach(player -> {
-                    player.event(WIN_ROUND);
-                    player.leaveBoard();
+                    Hero hero = player.getHero();
+                    if (hero.isActiveAndAlive()) {
+                        player.event(WIN_ROUND);
+                        hero.setActive(false);
+                        hero.getPlayer().leaveBoard();
+                    }
                 });
             }
         }

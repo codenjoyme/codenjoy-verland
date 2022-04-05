@@ -52,6 +52,11 @@ public class Player extends RoundGamePlayer<Hero, Field> {
     }
 
     @Override
+    public boolean isAlive() {
+        return super.isAlive() && hero.isActive();
+    }
+
+    @Override
     public void event(Object event) {
         hero.addScore(calculator.score(event));
         super.event(event);

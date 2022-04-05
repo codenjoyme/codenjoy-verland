@@ -756,6 +756,40 @@ public class GameTest extends AbstractGameTest {
         verifyAllEvents("[CURE, WIN_ROUND]");
 
         assertWin();
+
+        // when
+        tick();
+
+        // then
+        assertF("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ♥x☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
+
+        verifyAllEvents("");
+
+        assertWin();
+
+        // when
+        assertF("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ♥x☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
+
+        tick();
+
+        // then
+        assertF("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ♥x☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
+
+        verifyAllEvents("");
+
+        assertWin();
     }
 
     @Test
@@ -1658,14 +1692,14 @@ public class GameTest extends AbstractGameTest {
         // given
         givenFl("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
-                "☼   ☼\n" +
+                "☼ o ☼\n" +
                 "☼♥  ☼\n" +
                 "☼☼☼☼☼\n");
 
         assertF("☼☼☼☼☼\n" +
-                "☼   ☼\n" +
-                "☼   ☼\n" +
-                "☼♥  ☼\n" +
+                "☼111☼\n" +
+                "☼1*1☼\n" +
+                "☼♥11☼\n" +
                 "☼☼☼☼☼\n");
 
         // when
@@ -1674,9 +1708,9 @@ public class GameTest extends AbstractGameTest {
 
         // then
         assertF("☼☼☼☼☼\n" +
-                "☼   ☼\n" +
-                "☼   ☼\n" +
-                "☼♥  ☼\n" +
+                "☼111☼\n" +
+                "☼1*1☼\n" +
+                "☼♥11☼\n" +
                 "☼☼☼☼☼\n");
 
         // when
@@ -1685,9 +1719,9 @@ public class GameTest extends AbstractGameTest {
 
         // then
         assertF("☼☼☼☼☼\n" +
-                "☼   ☼\n" +
-                "☼   ☼\n" +
-                "☼♥  ☼\n" +
+                "☼111☼\n" +
+                "☼1*1☼\n" +
+                "☼♥11☼\n" +
                 "☼☼☼☼☼\n");
 
         // when
@@ -1702,9 +1736,9 @@ public class GameTest extends AbstractGameTest {
 
         // then
         assertF("☼☼☼☼☼\n" +
-                "☼   ☼\n" +
-                "☼   ☼\n" +
-                "☼  ♥☼\n" +
+                "☼111☼\n" +
+                "☼1*1☼\n" +
+                "☼11♥☼\n" +
                 "☼☼☼☼☼\n");
 
         // when
@@ -1719,13 +1753,12 @@ public class GameTest extends AbstractGameTest {
 
         // then
         assertF("☼☼☼☼☼\n" +
-                "☼  ♥☼\n" +
-                "☼   ☼\n" +
-                "☼   ☼\n" +
+                "☼11♥☼\n" +
+                "☼1*1☼\n" +
+                "☼111☼\n" +
                 "☼☼☼☼☼\n");
 
-        // TODO это случается потому, что поле пустое и нет на нем инфекций
-        verifyAllEvents("[WIN_ROUND, WIN_ROUND, WIN_ROUND, WIN_ROUND, WIN_ROUND, WIN_ROUND, WIN_ROUND, WIN_ROUND]");
+        verifyAllEvents("");
     }
 
     @Test
