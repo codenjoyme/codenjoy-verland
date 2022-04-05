@@ -239,6 +239,24 @@ public class MultiplayerTest extends AbstractGameTest {
         assertScores(
                 "hero(0)=40\n" +
                 "hero(1)=30");
+
+        // when
+        // after tick will be next round
+        tick();
+
+        assertF("☼☼☼☼☼☼\n" +
+                "☼♥**♠☼\n" +
+                "☼****☼\n" +
+                "☼****☼\n" +
+                "☼****☼\n" +
+                "☼☼☼☼☼☼\n", 0);
+
+        assertF("☼☼☼☼☼☼\n" +
+                "☼♠**♥☼\n" +
+                "☼****☼\n" +
+                "☼****☼\n" +
+                "☼****☼\n" +
+                "☼☼☼☼☼☼\n", 1);
     }
 
     @Test
@@ -274,6 +292,24 @@ public class MultiplayerTest extends AbstractGameTest {
         assertScores(
                 "hero(0)=40\n" +
                 "hero(1)=40");
+
+        // when
+        // after tick will be next round
+        tick();
+
+        assertF("☼☼☼☼☼☼\n" +
+                "☼♥*♠*☼\n" +
+                "☼****☼\n" +
+                "☼****☼\n" +
+                "☼****☼\n" +
+                "☼☼☼☼☼☼\n", 0);
+
+        assertF("☼☼☼☼☼☼\n" +
+                "☼♠*♥*☼\n" +
+                "☼****☼\n" +
+                "☼****☼\n" +
+                "☼****☼\n" +
+                "☼☼☼☼☼☼\n", 1);
     }
 
     @Test
@@ -312,6 +348,24 @@ public class MultiplayerTest extends AbstractGameTest {
         assertScores(
                 "hero(0)=40\n" +
                 "hero(1)=41");
+
+        // when
+        // after tick will be next round
+        tick();
+
+        assertF("☼☼☼☼☼☼\n" +
+                "☼♥**♠☼\n" +
+                "☼****☼\n" +
+                "☼****☼\n" +
+                "☼****☼\n" +
+                "☼☼☼☼☼☼\n", 0);
+
+        assertF("☼☼☼☼☼☼\n" +
+                "☼♠**♥☼\n" +
+                "☼****☼\n" +
+                "☼****☼\n" +
+                "☼****☼\n" +
+                "☼☼☼☼☼☼\n", 1);
     }
 
     @Test

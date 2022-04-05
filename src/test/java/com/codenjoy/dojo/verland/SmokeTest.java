@@ -161,4 +161,51 @@ public class SmokeTest {
                 Arrays.asList(new AISolver(dice)),
                 Arrays.asList(new Board()));
     }
+
+    @Test
+    public void testMultiplayer() {
+        // about 0.27 sec
+        int ticks = 1000;
+        int players = 4;
+
+        smoke.settings().removeWhenWin(false);
+        smoke.settings().removeWhenGameOver(false);
+        smoke.settings().reloadPlayersWhenGameOverAll(false);
+        smoke.settings().increaseLevelAfterReload(false);
+
+        smoke.play(ticks, "SmokeTestMultiplayer.data",
+                new GameRunner() {
+                    @Override
+                    public Dice getDice() {
+                        return dice;
+                    }
+
+                    @Override
+                    public GameSettings getSettings() {
+                        int level = LevelProgress.levelsStartsFrom1;
+                        return new TestGameSettings()
+                                .clearLevelMaps(level)
+                                .setLevelMaps(level,
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                                        "☼♥ ********* ♥☼\n" +
+                                        "☼  *********  ☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼*************☼\n" +
+                                        "☼  *********  ☼\n" +
+                                        "☼♥ ********* ♥☼\n" +
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n")
+                                .integer(COUNT_CONTAGIONS, 10);
+                    }
+                },
+                players,
+                () -> new AISolver(dice),
+                Board::new);
+    }
 }

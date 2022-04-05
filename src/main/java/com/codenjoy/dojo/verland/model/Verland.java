@@ -60,6 +60,7 @@ public class Verland extends RoundField<Player, Hero> implements Field {
     private GameSettings settings;
 
     private Dice heroDice;
+    private boolean needReset;
 
     public Verland(Dice dice, Level level, GameSettings settings) {
         super(START_ROUND, WIN_ROUND, settings);
@@ -82,6 +83,7 @@ public class Verland extends RoundField<Player, Hero> implements Field {
 
         generateAll();
         heroDice = initHeroDice();
+        needReset = false;
 
         super.clearScore();
     }
@@ -103,6 +105,10 @@ public class Verland extends RoundField<Player, Hero> implements Field {
 
     @Override
     protected void tickField() {
+        if (needReset) {
+            clearScore();
+        }
+
         heroes().copy().forEach(Hero::tick);
 
         for (Contagion contagion : contagions().copy()) {
@@ -128,6 +134,7 @@ public class Verland extends RoundField<Player, Hero> implements Field {
                     if (hero.isActiveAndAlive()) {
                         player.event(WIN_ROUND);
                         hero.leaveGame();
+                        needReset = players.size() > 1;
                     }
                 });
             }

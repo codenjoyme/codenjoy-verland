@@ -43,7 +43,9 @@ public class PerformanceTest {
         // about 8.9 sec
         int players = 4;
         int countContagions = 200;
-        int ticks = 1100;
+        // именно столько тиков надо, чтобы очистить все поле,
+        // на один больше и игра начнется заново
+        int ticks = 1033;
 
         int expectedCreation = 1400;
         int expectedPrint = 10000;
