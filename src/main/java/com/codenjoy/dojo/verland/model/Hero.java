@@ -238,4 +238,8 @@ public class Hero extends RoundPlayerHero<Field>
             fireMorePotions();
         }
     }
+
+    public void leaveGame() {
+        setActive(false);
+    }
 }

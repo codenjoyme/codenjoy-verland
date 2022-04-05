@@ -127,8 +127,7 @@ public class Verland extends RoundField<Player, Hero> implements Field {
                     Hero hero = player.getHero();
                     if (hero.isActiveAndAlive()) {
                         player.event(WIN_ROUND);
-                        hero.setActive(false);
-                        hero.getPlayer().leaveBoard();
+                        hero.leaveGame();
                     }
                 });
             }

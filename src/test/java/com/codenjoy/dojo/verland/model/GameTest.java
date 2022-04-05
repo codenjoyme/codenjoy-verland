@@ -1887,8 +1887,7 @@ public class GameTest extends AbstractGameTest {
         assertEquals(false, hero().isGameOver());
         assertEquals(true, hero().isAlive());
         assertEquals(true, hero().isActive());
-        // true тут просто потому, что тесты не пересоздают player как это делает Deals
-        assertEquals(true, player().shouldLeave());
+        assertEquals(false, player().shouldLeave());
     }
 
     @Test

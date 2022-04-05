@@ -148,9 +148,6 @@ public abstract class AbstractGameTest
         assertEquals(true, hero(index).isGameOver());
         assertEquals(false, hero(index).isAlive());
         assertEquals(true, hero(index).isActive());
-        // тут false потому что Single.isGameOver = true и так будет обновление борды,
-        // а shouldLeave надо делать, когда на поле не умер игрок, но выиграл и больше
-        // ему тут делать нечего
-        assertEquals(false, player(index).shouldLeave());
+        assertEquals(true, player(index).shouldLeave());
     }
 }
