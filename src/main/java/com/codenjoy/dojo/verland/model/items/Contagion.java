@@ -37,6 +37,7 @@ public class Contagion extends PointImpl implements State<Element, Player> {
 
     @Override
     public Element state(Player player, Object... alsoAtPoint) {
+        // TODO если играют несколько ребят MULTIPLE, то не показывать бомбы
         if (player.getHero().isGameOver()) {
             return Element.INFECTION;
         }
