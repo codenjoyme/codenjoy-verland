@@ -94,7 +94,7 @@ In this example, the position of the hero (symbol `♥`) is `[4, 3]`.
 
 What this field looks like in real life:
 
-![](https://dojorena.io/codenjoy-contest/resources/verland/help/board.png)
+![](/codenjoy-contest/resources/verland/help/board.png)
 
 <meta charset="UTF-8">
 
