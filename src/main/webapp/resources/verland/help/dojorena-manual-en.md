@@ -180,6 +180,8 @@ If you don't know where to start, try implementing the following algorithms:
 * Take a step back and analyze around which cells there is definitely no infection. 
 * Try to heal the supposed place of infection.
 
+## FAQ
+
 ## <a id=""ask""></a> Ask Sensei
 
 You can always see the settings of the current game
@@ -240,8 +242,6 @@ All languages in one way or another have a similar set of methods:
 * ``Collection<Point> getWalls();``
   The positions of all the walls.
 * and so on...
-
-## FAQ
 
 ## Want to host an event?
 
