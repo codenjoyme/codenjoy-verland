@@ -94,7 +94,7 @@ In this example, the position of the hero (symbol `♥`) is `[4, 3]`.
 
 What this field looks like in real life:
 
-<img src="/codenjoy-contest/resources/verland/help/board.png" style="height:auto;" />
+<img src="/codenjoy-contest/resources/verland/img/board/large.png" style="height:auto;" />
 
 <meta charset="UTF-8">
 
