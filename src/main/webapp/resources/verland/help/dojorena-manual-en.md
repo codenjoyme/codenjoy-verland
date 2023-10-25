@@ -188,18 +188,18 @@ If you don't know where to start, try implementing the following algorithms:
 The parameters will change[(?)](#ask) as the game progresses.
 The default values are shown in the table below:
 
-| Settings name | Action |
-|---------------|--------|
-| COUNT_CONTAGIONS | [Score] Count contagions |
-| POTIONS_COUNT | [Score] Potions count |
-| CURE_SCORE | [Score] Cure score |
-| CLEAN_AREA_SCORE | [Score] Clear area score |
-| WIN_SCORE | [Score] Win score |
-| GOT_INFECTED_PENALTY | [Game] Got infected penalty |
-| SUICIDE_PENALTY | [Game] Suicide penalty |
-| NO_MORE_POTIONS_PENALTY | [Score] No more potions penalty |
-| FORGOT_POTION_PENALTY | [Score] Forgot potion penalty |
-| SCORE_COUNTING_TYPE | [Score] Counting score mode |
+| Action | Settings name |
+|--------|---------------|
+| [Score] Count contagions | COUNT_CONTAGIONS |
+| [Score] Potions count | POTIONS_COUNT |
+| [Score] Cure score | CURE_SCORE |
+| [Score] Clear area score | CLEAN_AREA_SCORE |
+| [Score] Win score | WIN_SCORE |
+| [Game] Got infected penalty | GOT_INFECTED_PENALTY |
+| [Game] Suicide penalty | SUICIDE_PENALTY |
+| [Score] No more potions penalty | NO_MORE_POTIONS_PENALTY |
+| [Score] Forgot potion penalty | FORGOT_POTION_PENALTY |
+| [Score] Counting score mode | SCORE_COUNTING_TYPE |
 
 
 ## FAQ
