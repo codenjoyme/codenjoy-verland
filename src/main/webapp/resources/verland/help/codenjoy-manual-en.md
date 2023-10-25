@@ -165,23 +165,6 @@ There are several commands:
 * `ACT(0)` - self elimination from this field 
   (results in penalty points)[(?)](#ask). 
 
-## Settings.
-
-The settings will change[(?)](#ask) as the game progresses. The default values
-are given in the table below:
-
-| Event | Title | Points |
-|---------|----------|------|
-| COUNT_CONTAGIONS | 30[(?)](#ask) |
-| number of healing potions | POTIONS_COUNT | 100[(?)](#ask) |
-| CURE_SCORE | 10[(?)](#ask)
-| CLEAN_AREA_SCORE | 1[(?)](#ask)
-| WIN_SCORE | 300[(?)](#ask)
-| GOT_INFECTED_PENALTY | -15[(?)](#ask)
-| Points penalty for suicide | SUICIDE_PENALTY | -100[(?)](#ask)
-| Penalty on points for failed heal attempt | NO_MORE_POTIONS_PENALTY | -2[(?)](#ask) |
-| Penalty for failed healing attempt | FORGOT_POTION_PENALTY | -2[(?)](#ask) |
-
 ## Cases
 
 ## Hints
