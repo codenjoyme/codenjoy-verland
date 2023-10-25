@@ -197,6 +197,11 @@ If you don't know where to start, try implementing the following algorithms:
 * Take a step back and analyze around which cells there is definitely no infection. 
 * Try to heal the supposed place of infection.
 
+## Settings
+
+The parameters will change[(?)](#ask) as the game progresses.
+The default values are shown in the table below:
+
 | Settings name | Action |
 |---------------|--------|
 | CLEAN_AREA_SCORE | [Score] Clear area score |
