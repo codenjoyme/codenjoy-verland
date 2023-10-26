@@ -23,267 +23,149 @@ package com.codenjoy.dojo.verland.services;
  */
 
 
-import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.event.Calculator;
-import com.codenjoy.dojo.services.event.ScoresImpl;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.utils.scorestest.AbstractScoresTest;
 import com.codenjoy.dojo.verland.TestGameSettings;
-import org.junit.Before;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.verland.services.GameSettings.Keys.*;
-import static org.junit.Assert.assertEquals;
 
-public class ScoresTest {
+public class ScoresTest extends AbstractScoresTest {
 
-    private PlayerScores scores;
-    private GameSettings settings;
-
-    public void suicide() {
-        scores.event(Event.SUICIDE);
+    @Override
+    public GameSettings settings() {
+        return new TestGameSettings()
+                .integer(WIN_SCORE, 1)
+                .integer(CURE_SCORE, 2)
+                .integer(CLEAN_AREA_SCORE, 3)
+                .integer(FORGOT_POTION_PENALTY, -4)
+                .integer(NO_MORE_POTIONS_PENALTY, -5)
+                .integer(GOT_INFECTED_PENALTY, -6)
+                .integer(SUICIDE_PENALTY, -7);
     }
 
-    public void cure() {
-        scores.event(Event.CURE);
+    @Override
+    protected Class<? extends ScoresMap> scores() {
+        return Scores.class;
     }
 
-    public void forgotPotion() {
-        scores.event(Event.FORGOT_POTION);
-    }
-
-    public void gotInfected() {
-        scores.event(Event.GOT_INFECTED);
-    }
-
-    public void noMorePotions() {
-        scores.event(Event.NO_MORE_POTIONS);
-    }
-
-    public void cleanArea() {
-        scores.event(Event.CLEAN_AREA);
-    }
-
-    public void win() {
-        scores.event(Event.WIN_ROUND);
-    }
-
-    @Before
-    public void setup() {
-        settings = new TestGameSettings();
+    @Override
+    protected Class<? extends Enum> eventTypes() {
+        return Event.class;
     }
 
     @Test
     public void shouldCollectScores() {
-        // given
-        givenScores(140);
-
-        // when
-        cure();
-        cure();
-        cure();
-        cure();
-
-        forgotPotion();
-
-        noMorePotions();
-
-        gotInfected();
-
-        cleanArea();
-        cleanArea();
-
-        win();
-
-        // then
-        assertEquals(140
-                        + 4 * settings.integer(CURE_SCORE)
-                        + settings.integer(FORGOT_POTION_PENALTY)
-                        + settings.integer(NO_MORE_POTIONS_PENALTY)
-                        + settings.integer(GOT_INFECTED_PENALTY)
-                        + 2 * settings.integer(CLEAN_AREA_SCORE)
-                        + settings.integer(WIN_SCORE),
-                scores.getScore());
+        assertEvents("100:\n" +
+                "CURE > +2 = 102\n" +
+                "CURE > +2 = 104\n" +
+                "CURE > +2 = 106\n" +
+                "CURE > +2 = 108\n" +
+                "FORGOT_POTION > -4 = 104\n" +
+                "NO_MORE_POTIONS > -5 = 99\n" +
+                "GOT_INFECTED > -6 = 93\n" +
+                "CLEAN_AREA > +3 = 96\n" +
+                "CLEAN_AREA > +3 = 99\n" +
+                "WIN_ROUND > +1 = 100");
     }
 
     @Test
     public void shouldStillZero_whenDead() {
-        // given
-        givenScores(0);
-
-        // when
-        gotInfected();
-
-        // then
-        assertEquals(0, scores.getScore());
+        assertEvents("12:\n" +
+                "GOT_INFECTED > -6 = 6\n" +
+                "GOT_INFECTED > -6 = 0\n" +
+                "GOT_INFECTED > +0 = 0");
     }
 
     @Test
     public void shouldStillZero_whenSuicide() {
-        // given
-        givenScores(0);
-
-        // when
-        suicide();
-
-        // then
-        assertEquals(0, scores.getScore());
+        assertEvents("14:\n" +
+                "SUICIDE > -7 = 7\n" +
+                "SUICIDE > -7 = 0\n" +
+                "SUICIDE > +0 = 0");
     }
 
     @Test
     public void shouldPenalty_whenSuicide() {
-        // given
-        givenScores(100);
-
-        // when
-        suicide();
-
-        // then
-        assertEquals(100
-                + settings.integer(SUICIDE_PENALTY),
-                scores.getScore());
+        assertEvents("100:\n" +
+                "SUICIDE > -7 = 93");
     }
 
     @Test
     public void shouldStillZero_whenForgotPotion() {
-        // given
-        givenScores(100);
-
-        // when
-        forgotPotion();
-
-        // then
-        assertEquals(100
-                + settings.integer(FORGOT_POTION_PENALTY),
-                scores.getScore());
+        assertEvents("100:\n" +
+                "FORGOT_POTION > -4 = 96");
     }
 
     @Test
     public void shouldStillZero_whenNoMorePotions() {
-        // given
-        givenScores(0);
-
-        // when
-        noMorePotions();
-
-        // then
-        assertEquals(0,
-                scores.getScore());
+        assertEvents("10:\n" +
+                "NO_MORE_POTIONS > -5 = 5\n" +
+                "NO_MORE_POTIONS > -5 = 0\n" +
+                "NO_MORE_POTIONS > +0 = 0");
     }
 
     @Test
     public void shouldDestroyMinesCountStartsFromZero_whenDead() {
-        // given
-        givenScores(100);
-
-        // when
-        cure();
-        gotInfected();
-
-        cure();
-
-        // then
-        assertEquals(100
-                + 2 * settings.integer(CURE_SCORE)
-                + settings.integer(GOT_INFECTED_PENALTY),
-                scores.getScore());
+        assertEvents("100:\n" +
+                "CURE > +2 = 102\n" +
+                "GOT_INFECTED > -6 = 96\n" +
+                "CURE > +2 = 98");
     }
 
     @Test
     public void shouldDecreaseMinesCount_whenForgotPotions() {
-        // given
-        givenScores(100);
-
-        // when
-        cure();
-        cure();
-        cure();
-        cure();
-        cure();
-
-        forgotPotion();
-
-        cure();
-        cure();
-        cure();
-
-        // then
-        assertEquals(100
-                + 5 * settings.integer(CURE_SCORE)
-                + settings.integer(NO_MORE_POTIONS_PENALTY)
-                + 3 * settings.integer(CURE_SCORE),
-                scores.getScore());
+        assertEvents("100:\n" +
+                "CURE > +2 = 102\n" +
+                "CURE > +2 = 104\n" +
+                "CURE > +2 = 106\n" +
+                "CURE > +2 = 108\n" +
+                "CURE > +2 = 110\n" +
+                "FORGOT_POTION > -4 = 106\n" +
+                "CURE > +2 = 108\n" +
+                "CURE > +2 = 110\n" +
+                "CURE > +2 = 112");
     }
 
     @Test
     public void shouldMinesCountIsZero_whenManyTimesForgotPotions() {
-        // given
-        givenScores(100);
-
-        // when
-        cure();
-        cure();
-
-        forgotPotion();
-        forgotPotion();
-        forgotPotion();
-
-        cure();
-
-        // then
-        assertEquals(100
-                + 2 * settings.integer(CURE_SCORE)
-                + 3 * settings.integer(FORGOT_POTION_PENALTY)
-                + settings.integer(CURE_SCORE),
-                scores.getScore());
-    }
-
-    private void givenScores(int score) {
-        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
+        assertEvents("100:\n" +
+                "CURE > +2 = 102\n" +
+                "CURE > +2 = 104\n" +
+                "FORGOT_POTION > -4 = 100\n" +
+                "FORGOT_POTION > -4 = 96\n" +
+                "FORGOT_POTION > -4 = 92\n" +
+                "CURE > +2 = 94");
     }
 
     @Test
-    public void shouldScore_whenWin() {
+    public void shouldCollectScores_whenWin() {
         // given
-        givenScores(100);
+        settings.integer(WIN_SCORE, 1);
 
-        // when
-        win();
+        // when then
+        assertEvents("100:\n" +
+                "WIN_ROUND > +1 = 101\n" +
+                "WIN_ROUND > +1 = 102");
 
-        // then
-        assertEquals(100
-                + settings.integer(WIN_SCORE),
-                scores.getScore());
     }
 
     @Test
-    public void shouldScore_whenCleanArea() {
+    public void shouldCollectScores_whenCleanArea() {
         // given
-        givenScores(100);
+        settings.integer(CLEAN_AREA_SCORE, 3);
 
-        // when
-        cleanArea();
-
-        // then
-        assertEquals(100
-                + settings.integer(CLEAN_AREA_SCORE),
-                scores.getScore());
+        // when then
+        assertEvents("100:\n" +
+                "CLEAN_AREA > +3 = 103\n" +
+                "CLEAN_AREA > +3 = 106");
     }
 
     @Test
     public void shouldCleanScore() {
-        // given
-        givenScores(100);
-
-        cleanArea();
-
-        // then
-        assertEquals(100
-                + settings.integer(CLEAN_AREA_SCORE),
-                scores.getScore());
-
-        // when
-        scores.clear();
-
-        // then
-        assertEquals(0, scores.getScore());
+        assertEvents("100:\n" +
+                "CLEAN_AREA > +3 = 103\n" +
+                "(CLEAN) > -103 = 0\n" +
+                "CLEAN_AREA > +3 = 3");
     }
 }
